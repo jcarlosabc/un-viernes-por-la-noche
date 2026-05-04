@@ -64,7 +64,7 @@ for agent in "${AGENTS[@]}"; do
 done
 
 # Instalar scripts de sesión
-for script in session-start.sh session-end.sh; do
+for script in session-start.sh session-end.sh statusline.cjs; do
   src="$UVPLN_DIR/claude/$script"
   dst="$CLAUDE_DIR/$script"
   if [ -f "$src" ]; then
