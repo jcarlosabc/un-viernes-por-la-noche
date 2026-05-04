@@ -170,10 +170,98 @@ Los agentes quedan en `~/.claude/agents/` listos para usar con Claude Code.
 <p>
   <img src="https://img.shields.io/badge/Claude_Code-requerido-7C3AED?style=flat-square&logoColor=white" />
   <img src="https://img.shields.io/badge/Claude_Pro_o_Max-requerido-22C55E?style=flat-square&logoColor=white" />
-  <img src="https://img.shields.io/badge/Node.js_%2F_Python_%2F_Docker-no_necesario-22C55E?style=flat-square&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js_18+-requerido-22C55E?style=flat-square&logo=node.js&logoColor=white" />
 </p>
 
-Solo necesitas una suscripcion de Claude. Sin Docker, sin dependencias, sin infraestructura.
+- **Claude Code** y suscripcion **Claude Pro o Max**
+- **Node.js 18+** — el banner, la statusline y los hooks corren en Node (cross-platform)
+
+Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este antes de copiar nada.
+
+---
+
+## Verificar la instalacion
+
+Las graficas de uvpln (banner + statusline) son scripts Node.js que Claude Code dispara por hooks. Antes y despues de instalar podes confirmar que se ven igual que en las capturas.
+
+### Antes de instalar — preview sin tocar nada
+
+```bash
+# Linux / macOS / WSL
+bash install.sh --check
+```
+
+```powershell
+# Windows
+powershell -ExecutionPolicy Bypass -File install.ps1 -Check
+```
+
+Si ves el banner ASCII morado/verde con el texto `Hola parcero, que haremos hoy?`, las graficas van a funcionar despues de instalar. Si sale `node: command not found`, instala Node 18+ primero.
+
+### Despues de instalar — verificacion real
+
+Abri Claude Code:
+
+```bash
+claude     # Linux / macOS / WSL
+uvpln      # Windows (claude tambien sirve)
+```
+
+En los primeros 2 segundos tenes que ver:
+
+1. Banner ASCII `UVPLN` morado con texto verde
+2. Linea `Agentes: 8 disponibles`
+3. Statusline abajo: `🐊 uvpln · <proyecto> │ ◈ ui-architect ◈ ui-tester ...`
+4. `/agents` lista los 8 con su descripcion
+
+Probalo:
+
+> "ui-architect, dame un componente Button con shadcn/ui"
+
+Si entra en personaje costeño y devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando. Probalo escribiendo `text-[#ff0000]` en un archivo — el hook `PreToolUse` lo bloquea.
+
+### Si algo falla
+
+| Sintoma | Causa probable | Fix |
+|---------|----------------|-----|
+| `claude: command not found` | Claude Code no instalado | https://claude.ai/code |
+| Sin banner ni statusline | Node.js no instalado o <18 | Instalar Node 18+ |
+| Banner sale en `--check` pero no al abrir Claude | Ya tenias `~/.claude/settings.json` previo | Mergear `hooks` y `statusLine` desde `claude/settings.json` (el instalador te dice que claves) |
+| No sale el banner pero si la statusline | Tu `~/.claude/CLAUDE.md` previo no se reemplazo | Revisar `CLAUDE.md.backup` y aplicar manual |
+| Agentes no aparecen en `/agents` | Sesion vieja en cache | Cerrar y reabrir Claude Code |
+
+---
+
+## Desinstalacion
+
+uvpln se desinstala limpio sin tocar tus proyectos ni codigo.
+
+### Linux / macOS / WSL
+
+```bash
+bash uninstall.sh           # con confirmacion
+bash uninstall.sh -y        # sin preguntar
+bash uninstall.sh --help    # opciones avanzadas
+```
+
+### Windows
+
+```powershell
+powershell -ExecutionPolicy Bypass -File uninstall.ps1
+powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Yes
+powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
+```
+
+### Que borra y que conserva
+
+| | Comportamiento |
+|---|---|
+| **Borra** los 8 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
+| **Borra** `session-start.js`, `session-end.js`, `statusline.cjs` | Solo los archivos de uvpln |
+| **Restaura** `~/.claude/CLAUDE.md.backup` si existe | Te devuelve tu CLAUDE.md previo |
+| **NO borra** `~/.claude/settings.json` por defecto | Puede tener config de otras herramientas. Te dice que claves remover, o usa `--reset-settings` para borrarlo |
+| **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
+| **NO toca** `~/.claude/` global ni nada fuera de eso | Cero impacto en tus proyectos |
 
 ---
 
@@ -183,6 +271,8 @@ Solo necesitas una suscripcion de Claude. Sin Docker, sin dependencias, sin infr
 un-viernes-por-la-noche/
 ├── install.sh                  → instalador Linux/macOS/WSL
 ├── install.ps1                 → instalador Windows
+├── uninstall.sh                → desinstalador Linux/macOS/WSL
+├── uninstall.ps1               → desinstalador Windows
 ├── uvpln.cmd                   → comando uvpln para Windows
 ├── claude/
 │   ├── CLAUDE.md               → personalidad y reglas globales

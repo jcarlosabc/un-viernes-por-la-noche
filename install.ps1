@@ -1,5 +1,10 @@
 # uvpln - instalador para Windows
 # Ejecutar: powershell -ExecutionPolicy Bypass -File install.ps1
+# Preview sin instalar: powershell -ExecutionPolicy Bypass -File install.ps1 -Check
+
+param(
+    [switch]$Check
+)
 
 $UVPLN_DIR  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $CLAUDE_DIR = "$env:USERPROFILE\.claude"
@@ -9,6 +14,26 @@ $MEMORY_DIR = "$CLAUDE_DIR\memory\design-systems"
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
 function err  { param($msg); Write-Host "  [X]  $msg" -ForegroundColor Red; exit 1 }
+
+# Modo -Check: preview de graficas sin instalar
+if ($Check) {
+    Write-Host ""
+    Write-Host "  uvpln - preview de graficas (sin instalar)" -ForegroundColor Magenta
+    Write-Host ""
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+        err "Node.js no esta instalado. Las graficas necesitan Node 18+: https://nodejs.org"
+    }
+    $nodeVer = (node --version)
+    ok "Node $nodeVer encontrado"
+    Write-Host ""
+    & node "$UVPLN_DIR\claude\session-start.js"
+    Write-Host ""
+    ok "Si viste el banner morado/verde, las graficas van a funcionar tras instalar."
+    Write-Host ""
+    Write-Host "  Para instalar: powershell -ExecutionPolicy Bypass -File install.ps1" -ForegroundColor White
+    Write-Host ""
+    exit 0
+}
 
 Write-Host ""
 Write-Host "  Un Viernes Por La Noche - instalador Windows" -ForegroundColor Magenta
@@ -21,12 +46,24 @@ if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
 }
 ok "Claude Code encontrado"
 
+# Verificar Node.js (banner + statusline + hooks corren en Node)
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+    err "Node.js no esta instalado. Las graficas y hooks lo necesitan. Instala Node 18+: https://nodejs.org"
+}
+$nodeVer = (node --version)
+$nodeMajor = [int](($nodeVer -replace '^v', '') -split '\.')[0]
+if ($nodeMajor -lt 18) {
+    warn "Node $nodeVer detectado - recomendado Node 18+"
+} else {
+    ok "Node $nodeVer encontrado"
+}
+
 # Crear directorios
 New-Item -ItemType Directory -Force -Path $AGENTS_DIR | Out-Null
 New-Item -ItemType Directory -Force -Path $MEMORY_DIR | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
-# Instalar CLAUDE.md
+# Instalar CLAUDE.md (con backup si ya existe)
 $src = "$UVPLN_DIR\claude\CLAUDE.md"
 $dst = "$CLAUDE_DIR\CLAUDE.md"
 if (Test-Path $dst) {
@@ -59,25 +96,37 @@ foreach ($agent in $agents) {
     }
 }
 
-# Instalar scripts de sesion y statusline
-$scripts = @("session-start.ps1", "session-end.ps1", "statusline.cjs")
+# Instalar scripts de sesion + statusline (Node.js, cross-platform)
+$scripts = @("session-start.js", "session-end.js", "statusline.cjs")
 foreach ($script in $scripts) {
     $src = "$UVPLN_DIR\claude\$script"
     $dst = "$CLAUDE_DIR\$script"
     if (Test-Path $src) {
         Copy-Item $src $dst -Force
         ok "Script instalado: $script"
+    } else {
+        warn "No encontrado: $script - saltando"
     }
 }
 
-# Instalar settings.json (version Windows)
-$settingsSrc = "$UVPLN_DIR\claude\settings-windows.json"
+# Instalar settings.json (unificado Node, mismo archivo que Linux/macOS)
+$settingsSrc = "$UVPLN_DIR\claude\settings.json"
 $settingsDst = "$CLAUDE_DIR\settings.json"
 if (-not (Test-Path $settingsDst)) {
     Copy-Item $settingsSrc $settingsDst -Force
     ok "settings.json instalado"
 } else {
-    warn "settings.json ya existe - revisa si queres agregar los hooks de uvpln"
+    warn "settings.json ya existe - no se sobreescribe"
+    Write-Host ""
+    Write-Host "  Para activar graficas y hooks de uvpln, mergea estas claves de" -ForegroundColor White
+    Write-Host "  $settingsSrc a $settingsDst :" -ForegroundColor White
+    Write-Host ""
+    Write-Host "    hooks.SessionStart    -> banner al abrir Claude Code" -ForegroundColor Gray
+    Write-Host "    hooks.SessionEnd      -> cierre de sesion" -ForegroundColor Gray
+    Write-Host "    hooks.PreToolUse      -> bloqueo colores hardcodeados + tracking agente" -ForegroundColor Gray
+    Write-Host "    hooks.PostToolUse     -> aviso de any en TS + cleanup tracking" -ForegroundColor Gray
+    Write-Host "    statusLine            -> barra inferior con los 8 agentes" -ForegroundColor Gray
+    Write-Host ""
 }
 
 Write-Host ""
@@ -89,5 +138,6 @@ foreach ($agent in $agents) {
     Write-Host "    -> $name" -ForegroundColor Green
 }
 Write-Host ""
-Write-Host "  Abri Claude Code en tu proyecto con: claude" -ForegroundColor White
+Write-Host "  Abri Claude Code con: claude  (o uvpln)" -ForegroundColor White
+Write-Host "  Verificacion rapida: powershell -ExecutionPolicy Bypass -File install.ps1 -Check" -ForegroundColor White
 Write-Host ""
