@@ -1,0 +1,18 @@
+{
+  "name": "uvpln",
+  "version": "1.5.0",
+  "private": true,
+  "description": "Un Viernes Por La Noche — frontend AI agent ecosystem para Claude Code",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:install": "bash test/install-flow.sh",
+    "lint:agents": "node test/lint-agents.js"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
