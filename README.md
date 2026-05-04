@@ -238,6 +238,22 @@ un-viernes-por-la-noche/
 ## Changelog
 
 <details>
+<summary><img src="https://img.shields.io/badge/v1.5.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Onboarding de backend + decisiones de stack</summary>
+
+<br/>
+
+Cuando llega a un proyecto nuevo, uvpln ahora:
+
+1. **Lee el backend** — explora `package.json`, rutas, controladores y README para entender los endpoints disponibles
+2. **Pregunta el stack** — antes de escribir una linea de codigo, pregunta TypeScript o JavaScript, React o Next.js
+3. **Guarda las decisiones** — escribe la config en `~/.claude/memory/design-systems/[proyecto].md`
+4. **Mapea endpoints** — va registrando los endpoints del backend a medida que los descubre
+
+Todos los agentes (ui-architect, tokens-manager, ui-tester) usan ese contexto guardado para trabajar en el lenguaje y framework que el equipo decidio.
+
+</details>
+
+<details>
 <summary><img src="https://img.shields.io/badge/v1.4.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Statusline de dos lineas con agentes</summary>
 
 <br/>
