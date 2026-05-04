@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.claude\\session-start.ps1\"",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:USERPROFILE '.claude\\session-start.ps1')\"",
             "blocking": false
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.claude\\session-end.ps1\"",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:USERPROFILE '.claude\\session-end.ps1')\"",
             "blocking": false
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f&&(f.endsWith('.tsx')||f.endsWith('.ts'))){const c=require('fs').existsSync(f)?require('fs').readFileSync(f,'utf8'):''; const anyCount=(c.match(/:\\s*any/g)||[]).length; if(anyCount>0){console.warn('uvpln: '+anyCount+' uso(s) de any en '+f+' — ojo parcero');}}\"",
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f&&(f.endsWith('.tsx')||f.endsWith('.ts'))){const c=require('fs').existsSync(f)?require('fs').readFileSync(f,'utf8'):''; const anyCount=(c.match(/:\\s*any/g)||[]).length; if(anyCount>0){console.warn('uvpln: '+anyCount+' uso(s) de any en '+f+' -- ojo parcero');}}\"",
             "blocking": false
           }
         ]
@@ -49,7 +49,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node \"%USERPROFILE%\\.claude\\statusline.cjs\"",
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"node (Join-Path $env:USERPROFILE '.claude\\statusline.cjs')\"",
     "refreshInterval": 30
   },
   "permissions": {
