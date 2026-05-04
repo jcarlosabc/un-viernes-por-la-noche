@@ -10,7 +10,11 @@ const UVPLN_MARKERS = [
   'session-end.js',
   'statusline.cjs',
   'active-agent.txt',
-  'uvpln:', // tag en console.error/warn de hooks que no tienen filename propio (color check, any check)
+  'uvpln-track-agent-start.js',
+  'uvpln-track-agent-end.js',
+  'uvpln-check-colors.js',
+  'uvpln-check-any.js',
+  'uvpln:', // backwards-compat con instalaciones < hooks externalizados
 ]
 
 const isUvplnCommand = (cmd) =>

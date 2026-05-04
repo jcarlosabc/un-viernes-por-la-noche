@@ -11,6 +11,7 @@ param(
 $UVPLN_DIR  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $CLAUDE_DIR = "$env:USERPROFILE\.claude"
 $AGENTS_DIR = "$CLAUDE_DIR\agents"
+$HOOKS_DIR  = "$CLAUDE_DIR\hooks"
 $MEMORY_DIR = "$CLAUDE_DIR\memory\design-systems"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
@@ -62,6 +63,7 @@ if ($nodeMajor -lt 18) {
 
 # Crear directorios
 New-Item -ItemType Directory -Force -Path $AGENTS_DIR | Out-Null
+New-Item -ItemType Directory -Force -Path $HOOKS_DIR  | Out-Null
 New-Item -ItemType Directory -Force -Path $MEMORY_DIR | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -108,6 +110,24 @@ foreach ($script in $scripts) {
         ok "Script instalado: $script"
     } else {
         warn "No encontrado: $script - saltando"
+    }
+}
+
+# Instalar hooks (lista fija)
+$hooks = @(
+    "uvpln-track-agent-start.js",
+    "uvpln-track-agent-end.js",
+    "uvpln-check-colors.js",
+    "uvpln-check-any.js"
+)
+foreach ($hook in $hooks) {
+    $src = "$UVPLN_DIR\claude\hooks\$hook"
+    $dst = "$HOOKS_DIR\$hook"
+    if (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        ok "Hook instalado: hooks\$hook"
+    } else {
+        warn "No encontrado: $hook - saltando"
     }
 }
 

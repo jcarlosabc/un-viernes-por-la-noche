@@ -11,6 +11,7 @@ param(
 
 $CLAUDE_DIR = "$env:USERPROFILE\.claude"
 $AGENTS_DIR = "$CLAUDE_DIR\agents"
+$HOOKS_DIR  = "$CLAUDE_DIR\hooks"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -74,6 +75,25 @@ foreach ($script in $scripts) {
         Remove-Item $f -Force
         ok "Removido: $script"
     }
+}
+
+# 2b. Hooks de uvpln (lista fija)
+$hooks = @(
+    "uvpln-track-agent-start.js",
+    "uvpln-track-agent-end.js",
+    "uvpln-check-colors.js",
+    "uvpln-check-any.js"
+)
+foreach ($hook in $hooks) {
+    $f = "$HOOKS_DIR\$hook"
+    if (Test-Path $f) {
+        Remove-Item $f -Force
+        ok "Removido: hooks\$hook"
+    }
+}
+if ((Test-Path $HOOKS_DIR) -and -not (Get-ChildItem $HOOKS_DIR -Force)) {
+    Remove-Item $HOOKS_DIR -Force
+    ok "Removido: hooks\ (estaba vacio)"
 }
 
 # 3. CLAUDE.md: restaurar backup o borrar

@@ -3,6 +3,7 @@ set -euo pipefail
 
 CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
+HOOKS_DIR="$CLAUDE_DIR/hooks"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -85,6 +86,25 @@ for script in session-start.js session-end.js statusline.cjs; do
     ok "Removido: $script"
   fi
 done
+
+# 2b. Hooks de uvpln (lista fija — no toca otros hooks que tengas)
+HOOKS=(
+  "uvpln-track-agent-start.js"
+  "uvpln-track-agent-end.js"
+  "uvpln-check-colors.js"
+  "uvpln-check-any.js"
+)
+for hook in "${HOOKS[@]}"; do
+  f="$HOOKS_DIR/$hook"
+  if [ -f "$f" ]; then
+    rm -f "$f"
+    ok "Removido: hooks/$hook"
+  fi
+done
+if [ -d "$HOOKS_DIR" ] && [ -z "$(ls -A "$HOOKS_DIR" 2>/dev/null)" ]; then
+  rmdir "$HOOKS_DIR"
+  ok "Removido: hooks/ (estaba vacío)"
+fi
 
 # 3. CLAUDE.md: si hay backup, lo restauramos; si no, borramos el de uvpln
 if [ -f "$CLAUDE_DIR/CLAUDE.md.backup" ]; then

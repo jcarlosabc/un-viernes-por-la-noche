@@ -4,6 +4,7 @@ set -euo pipefail
 UVPLN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
+HOOKS_DIR="$CLAUDE_DIR/hooks"
 MEMORY_DIR="$CLAUDE_DIR/memory/design-systems"
 
 GREEN='\033[0;32m'
@@ -58,6 +59,7 @@ fi
 
 # Crear estructura de directorios
 mkdir -p "$AGENTS_DIR"
+mkdir -p "$HOOKS_DIR"
 mkdir -p "$MEMORY_DIR"
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -101,6 +103,24 @@ for script in session-start.js session-end.js statusline.cjs; do
     ok "Script instalado: $script"
   else
     warn "No encontrado: $script — saltando"
+  fi
+done
+
+# Instalar hooks (lista fija — no toca otros hooks que tengas)
+HOOKS=(
+  "uvpln-track-agent-start.js"
+  "uvpln-track-agent-end.js"
+  "uvpln-check-colors.js"
+  "uvpln-check-any.js"
+)
+for hook in "${HOOKS[@]}"; do
+  src="$UVPLN_DIR/claude/hooks/$hook"
+  dst="$HOOKS_DIR/$hook"
+  if [ -f "$src" ]; then
+    cp "$src" "$dst"
+    ok "Hook instalado: hooks/$hook"
+  else
+    warn "No encontrado: $hook — saltando"
   fi
 done
 
