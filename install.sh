@@ -63,6 +63,17 @@ for agent in "${AGENTS[@]}"; do
   fi
 done
 
+# Instalar scripts de sesión
+for script in session-start.sh session-end.sh; do
+  src="$UVPLN_DIR/claude/$script"
+  dst="$CLAUDE_DIR/$script"
+  if [ -f "$src" ]; then
+    cp "$src" "$dst"
+    chmod +x "$dst"
+    ok "Script instalado: $script"
+  fi
+done
+
 # Instalar settings.json si no existe
 SETTINGS="$CLAUDE_DIR/settings.json"
 if [ ! -f "$SETTINGS" ]; then
