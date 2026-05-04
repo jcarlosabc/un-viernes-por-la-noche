@@ -5,6 +5,7 @@ UVPLN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
 MEMORY_DIR="$CLAUDE_DIR/memory/design-systems"
 
 GREEN='\033[0;32m'
@@ -60,6 +61,7 @@ fi
 # Crear estructura de directorios
 mkdir -p "$AGENTS_DIR"
 mkdir -p "$HOOKS_DIR"
+mkdir -p "$COMMANDS_DIR"
 mkdir -p "$MEMORY_DIR"
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -112,6 +114,7 @@ HOOKS=(
   "uvpln-track-agent-end.js"
   "uvpln-check-colors.js"
   "uvpln-check-any.js"
+  "uvpln-loop-trigger.js"
 )
 for hook in "${HOOKS[@]}"; do
   src="$UVPLN_DIR/claude/hooks/$hook"
@@ -121,6 +124,18 @@ for hook in "${HOOKS[@]}"; do
     ok "Hook instalado: hooks/$hook"
   else
     warn "No encontrado: $hook — saltando"
+  fi
+done
+
+# Instalar comandos slash (loop de calidad)
+for cmd in "uvpln-loop.md"; do
+  src="$UVPLN_DIR/claude/commands/$cmd"
+  dst="$COMMANDS_DIR/$cmd"
+  if [ -f "$src" ]; then
+    cp "$src" "$dst"
+    ok "Comando instalado: commands/$cmd"
+  else
+    warn "No encontrado: $cmd — saltando"
   fi
 done
 

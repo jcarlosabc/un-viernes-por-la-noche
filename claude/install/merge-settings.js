@@ -14,6 +14,7 @@ const UVPLN_MARKERS = [
   'uvpln-track-agent-end.js',
   'uvpln-check-colors.js',
   'uvpln-check-any.js',
+  'uvpln-loop-trigger.js',
   'uvpln:', // backwards-compat con instalaciones < hooks externalizados
 ]
 

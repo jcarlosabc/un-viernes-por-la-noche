@@ -8,11 +8,12 @@ param(
     [switch]$ForceStatusline
 )
 
-$UVPLN_DIR  = Split-Path -Parent $MyInvocation.MyCommand.Path
-$CLAUDE_DIR = "$env:USERPROFILE\.claude"
-$AGENTS_DIR = "$CLAUDE_DIR\agents"
-$HOOKS_DIR  = "$CLAUDE_DIR\hooks"
-$MEMORY_DIR = "$CLAUDE_DIR\memory\design-systems"
+$UVPLN_DIR    = Split-Path -Parent $MyInvocation.MyCommand.Path
+$CLAUDE_DIR   = "$env:USERPROFILE\.claude"
+$AGENTS_DIR   = "$CLAUDE_DIR\agents"
+$HOOKS_DIR    = "$CLAUDE_DIR\hooks"
+$COMMANDS_DIR = "$CLAUDE_DIR\commands"
+$MEMORY_DIR   = "$CLAUDE_DIR\memory\design-systems"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -62,9 +63,10 @@ if ($nodeMajor -lt 18) {
 }
 
 # Crear directorios
-New-Item -ItemType Directory -Force -Path $AGENTS_DIR | Out-Null
-New-Item -ItemType Directory -Force -Path $HOOKS_DIR  | Out-Null
-New-Item -ItemType Directory -Force -Path $MEMORY_DIR | Out-Null
+New-Item -ItemType Directory -Force -Path $AGENTS_DIR   | Out-Null
+New-Item -ItemType Directory -Force -Path $HOOKS_DIR    | Out-Null
+New-Item -ItemType Directory -Force -Path $COMMANDS_DIR | Out-Null
+New-Item -ItemType Directory -Force -Path $MEMORY_DIR   | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
 # Instalar CLAUDE.md (con backup si ya existe)
@@ -118,7 +120,8 @@ $hooks = @(
     "uvpln-track-agent-start.js",
     "uvpln-track-agent-end.js",
     "uvpln-check-colors.js",
-    "uvpln-check-any.js"
+    "uvpln-check-any.js",
+    "uvpln-loop-trigger.js"
 )
 foreach ($hook in $hooks) {
     $src = "$UVPLN_DIR\claude\hooks\$hook"
@@ -128,6 +131,19 @@ foreach ($hook in $hooks) {
         ok "Hook instalado: hooks\$hook"
     } else {
         warn "No encontrado: $hook - saltando"
+    }
+}
+
+# Instalar comandos slash (loop de calidad)
+$commands = @("uvpln-loop.md")
+foreach ($cmd in $commands) {
+    $src = "$UVPLN_DIR\claude\commands\$cmd"
+    $dst = "$COMMANDS_DIR\$cmd"
+    if (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        ok "Comando instalado: commands\$cmd"
+    } else {
+        warn "No encontrado: $cmd - saltando"
     }
 }
 

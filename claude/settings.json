@@ -52,6 +52,11 @@
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-track-agent-end.js'))\"",
             "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-loop-trigger.js'))\"",
+            "blocking": true
           }
         ]
       },
