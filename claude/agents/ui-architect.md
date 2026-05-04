@@ -43,6 +43,8 @@ Antes de diseñar cualquier componente, preguntar:
 - ¿Cuál es el contexto de uso? (página, modal, sidebar, mobile)
 - ¿Hay restricciones de performance? (above the fold, lazy load)
 
+Si hay un brief de `design-bridge` o spec de `ui-designer`, usarlo como punto de partida. Si no hay brief y el componente encaja en un patrón estándar (landing, dashboard, auth, e-commerce), consultar la plantilla correspondiente en `~/.claude/templates/` para partir de decisiones de diseño ya resueltas.
+
 ### 2. Diseño del componente
 Entregar siempre:
 - Estructura de archivos y nombres

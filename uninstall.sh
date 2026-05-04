@@ -4,6 +4,8 @@ set -euo pipefail
 CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
+TEMPLATES_DIR="$CLAUDE_DIR/templates"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -65,6 +67,10 @@ AGENTS=(
   "performance-ui.md"
   "code-reviewer.md"
   "refactoring-specialist.md"
+  "design-bridge.md"
+  "ui-designer.md"
+  "ux-researcher.md"
+  "debugger.md"
 )
 for agent in "${AGENTS[@]}"; do
   f="$AGENTS_DIR/$agent"
@@ -93,6 +99,7 @@ HOOKS=(
   "uvpln-track-agent-end.js"
   "uvpln-check-colors.js"
   "uvpln-check-any.js"
+  "uvpln-loop-trigger.js"
 )
 for hook in "${HOOKS[@]}"; do
   f="$HOOKS_DIR/$hook"
@@ -104,6 +111,32 @@ done
 if [ -d "$HOOKS_DIR" ] && [ -z "$(ls -A "$HOOKS_DIR" 2>/dev/null)" ]; then
   rmdir "$HOOKS_DIR"
   ok "Removido: hooks/ (estaba vacío)"
+fi
+
+# 2c. Comandos slash de uvpln
+for cmd in "uvpln-loop.md"; do
+  f="$COMMANDS_DIR/$cmd"
+  if [ -f "$f" ]; then
+    rm -f "$f"
+    ok "Removido: commands/$cmd"
+  fi
+done
+if [ -d "$COMMANDS_DIR" ] && [ -z "$(ls -A "$COMMANDS_DIR" 2>/dev/null)" ]; then
+  rmdir "$COMMANDS_DIR"
+  ok "Removido: commands/ (estaba vacío)"
+fi
+
+# 2d. Plantillas de UI
+for tpl in "README.md" "landing-page.md" "dashboard.md" "auth.md" "ecommerce.md"; do
+  f="$TEMPLATES_DIR/$tpl"
+  if [ -f "$f" ]; then
+    rm -f "$f"
+    ok "Removido: templates/$tpl"
+  fi
+done
+if [ -d "$TEMPLATES_DIR" ] && [ -z "$(ls -A "$TEMPLATES_DIR" 2>/dev/null)" ]; then
+  rmdir "$TEMPLATES_DIR"
+  ok "Removido: templates/ (estaba vacío)"
 fi
 
 # 3. CLAUDE.md: si hay backup, lo restauramos; si no, borramos el de uvpln

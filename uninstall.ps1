@@ -9,9 +9,11 @@ param(
     [switch]$Help
 )
 
-$CLAUDE_DIR = "$env:USERPROFILE\.claude"
-$AGENTS_DIR = "$CLAUDE_DIR\agents"
-$HOOKS_DIR  = "$CLAUDE_DIR\hooks"
+$CLAUDE_DIR     = "$env:USERPROFILE\.claude"
+$AGENTS_DIR     = "$CLAUDE_DIR\agents"
+$HOOKS_DIR      = "$CLAUDE_DIR\hooks"
+$COMMANDS_DIR   = "$CLAUDE_DIR\commands"
+$TEMPLATES_DIR  = "$CLAUDE_DIR\templates"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -53,7 +55,11 @@ $agents = @(
     "tokens-manager.md",
     "performance-ui.md",
     "code-reviewer.md",
-    "refactoring-specialist.md"
+    "refactoring-specialist.md",
+    "design-bridge.md",
+    "ui-designer.md",
+    "ux-researcher.md",
+    "debugger.md"
 )
 foreach ($agent in $agents) {
     $f = "$AGENTS_DIR\$agent"
@@ -82,7 +88,8 @@ $hooks = @(
     "uvpln-track-agent-start.js",
     "uvpln-track-agent-end.js",
     "uvpln-check-colors.js",
-    "uvpln-check-any.js"
+    "uvpln-check-any.js",
+    "uvpln-loop-trigger.js"
 )
 foreach ($hook in $hooks) {
     $f = "$HOOKS_DIR\$hook"
@@ -94,6 +101,34 @@ foreach ($hook in $hooks) {
 if ((Test-Path $HOOKS_DIR) -and -not (Get-ChildItem $HOOKS_DIR -Force)) {
     Remove-Item $HOOKS_DIR -Force
     ok "Removido: hooks\ (estaba vacio)"
+}
+
+# 2c. Comandos slash de uvpln
+$cmds = @("uvpln-loop.md")
+foreach ($cmd in $cmds) {
+    $f = "$COMMANDS_DIR\$cmd"
+    if (Test-Path $f) {
+        Remove-Item $f -Force
+        ok "Removido: commands\$cmd"
+    }
+}
+if ((Test-Path $COMMANDS_DIR) -and -not (Get-ChildItem $COMMANDS_DIR -Force)) {
+    Remove-Item $COMMANDS_DIR -Force
+    ok "Removido: commands\ (estaba vacio)"
+}
+
+# 2d. Plantillas de UI
+$tpls = @("README.md", "landing-page.md", "dashboard.md", "auth.md", "ecommerce.md")
+foreach ($tpl in $tpls) {
+    $f = "$TEMPLATES_DIR\$tpl"
+    if (Test-Path $f) {
+        Remove-Item $f -Force
+        ok "Removido: templates\$tpl"
+    }
+}
+if ((Test-Path $TEMPLATES_DIR) -and -not (Get-ChildItem $TEMPLATES_DIR -Force)) {
+    Remove-Item $TEMPLATES_DIR -Force
+    ok "Removido: templates\ (estaba vacio)"
 }
 
 # 3. CLAUDE.md: restaurar backup o borrar

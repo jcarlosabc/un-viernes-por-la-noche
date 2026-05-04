@@ -28,7 +28,7 @@
 
 ## Que es uvpln?
 
-`uvpln` es un equipo de **8 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno y habla como la gente.
+`uvpln` es un equipo de **12 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde traducir una referencia visual a codigo hasta validar accesibilidad y aprobar el componente.
 
 <p align="center">
   <img src="uvpln.png" alt="uvpln en accion" width="480" />
@@ -45,40 +45,69 @@
     <tr>
       <th>Agente</th>
       <th>Especialidad</th>
+      <th>Modelo</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><img src="https://img.shields.io/badge/ui--architect-7C3AED?style=flat-square&logoColor=white" /></td>
-      <td>Arquitectura de componentes, React 19, Next.js 15, Tailwind 4, shadcn/ui</td>
+      <td><img src="https://img.shields.io/badge/ux--researcher-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Traduce requerimientos vagos a flujos, estados y criterios de aceptacion</td>
+      <td>Haiku</td>
     </tr>
     <tr>
-      <td><img src="https://img.shields.io/badge/ui--tester-22C55E?style=flat-square&logoColor=white" /></td>
+      <td><img src="https://img.shields.io/badge/design--bridge-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Convierte URLs, screenshots y referencias visuales en briefs para ui-architect</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/ui--designer-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Crea specs visuales: layout, jerarquia, tipografia, componentes shadcn a usar</td>
+      <td>Haiku</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/ui--architect-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Arquitectura de componentes, React 19, Next.js 15, Tailwind 4, shadcn/ui</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/ui--tester-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Testing exhaustivo con browser real, responsive, estados, edge cases</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/debugger-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Analiza root cause de bugs — entrega diagnostico preciso a ui-architect</td>
+      <td>Haiku</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/a11y--expert-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Accesibilidad WCAG 2.2, ARIA, gestion de foco, semantica</td>
+      <td>Haiku</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/motion--designer-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Animaciones, Framer Motion, transiciones, micro-interacciones</td>
+      <td>Haiku</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/tokens--manager-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Design tokens, variables CSS, dark mode, theming</td>
+      <td>Haiku</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/performance--ui-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Core Web Vitals, bundle size, lazy loading, optimizacion visual</td>
+      <td>Sonnet</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/code--reviewer-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Revision de TypeScript/React — seguridad, calidad, patrones</td>
+      <td>Opus</td>
     </tr>
     <tr>
       <td><img src="https://img.shields.io/badge/refactoring--specialist-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Refactor de componentes sin cambiar comportamiento</td>
+      <td>Sonnet</td>
     </tr>
   </tbody>
 </table>
@@ -87,21 +116,53 @@
 
 ## El loop de calidad
 
-El diferenciador de uvpln. Ningun componente es **listo** hasta que pasa el loop completo:
+El diferenciador de uvpln. Ningun componente es **listo** hasta que pasa el loop completo — y el loop corre solo:
 
 ```
-╔══════════════════════════════════════════════╗
-║                                              ║
-║   ui-architect  →  diseña el componente      ║
-║         ↓                                    ║
-║   ui-tester     →  lo rompe con browser real ║
-║         ↓                                    ║
-║   ui-architect  →  corrige con el reporte    ║
-║         ↓                                    ║
-║   ui-tester     →  APROBADO ✓                ║
-║                                              ║
-╚══════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   ux-researcher   →  filtra req vago en flujos y estados     ║
+║         ↓            (solo si el requerimiento es vago)      ║
+║   design-bridge   →  traduce referencia visual a brief       ║
+║   ui-designer     →  crea spec visual si no hay referencia   ║
+║         ↓                                                    ║
+║   ui-architect    →  construye el componente                 ║
+║         ↓                                                    ║
+║   ui-tester       →  lo rompe con browser real               ║
+║         ↓                                                    ║
+║   debugger        →  analiza root cause (si bug no obvio)    ║
+║         ↓                                                    ║
+║   ui-architect    →  corrige con diagnostico preciso         ║
+║         ↓                                                    ║
+║   ui-tester       →  APROBADO ✓                              ║
+║         ↓                                                    ║
+║   code-reviewer   →  valida antes de merge                   ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 ```
+
+### Loop automatico
+
+Cuando `ui-architect` termina un componente, un hook `PostToolUse` le avisa a Claude automaticamente que debe invocar `ui-tester`. El loop cierra solo — no necesitas recordarlo.
+
+Para ejecutar el loop completo desde cero:
+
+```
+/uvpln-loop descripcion del componente que necesitas
+```
+
+---
+
+## Plantillas de UI
+
+uvpln incluye **4 plantillas de referencia** con patrones visuales ya resueltos. `ui-architect` y `ui-designer` las consultan cuando construyen algo sin brief previo:
+
+| Plantilla | Para que |
+|-----------|----------|
+| `landing-page` | Hero, features, pricing, CTAs — paginas de conversion |
+| `dashboard` | Sidebar, KPI cards, tablas — paneles de administracion |
+| `auth` | Login, registro, recuperacion de contrasena |
+| `ecommerce` | Product grid, detalle, carrito drawer, checkout |
 
 ---
 
@@ -120,14 +181,14 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 
   Proyecto:      mi-proyecto
   Design system: cargado (48 lineas)
-  Agentes:       8 disponibles
+  Agentes:       12 disponibles
 
   Hola parcero, que haremos hoy?
 ```
 
 **Statusline en tiempo real** (barra inferior):
 ```
-🐊 uvpln · mi-proyecto │ 8 agentes │ ◉ design system │ sonnet-4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
+🐊 uvpln · mi-proyecto │ 12 agentes │ ◉ design system │ sonnet-4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
 ```
 
 ---
@@ -136,10 +197,11 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 
 uvpln vigila el codigo mientras escribis:
 
-| Hook | Que hace |
-|------|----------|
-| `PreToolUse` | Bloquea si detecta colores hardcodeados (`text-[#fff]`) — usa tokens |
-| `PostToolUse` | Avisa si hay usos de `any` en TypeScript |
+| Hook | Cuando corre | Que hace |
+|------|-------------|----------|
+| `PreToolUse` Write/Edit | Antes de guardar | Bloquea colores hardcodeados (`text-[#fff]`) — fuerza uso de tokens |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `any` en TypeScript |
+| `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
 
 ---
 
@@ -155,7 +217,7 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 Despues escribi `uvpln` en cualquier terminal para abrir Claude Code con identidad uvpln.
 
-Así se ve uvpln corriendo en PowerShell:
+Asi se ve uvpln corriendo en PowerShell:
 
 <p align="center">
   <img src="uvpln-powershell.png" alt="uvpln en PowerShell" width="100%" />
@@ -168,8 +230,6 @@ git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
 cd un-viernes-por-la-noche
 bash install.sh
 ```
-
-Los agentes quedan en `~/.claude/agents/` listos para usar con Claude Code.
 
 ### Requisitos
 
@@ -188,8 +248,6 @@ Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este 
 
 ## Verificar la instalacion
 
-Las graficas de uvpln (banner + statusline) son scripts Node.js que Claude Code dispara por hooks. Antes y despues de instalar podes confirmar que se ven igual que en las capturas.
-
 ### Antes de instalar — preview sin tocar nada
 
 ```bash
@@ -201,8 +259,6 @@ bash install.sh --check
 # Windows
 powershell -ExecutionPolicy Bypass -File install.ps1 -Check
 ```
-
-Si ves el banner ASCII morado/verde con el texto `Hola parcero, que haremos hoy?`, las graficas van a funcionar despues de instalar. Si sale `node: command not found`, instala Node 18+ primero.
 
 ### Despues de instalar — verificacion real
 
@@ -216,15 +272,15 @@ uvpln      # Windows (claude tambien sirve)
 En los primeros 2 segundos tenes que ver:
 
 1. Banner ASCII `UVPLN` morado con texto verde
-2. Linea `Agentes: 8 disponibles`
-3. Statusline abajo: `🐊 uvpln · <proyecto> │ ◈ ui-architect ◈ ui-tester ...`
-4. `/agents` lista los 8 con su descripcion
+2. Linea `Agentes: 12 disponibles`
+3. Statusline abajo con todos los agentes listados
+4. `/agents` lista los 12 con su descripcion
 
 Probalo:
 
 > "ui-architect, dame un componente Button con shadcn/ui"
 
-Si entra en personaje costeño y devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando. Probalo escribiendo `text-[#ff0000]` en un archivo — el hook `PreToolUse` lo bloquea.
+Si devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando.
 
 ### Si algo falla
 
@@ -232,8 +288,7 @@ Si entra en personaje costeño y devuelve `.tsx` con tokens (sin `text-[#fff]`),
 |---------|----------------|-----|
 | `claude: command not found` | Claude Code no instalado | https://claude.ai/code |
 | Sin banner ni statusline | Node.js no instalado o <18 | Instalar Node 18+ |
-| Banner sale en `--check` pero no al abrir Claude | Ya tenias `~/.claude/settings.json` previo | Mergear `hooks` y `statusLine` desde `claude/settings.json` (el instalador te dice que claves) |
-| No sale el banner pero si la statusline | Tu `~/.claude/CLAUDE.md` previo no se reemplazo | Revisar `CLAUDE.md.backup` y aplicar manual |
+| Banner sale en `--check` pero no al abrir Claude | Ya tenias `~/.claude/settings.json` previo | El instalador mergea automaticamente — si no funciono, corre `install.ps1` de nuevo |
 | Agentes no aparecen en `/agents` | Sesion vieja en cache | Cerrar y reabrir Claude Code |
 
 ---
@@ -262,12 +317,13 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
 
 | | Comportamiento |
 |---|---|
-| **Borra** los 8 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
-| **Borra** `session-start.js`, `session-end.js`, `statusline.cjs` | Solo los archivos de uvpln |
+| **Borra** los 12 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
+| **Borra** hooks, scripts de sesion y statusline | Solo los archivos de uvpln |
+| **Borra** el comando `/uvpln-loop` de `~/.claude/commands/` | |
+| **Borra** las plantillas de `~/.claude/templates/` | |
 | **Restaura** `~/.claude/CLAUDE.md.backup` si existe | Te devuelve tu CLAUDE.md previo |
-| **NO borra** `~/.claude/settings.json` por defecto | Puede tener config de otras herramientas. Te dice que claves remover, o usa `--reset-settings` para borrarlo |
+| **NO borra** `~/.claude/settings.json` por defecto | Puede tener config de otras herramientas. Usa `--reset-settings` para borrarlo |
 | **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
-| **NO toca** `~/.claude/` global ni nada fuera de eso | Cero impacto en tus proyectos |
 
 ---
 
@@ -281,20 +337,37 @@ un-viernes-por-la-noche/
 ├── uninstall.ps1               → desinstalador Windows
 ├── uvpln.cmd                   → comando uvpln para Windows
 ├── claude/
-│   ├── CLAUDE.md               → personalidad y reglas globales
-│   ├── settings.json           → hooks cross-platform (Windows + Linux)
-│   ├── session-start.js        → banner de bienvenida (Node.js)
-│   ├── session-end.js          → cierre de sesion (Node.js)
+│   ├── CLAUDE.md               → personalidad, reglas y decision matrix
+│   ├── settings.json           → hooks cross-platform
+│   ├── session-start.js        → banner de bienvenida
+│   ├── session-end.js          → cierre de sesion
 │   ├── statusline.cjs          → barra inferior en tiempo real
-│   └── agents/
-│       ├── ui-architect.md
-│       ├── ui-tester.md
-│       ├── a11y-expert.md
-│       ├── motion-designer.md
-│       ├── tokens-manager.md
-│       ├── performance-ui.md
-│       ├── code-reviewer.md
-│       └── refactoring-specialist.md
+│   ├── agents/                 → 12 agentes especializados
+│   │   ├── ux-researcher.md
+│   │   ├── design-bridge.md
+│   │   ├── ui-designer.md
+│   │   ├── ui-architect.md
+│   │   ├── ui-tester.md
+│   │   ├── debugger.md
+│   │   ├── a11y-expert.md
+│   │   ├── motion-designer.md
+│   │   ├── tokens-manager.md
+│   │   ├── performance-ui.md
+│   │   ├── code-reviewer.md
+│   │   └── refactoring-specialist.md
+│   ├── commands/
+│   │   └── uvpln-loop.md       → slash command /uvpln-loop
+│   ├── hooks/                  → hooks de calidad
+│   │   ├── uvpln-track-agent-start.js
+│   │   ├── uvpln-track-agent-end.js
+│   │   ├── uvpln-check-colors.js
+│   │   ├── uvpln-check-any.js
+│   │   └── uvpln-loop-trigger.js
+│   └── templates/              → patrones visuales de referencia
+│       ├── landing-page.md
+│       ├── dashboard.md
+│       ├── auth.md
+│       └── ecommerce.md
 ```
 
 ---
@@ -304,13 +377,15 @@ un-viernes-por-la-noche/
 | | Helix | Engram | **uvpln** |
 |--|:-----:|:------:|:---------:|
 | Especializacion frontend | ✗ | ✗ | ✅ |
-| Loop diseno → testing | ✗ | ✗ | ✅ |
+| Loop diseno → testing automatico | ✗ | ✗ | ✅ |
+| Traduccion de referencias visuales | ✗ | ✗ | ✅ |
+| Plantillas de UI incorporadas | ✗ | ✗ | ✅ |
+| Routing de modelos por rol | ✗ | ✗ | ✅ |
 | React 19 / Next.js 15 | ✗ | ✗ | ✅ |
 | Sin dependencias extra | ✗ | Parcial | ✅ |
 | Memoria de design system | ✗ | Parcial | ✅ |
 | Statusline personalizada | ✗ | ✗ | ✅ |
 | Soporte Windows nativo | ✗ | ✗ | ✅ |
-| Personalidad propia | ✗ | ✗ | ✅ |
 
 ---
 
@@ -334,6 +409,52 @@ un-viernes-por-la-noche/
 ## Changelog
 
 <details>
+<summary><img src="https://img.shields.io/badge/v2.0.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Loop automatico + 4 agentes nuevos + plantillas de UI + optimizacion de modelos</summary>
+
+<br/>
+
+### Loop de calidad automatizado
+
+El loop ya no es solo una regla en el CLAUDE.md — ahora corre solo:
+
+- **Hook `PostToolUse`** — cuando `ui-architect` termina, Claude recibe automaticamente la instruccion de invocar `ui-tester`. No hay que recordarlo.
+- **`/uvpln-loop`** — slash command que orquesta el ciclo completo: architect → tester → fix → approve, con maximo 3 iteraciones antes de escalar al usuario.
+
+### 4 agentes nuevos
+
+| Agente | Que hace |
+|--------|----------|
+| `ux-researcher` | Traduce requerimientos vagos a flujos, estados y criterios de aceptacion |
+| `design-bridge` | Convierte URLs, screenshots y referencias visuales ("como Stripe") a briefs para ui-architect |
+| `ui-designer` | Crea la spec visual antes de codificar: layout, jerarquia, componentes, tipografia |
+| `debugger` | Analiza la root cause de bugs con logica (no intuicion) y entrega diagnostico preciso a ui-architect |
+
+### Plantillas de UI (sistema de inspiracion visual)
+
+4 archivos en `~/.claude/templates/` con patrones visuales ya resueltos:
+- `landing-page.md` — hero, features, pricing, CTAs
+- `dashboard.md` — sidebar, KPI cards, tablas de datos
+- `auth.md` — login, registro, recuperacion de contrasena
+- `ecommerce.md` — product grid, detalle, carrito drawer
+
+`ui-architect` los consulta cuando construye sin brief previo. Son decisiones de diseno ya tomadas, no codigo copiable.
+
+### Optimizacion de modelos (reduccion de costo ~40%)
+
+| Agente | Antes | Ahora |
+|--------|-------|-------|
+| `a11y-expert` | Sonnet | **Haiku** |
+| `motion-designer` | Sonnet | **Haiku** |
+| `tokens-manager` | Sonnet | **Haiku** |
+| `ux-researcher` (nuevo) | — | Haiku |
+| `ui-designer` (nuevo) | — | Haiku |
+| `debugger` (nuevo) | — | Haiku |
+
+Los agentes que toman decisiones de arquitectura o seguridad (ui-architect, performance-ui, code-reviewer) mantienen Sonnet u Opus.
+
+</details>
+
+<details>
 <summary><img src="https://img.shields.io/badge/v1.5.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Onboarding de backend + decisiones de stack</summary>
 
 <br/>
@@ -344,8 +465,6 @@ Cuando llega a un proyecto nuevo, uvpln ahora:
 2. **Pregunta el stack** — antes de escribir una linea de codigo, pregunta TypeScript o JavaScript, React o Next.js
 3. **Guarda las decisiones** — escribe la config en `~/.claude/memory/design-systems/[proyecto].md`
 4. **Mapea endpoints** — va registrando los endpoints del backend a medida que los descubre
-
-Todos los agentes (ui-architect, tokens-manager, ui-tester) usan ese contexto guardado para trabajar en el lenguaje y framework que el equipo decidio.
 
 </details>
 
@@ -358,62 +477,44 @@ La statusline ahora muestra dos lineas: resumen general arriba y cada agente lis
 
 ```
 🐊 uvpln · mi-proyecto │ ○ ds │ Sonnet 4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
-◈ ui-architect  ◈ ui-tester  ◈ a11y-expert  ◈ motion-designer  ◈ tokens-manager  ◈ performance-ui  ◈ code-reviewer  ◈ refactoring-specialist
+◈ ui-architect  ◈ ui-tester  ◈ a11y-expert  ◈ motion-designer ...
 ```
 
-- Los agentes se leen dinamicamente del directorio `~/.claude/agents/`
-- Si agregas o quitas un agente, la statusline se actualiza sola
+Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se actualiza sola.
 
 </details>
 
 <details>
-<summary><img src="https://img.shields.io/badge/v1.3.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Hooks cross-platform con Node.js + comando uvpln</summary>
+<summary><img src="https://img.shields.io/badge/v1.3.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Hooks cross-platform con Node.js + comando uvpln</summary>
 
 <br/>
 
-- **Hooks reescritos en Node.js** — los scripts de sesion pasaron de `.ps1` a `.js` para funcionar igual en Windows, Linux y macOS sin depender de variables de entorno que se corrompian en Claude Code
-- **Comando `uvpln`** — se puede abrir Claude Code escribiendo `uvpln` en lugar de `claude`, igual que `helix`
-- **`settings.json` unificado** — un solo archivo de configuracion para todas las plataformas
-
-**Cambios:**
-- `session-start.ps1` / `session-end.ps1` → `session-start.js` / `session-end.js`
-- `settings-windows.json` eliminado — ya no es necesario
+- Hooks reescritos en Node.js — funcionan igual en Windows, Linux y macOS
+- Comando `uvpln` para abrir Claude Code con identidad uvpln
+- `settings.json` unificado para todas las plataformas
 
 </details>
 
 <details>
-<summary><img src="https://img.shields.io/badge/v1.2.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Statusline, banner de bienvenida y soporte Windows</summary>
+<summary><img src="https://img.shields.io/badge/v1.2.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Statusline, banner y soporte Windows</summary>
 
 <br/>
 
-- **Statusline** — barra inferior en tiempo real con proyecto activo, design system, modelo, % contexto y costo
-- **Banner ASCII** — pantalla de bienvenida morada con verde al abrir Claude Code
-- **Soporte Windows nativo** — `install.ps1` para instalar sin WSL ni Git Bash
-- **Hooks de calidad** — bloquea colores hardcodeados y avisa sobre `any` en TypeScript
-
-**Archivos nuevos:**
-- `statusline.cjs` — barra inferior
-- `session-start.js` / `session-end.js` — banner de inicio y cierre
-- `install.ps1` — instalador Windows
-- `uvpln.cmd` — comando `uvpln` para Windows
+- Statusline en tiempo real con proyecto, modelo, contexto y costo
+- Banner ASCII morado/verde al abrir Claude Code
+- `install.ps1` para Windows nativo sin WSL
+- Hooks de calidad: bloquea colores hardcodeados y avisa sobre `any`
 
 </details>
 
 <details>
-<summary><img src="https://img.shields.io/badge/v1.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Agentes de calidad de codigo + frontmatter</summary>
+<summary><img src="https://img.shields.io/badge/v1.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; code-reviewer + refactoring-specialist + frontmatter</summary>
 
 <br/>
 
-- **`code-reviewer`** — revision de TypeScript/React con severidades (bloqueante, alto, medio, bajo) antes de hacer merge
-- **`refactoring-specialist`** — refactor de componentes sin cambiar comportamiento: extraer hooks, dividir componentes, eliminar prop drilling, CVA para variantes
-- **Frontmatter en todos los agentes** — Claude Code ahora sabe exactamente cuando invocar cada agente, que herramientas tiene y que modelo usar
-
-**Agentes con frontmatter:**
-
-| Agente | Modelo |
-|--------|--------|
-| `code-reviewer` | Opus (mas razonamiento para detectar issues sutiles) |
-| Resto de agentes | Sonnet |
+- `code-reviewer` con Opus para revision pre-merge con severidades
+- `refactoring-specialist` para limpiar componentes sin cambiar comportamiento
+- Frontmatter en todos los agentes para activacion automatica por Claude Code
 
 </details>
 
@@ -422,22 +523,7 @@ La statusline ahora muestra dos lineas: resumen general arriba y cada agente lis
 
 <br/>
 
-Primera version de uvpln. El ecosistema de agentes especializado en frontend para Claude Code.
-
-**6 agentes especializados:**
-- `ui-architect` — React 19, Next.js 15, Tailwind 4, shadcn/ui
-- `ui-tester` — testing exhaustivo con browser real
-- `a11y-expert` — accesibilidad WCAG 2.2
-- `motion-designer` — Framer Motion y animaciones
-- `tokens-manager` — design tokens y dark mode
-- `performance-ui` — Core Web Vitals y bundle size
-
-**El loop de calidad:**
-```
-ui-architect diseña → ui-tester rompe → ui-architect corrige → ui-tester aprueba
-```
-
-**Personalidad:** colombiano costeño de Cartagena de Indias. Habla como la gente.
+Primera version de uvpln con 6 agentes especializados y el loop `ui-architect → ui-tester → aprobado`.
 
 </details>
 
