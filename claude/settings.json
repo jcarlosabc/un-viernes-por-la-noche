@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; const bad=['text-[#','bg-[#','border-[#','text-[rgb','bg-[rgb']; const found=bad.filter(p=>f&&require('fs').existsSync(f)&&require('fs').readFileSync(f,'utf8').includes(p)); if(found.length){console.error('uvpln: color hardcodeado detectado — usá un token del design system');process.exit(2);}\"",
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f&&(f.endsWith('.tsx')||f.endsWith('.ts'))){const c=require('fs').existsSync(f)?require('fs').readFileSync(f,'utf8'):''; const anyCount=(c.match(/:\\s*any/g)||[]).length; if(anyCount>0){console.warn('uvpln: encontré '+anyCount+' uso(s) de `any` en '+f+' — ojo con eso parcero');}}\"",
+            "blocking": false
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep"
+    ]
+  }
+}
