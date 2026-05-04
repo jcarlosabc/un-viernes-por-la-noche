@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/session-start.sh",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','session-start.js'))\"",
             "blocking": false
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/session-end.sh",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','session-end.js'))\"",
             "blocking": false
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; const bad=['text-[#','bg-[#','border-[#','text-[rgb','bg-[rgb']; const found=bad.filter(p=>f&&require('fs').existsSync(f)&&require('fs').readFileSync(f,'utf8').includes(p)); if(found.length){console.error('uvpln: color hardcodeado detectado — usá un token del design system');process.exit(2);}\"",
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; const bad=['text-[#','bg-[#','border-[#']; const found=bad.filter(p=>f&&require('fs').existsSync(f)&&require('fs').readFileSync(f,'utf8').includes(p)); if(found.length){console.error('uvpln: color hardcodeado -- usa un token del design system');process.exit(2);}\"",
             "blocking": true
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f&&(f.endsWith('.tsx')||f.endsWith('.ts'))){const c=require('fs').existsSync(f)?require('fs').readFileSync(f,'utf8'):''; const anyCount=(c.match(/:\\s*any/g)||[]).length; if(anyCount>0){console.warn('uvpln: encontré '+anyCount+' uso(s) de `any` en '+f+' — ojo con eso parcero');}}\"",
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f&&(f.endsWith('.tsx')||f.endsWith('.ts'))){const c=require('fs').existsSync(f)?require('fs').readFileSync(f,'utf8'):''; const n=(c.match(/:\\s*any/g)||[]).length; if(n>0)console.warn('uvpln: '+n+' uso(s) de any en '+f+' -- ojo parcero');}\"",
             "blocking": false
           }
         ]
@@ -49,7 +49,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node ~/.claude/statusline.cjs",
+    "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','statusline.cjs'))\"",
     "refreshInterval": 30
   },
   "permissions": {
