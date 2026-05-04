@@ -145,20 +145,22 @@ uvpln vigila el codigo mientras escribis:
 
 ## Instalacion
 
+### Windows
+
+```powershell
+git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
+cd un-viernes-por-la-noche
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+Despues escribi `uvpln` en cualquier terminal para abrir Claude Code con identidad uvpln.
+
 ### Linux / macOS / WSL
 
 ```bash
 git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
 cd un-viernes-por-la-noche
 bash install.sh
-```
-
-### Windows nativo
-
-```powershell
-git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
-cd un-viernes-por-la-noche
-powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
 Los agentes quedan en `~/.claude/agents/` listos para usar con Claude Code.
@@ -181,12 +183,12 @@ Solo necesitas una suscripcion de Claude. Sin Docker, sin dependencias, sin infr
 un-viernes-por-la-noche/
 ├── install.sh                  → instalador Linux/macOS/WSL
 ├── install.ps1                 → instalador Windows
+├── uvpln.cmd                   → comando uvpln para Windows
 ├── claude/
 │   ├── CLAUDE.md               → personalidad y reglas globales
-│   ├── settings.json           → hooks Linux/WSL
-│   ├── settings-windows.json   → hooks Windows
-│   ├── session-start.sh/.ps1   → banner de bienvenida
-│   ├── session-end.sh/.ps1     → cierre de sesion
+│   ├── settings.json           → hooks cross-platform (Windows + Linux)
+│   ├── session-start.js        → banner de bienvenida (Node.js)
+│   ├── session-end.js          → cierre de sesion (Node.js)
 │   ├── statusline.cjs          → barra inferior en tiempo real
 │   └── agents/
 │       ├── ui-architect.md
