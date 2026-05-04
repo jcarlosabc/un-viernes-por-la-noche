@@ -104,23 +104,23 @@ for script in session-start.js session-end.js statusline.cjs; do
   fi
 done
 
-# Instalar settings.json
+# Instalar / mergear settings.json
 SETTINGS="$CLAUDE_DIR/settings.json"
+MERGE_SCRIPT="$UVPLN_DIR/claude/install/merge-settings.js"
+FORCE_FLAG=""
+for arg in "$@"; do
+  [ "$arg" = "--force-statusline" ] && FORCE_FLAG="--force-statusline"
+done
+
 if [ ! -f "$SETTINGS" ]; then
   cp "$UVPLN_DIR/claude/settings.json" "$SETTINGS"
   ok "settings.json instalado"
 else
-  warn "settings.json ya existe — no se sobreescribe"
-  echo ""
-  echo "  Para activar gráficas y hooks de uvpln, mergeá estas claves de"
-  echo "  $UVPLN_DIR/claude/settings.json a $SETTINGS:"
-  echo ""
-  echo "    hooks.SessionStart    → banner al abrir Claude Code"
-  echo "    hooks.SessionEnd      → cierre de sesión"
-  echo "    hooks.PreToolUse      → bloqueo colores hardcodeados + tracking agente activo"
-  echo "    hooks.PostToolUse     → aviso de any en TS + cleanup tracking"
-  echo "    statusLine            → barra inferior con los 8 agentes"
-  echo ""
+  if node "$MERGE_SCRIPT" "$UVPLN_DIR/claude/settings.json" "$SETTINGS" $FORCE_FLAG; then
+    ok "settings.json mergeado (hooks de uvpln + tu config previa)"
+  else
+    err "Falló el merge de settings.json — revisá el backup en $CLAUDE_DIR"
+  fi
 fi
 
 echo ""

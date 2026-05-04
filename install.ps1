@@ -1,9 +1,11 @@
 # uvpln - instalador para Windows
 # Ejecutar: powershell -ExecutionPolicy Bypass -File install.ps1
 # Preview sin instalar: powershell -ExecutionPolicy Bypass -File install.ps1 -Check
+# Forzar statusLine de uvpln: powershell -ExecutionPolicy Bypass -File install.ps1 -ForceStatusline
 
 param(
-    [switch]$Check
+    [switch]$Check,
+    [switch]$ForceStatusline
 )
 
 $UVPLN_DIR  = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -109,24 +111,23 @@ foreach ($script in $scripts) {
     }
 }
 
-# Instalar settings.json (unificado Node, mismo archivo que Linux/macOS)
+# Instalar / mergear settings.json (script Node cross-platform)
 $settingsSrc = "$UVPLN_DIR\claude\settings.json"
 $settingsDst = "$CLAUDE_DIR\settings.json"
+$mergeScript = "$UVPLN_DIR\claude\install\merge-settings.js"
+
 if (-not (Test-Path $settingsDst)) {
     Copy-Item $settingsSrc $settingsDst -Force
     ok "settings.json instalado"
 } else {
-    warn "settings.json ya existe - no se sobreescribe"
-    Write-Host ""
-    Write-Host "  Para activar graficas y hooks de uvpln, mergea estas claves de" -ForegroundColor White
-    Write-Host "  $settingsSrc a $settingsDst :" -ForegroundColor White
-    Write-Host ""
-    Write-Host "    hooks.SessionStart    -> banner al abrir Claude Code" -ForegroundColor Gray
-    Write-Host "    hooks.SessionEnd      -> cierre de sesion" -ForegroundColor Gray
-    Write-Host "    hooks.PreToolUse      -> bloqueo colores hardcodeados + tracking agente" -ForegroundColor Gray
-    Write-Host "    hooks.PostToolUse     -> aviso de any en TS + cleanup tracking" -ForegroundColor Gray
-    Write-Host "    statusLine            -> barra inferior con los 8 agentes" -ForegroundColor Gray
-    Write-Host ""
+    $mergeArgs = @($mergeScript, $settingsSrc, $settingsDst)
+    if ($ForceStatusline) { $mergeArgs += "--force-statusline" }
+    & node @mergeArgs
+    if ($LASTEXITCODE -eq 0) {
+        ok "settings.json mergeado (hooks de uvpln + tu config previa)"
+    } else {
+        err "Fallo el merge de settings.json - revisa el backup en $CLAUDE_DIR"
+    }
 }
 
 Write-Host ""
