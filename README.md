@@ -155,6 +155,12 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 Despues escribi `uvpln` en cualquier terminal para abrir Claude Code con identidad uvpln.
 
+Así se ve uvpln corriendo en PowerShell:
+
+<p align="center">
+  <img src="uvpln-powershell.png" alt="uvpln en PowerShell" width="100%" />
+</p>
+
 ### Linux / macOS / WSL
 
 ```bash
