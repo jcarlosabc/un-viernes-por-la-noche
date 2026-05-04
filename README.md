@@ -235,6 +235,102 @@ un-viernes-por-la-noche/
 
 ---
 
+## Changelog
+
+<details>
+<summary><img src="https://img.shields.io/badge/v1.4.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Statusline de dos lineas con agentes</summary>
+
+<br/>
+
+La statusline ahora muestra dos lineas: resumen general arriba y cada agente listado individualmente abajo.
+
+```
+🐊 uvpln · mi-proyecto │ ○ ds │ Sonnet 4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
+◈ ui-architect  ◈ ui-tester  ◈ a11y-expert  ◈ motion-designer  ◈ tokens-manager  ◈ performance-ui  ◈ code-reviewer  ◈ refactoring-specialist
+```
+
+- Los agentes se leen dinamicamente del directorio `~/.claude/agents/`
+- Si agregas o quitas un agente, la statusline se actualiza sola
+
+</details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/v1.3.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Hooks cross-platform con Node.js + comando uvpln</summary>
+
+<br/>
+
+- **Hooks reescritos en Node.js** — los scripts de sesion pasaron de `.ps1` a `.js` para funcionar igual en Windows, Linux y macOS sin depender de variables de entorno que se corrompian en Claude Code
+- **Comando `uvpln`** — se puede abrir Claude Code escribiendo `uvpln` en lugar de `claude`, igual que `helix`
+- **`settings.json` unificado** — un solo archivo de configuracion para todas las plataformas
+
+**Cambios:**
+- `session-start.ps1` / `session-end.ps1` → `session-start.js` / `session-end.js`
+- `settings-windows.json` eliminado — ya no es necesario
+
+</details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/v1.2.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Statusline, banner de bienvenida y soporte Windows</summary>
+
+<br/>
+
+- **Statusline** — barra inferior en tiempo real con proyecto activo, design system, modelo, % contexto y costo
+- **Banner ASCII** — pantalla de bienvenida morada con verde al abrir Claude Code
+- **Soporte Windows nativo** — `install.ps1` para instalar sin WSL ni Git Bash
+- **Hooks de calidad** — bloquea colores hardcodeados y avisa sobre `any` en TypeScript
+
+**Archivos nuevos:**
+- `statusline.cjs` — barra inferior
+- `session-start.js` / `session-end.js` — banner de inicio y cierre
+- `install.ps1` — instalador Windows
+- `uvpln.cmd` — comando `uvpln` para Windows
+
+</details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/v1.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Agentes de calidad de codigo + frontmatter</summary>
+
+<br/>
+
+- **`code-reviewer`** — revision de TypeScript/React con severidades (bloqueante, alto, medio, bajo) antes de hacer merge
+- **`refactoring-specialist`** — refactor de componentes sin cambiar comportamiento: extraer hooks, dividir componentes, eliminar prop drilling, CVA para variantes
+- **Frontmatter en todos los agentes** — Claude Code ahora sabe exactamente cuando invocar cada agente, que herramientas tiene y que modelo usar
+
+**Agentes con frontmatter:**
+
+| Agente | Modelo |
+|--------|--------|
+| `code-reviewer` | Opus (mas razonamiento para detectar issues sutiles) |
+| Resto de agentes | Sonnet |
+
+</details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/v1.0.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Release inicial — 6 agentes + loop de calidad</summary>
+
+<br/>
+
+Primera version de uvpln. El ecosistema de agentes especializado en frontend para Claude Code.
+
+**6 agentes especializados:**
+- `ui-architect` — React 19, Next.js 15, Tailwind 4, shadcn/ui
+- `ui-tester` — testing exhaustivo con browser real
+- `a11y-expert` — accesibilidad WCAG 2.2
+- `motion-designer` — Framer Motion y animaciones
+- `tokens-manager` — design tokens y dark mode
+- `performance-ui` — Core Web Vitals y bundle size
+
+**El loop de calidad:**
+```
+ui-architect diseña → ui-tester rompe → ui-architect corrige → ui-tester aprueba
+```
+
+**Personalidad:** colombiano costeño de Cartagena de Indias. Habla como la gente.
+
+</details>
+
+---
+
 <p align="center">
   Hecho con berraquera desde Cartagena de Indias, Colombia 🇨🇴
 </p>
