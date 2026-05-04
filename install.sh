@@ -6,6 +6,7 @@ CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 COMMANDS_DIR="$CLAUDE_DIR/commands"
+TEMPLATES_DIR="$CLAUDE_DIR/templates"
 MEMORY_DIR="$CLAUDE_DIR/memory/design-systems"
 
 GREEN='\033[0;32m'
@@ -62,6 +63,7 @@ fi
 mkdir -p "$AGENTS_DIR"
 mkdir -p "$HOOKS_DIR"
 mkdir -p "$COMMANDS_DIR"
+mkdir -p "$TEMPLATES_DIR"
 mkdir -p "$MEMORY_DIR"
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -83,6 +85,10 @@ AGENTS=(
   "performance-ui.md"
   "code-reviewer.md"
   "refactoring-specialist.md"
+  "design-bridge.md"
+  "ui-designer.md"
+  "ux-researcher.md"
+  "debugger.md"
 )
 
 for agent in "${AGENTS[@]}"; do
@@ -136,6 +142,18 @@ for cmd in "uvpln-loop.md"; do
     ok "Comando instalado: commands/$cmd"
   else
     warn "No encontrado: $cmd — saltando"
+  fi
+done
+
+# Instalar plantillas de UI
+for tpl in "README.md" "landing-page.md" "dashboard.md" "auth.md" "ecommerce.md"; do
+  src="$UVPLN_DIR/claude/templates/$tpl"
+  dst="$TEMPLATES_DIR/$tpl"
+  if [ -f "$src" ]; then
+    cp "$src" "$dst"
+    ok "Plantilla instalada: templates/$tpl"
+  else
+    warn "No encontrado: $tpl — saltando"
   fi
 done
 

@@ -8,12 +8,13 @@ param(
     [switch]$ForceStatusline
 )
 
-$UVPLN_DIR    = Split-Path -Parent $MyInvocation.MyCommand.Path
-$CLAUDE_DIR   = "$env:USERPROFILE\.claude"
-$AGENTS_DIR   = "$CLAUDE_DIR\agents"
-$HOOKS_DIR    = "$CLAUDE_DIR\hooks"
-$COMMANDS_DIR = "$CLAUDE_DIR\commands"
-$MEMORY_DIR   = "$CLAUDE_DIR\memory\design-systems"
+$UVPLN_DIR      = Split-Path -Parent $MyInvocation.MyCommand.Path
+$CLAUDE_DIR     = "$env:USERPROFILE\.claude"
+$AGENTS_DIR     = "$CLAUDE_DIR\agents"
+$HOOKS_DIR      = "$CLAUDE_DIR\hooks"
+$COMMANDS_DIR   = "$CLAUDE_DIR\commands"
+$TEMPLATES_DIR  = "$CLAUDE_DIR\templates"
+$MEMORY_DIR     = "$CLAUDE_DIR\memory\design-systems"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -63,10 +64,11 @@ if ($nodeMajor -lt 18) {
 }
 
 # Crear directorios
-New-Item -ItemType Directory -Force -Path $AGENTS_DIR   | Out-Null
-New-Item -ItemType Directory -Force -Path $HOOKS_DIR    | Out-Null
-New-Item -ItemType Directory -Force -Path $COMMANDS_DIR | Out-Null
-New-Item -ItemType Directory -Force -Path $MEMORY_DIR   | Out-Null
+New-Item -ItemType Directory -Force -Path $AGENTS_DIR    | Out-Null
+New-Item -ItemType Directory -Force -Path $HOOKS_DIR     | Out-Null
+New-Item -ItemType Directory -Force -Path $COMMANDS_DIR  | Out-Null
+New-Item -ItemType Directory -Force -Path $TEMPLATES_DIR | Out-Null
+New-Item -ItemType Directory -Force -Path $MEMORY_DIR    | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
 # Instalar CLAUDE.md (con backup si ya existe)
@@ -88,7 +90,11 @@ $agents = @(
     "tokens-manager.md",
     "performance-ui.md",
     "code-reviewer.md",
-    "refactoring-specialist.md"
+    "refactoring-specialist.md",
+    "design-bridge.md",
+    "ui-designer.md",
+    "ux-researcher.md",
+    "debugger.md"
 )
 
 foreach ($agent in $agents) {
@@ -144,6 +150,19 @@ foreach ($cmd in $commands) {
         ok "Comando instalado: commands\$cmd"
     } else {
         warn "No encontrado: $cmd - saltando"
+    }
+}
+
+# Instalar plantillas de UI
+$templates = @("README.md", "landing-page.md", "dashboard.md", "auth.md", "ecommerce.md")
+foreach ($tpl in $templates) {
+    $src = "$UVPLN_DIR\claude\templates\$tpl"
+    $dst = "$TEMPLATES_DIR\$tpl"
+    if (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        ok "Plantilla instalada: templates\$tpl"
+    } else {
+        warn "No encontrado: $tpl - saltando"
     }
 }
 

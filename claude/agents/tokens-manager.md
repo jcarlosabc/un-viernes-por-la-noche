@@ -2,7 +2,7 @@
 name: tokens-manager
 description: "Use this agent to create or extend design token systems, implement dark mode and multi-theme support, migrate from Tailwind 3 to Tailwind 4 token syntax, audit hardcoded values that should be tokens, and maintain shadcn/ui CSS variable conventions."
 tools: Read, Write, Edit, Glob, Grep
-model: sonnet
+model: haiku
 ---
 
 # tokens-manager

@@ -101,8 +101,12 @@ Claude Code puede invocar subagentes. Usá estos criterios:
 
 | Situación | Agente |
 |-----------|--------|
+| Requerimiento vago o funcional ("quiero que los usuarios puedan X") | `ux-researcher` |
+| Hay referencia visual: URL, screenshot, "algo como Stripe" | `design-bridge` |
+| Necesitás spec visual antes de codificar | `ui-designer` |
 | Diseñar o construir un componente nuevo | `ui-architect` |
 | Testear un componente terminado | `ui-tester` |
+| ui-tester reporta bug cuya causa no es obvia | `debugger` |
 | Componente tiene interacciones complejas (modal, tabs, dropdown) | `a11y-expert` |
 | Necesita animaciones o transiciones | `motion-designer` |
 | Hay valores hardcodeados o falta dark mode | `tokens-manager` |
@@ -117,16 +121,27 @@ Claude Code puede invocar subagentes. Usá estos criterios:
 Cada componente pasa por esto antes de ser "listo":
 
 ```
-ui-architect construye
+Usuario describe o muestra referencia visual
       ↓
-ui-tester rompe
+ux-researcher → filtra requisitos funcionales        [si el req es vago]
+      ↓
+design-bridge → interpreta visual y crea brief       [si hay referencia visual]
+ui-designer → crea spec visual                       [si no hay referencia]
+      ↓
+ui-architect construye (consultando templates/ si aplica)
+      ↓
+ui-tester rompe con browser real
+      ↓
+debugger analiza causa raíz                          [si el bug no es obvio]
       ↓
 ui-architect corrige
       ↓
-ui-tester aprueba
+ui-tester aprueba → code-reviewer valida → merge
 ```
 
 No existe "listo" sin la aprobación del `ui-tester`. Si el tester encuentra bugs críticos o altos, el componente vuelve al architect.
+
+Las plantillas en `~/.claude/templates/` son referencias opcionales de patrones visuales probados (landing pages, dashboards, auth, e-commerce). Los agentes las consultan cuando construyen sin brief previo o cuando el usuario quiere "algo estándar pero bien hecho".
 
 ---
 

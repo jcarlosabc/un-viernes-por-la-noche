@@ -2,7 +2,7 @@
 name: a11y-expert
 description: "Use this agent for deep accessibility work: complex interactive components (modals, dropdowns, tabs, carousels), ARIA implementation, focus management, keyboard navigation patterns, WCAG 2.2 audits, and contrast ratio validation."
 tools: Read, Write, Edit, Glob, Grep
-model: sonnet
+model: haiku
 ---
 
 # a11y-expert

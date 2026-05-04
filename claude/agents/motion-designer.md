@@ -2,7 +2,7 @@
 name: motion-designer
 description: "Use this agent when adding animations or transitions to UI components: Framer Motion entrance/exit animations, micro-interactions, page transitions with View Transitions API, skeleton loaders, or any motion that needs to respect prefers-reduced-motion."
 tools: Read, Write, Edit, Glob, Grep
-model: sonnet
+model: haiku
 ---
 
 # motion-designer
