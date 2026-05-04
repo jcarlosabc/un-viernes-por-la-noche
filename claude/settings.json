@@ -24,6 +24,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const p=require('path'),o=require('os'),fs=require('fs');const t=JSON.parse(d);const name=t.subagent_type||t.description||'';const f=p.join(o.homedir(),'.claude','memory','active-agent.txt');fs.mkdirSync(p.dirname(f),{recursive:true});fs.writeFileSync(f,name);}catch(e){}})\"",
+            "blocking": false
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit",
         "hooks": [
           {
@@ -35,6 +45,16 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"try{require('fs').unlinkSync(require('path').join(require('os').homedir(),'.claude','memory','active-agent.txt'))}catch(e){}\"",
+            "blocking": false
+          }
+        ]
+      },
       {
         "matcher": "Write|Edit",
         "hooks": [
@@ -50,7 +70,7 @@
   "statusLine": {
     "type": "command",
     "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','statusline.cjs'))\"",
-    "refreshInterval": 30
+    "refreshInterval": 10
   },
   "permissions": {
     "allow": [

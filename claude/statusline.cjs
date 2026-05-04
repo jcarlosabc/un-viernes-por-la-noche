@@ -25,14 +25,19 @@ process.stdin.on('end', () => {
     ? `$${data.cost.total_cost_usd.toFixed(3)}`
     : ''
 
-  // Leer agentes del directorio
+  // Agentes disponibles
   const agentsDir = path.join(os.homedir(), '.claude', 'agents')
   const agents = fs.existsSync(agentsDir)
-    ? fs.readdirSync(agentsDir)
-        .filter(f => f.endsWith('.md'))
-        .map(f => f.replace('.md', ''))
+    ? fs.readdirSync(agentsDir).filter(f => f.endsWith('.md')).map(f => f.replace('.md', ''))
     : []
 
+  // Agente activo (si hay uno corriendo)
+  const activeFile  = path.join(os.homedir(), '.claude', 'memory', 'active-agent.txt')
+  const activeAgent = fs.existsSync(activeFile)
+    ? fs.readFileSync(activeFile, 'utf8').trim().toLowerCase()
+    : null
+
+  // Design system
   const dsFile = path.join(os.homedir(), '.claude', 'memory', 'design-systems', `${project}.md`)
   const dsTag  = fs.existsSync(dsFile)
     ? `${GREEN}◉ ds${RESET}`
@@ -55,10 +60,14 @@ process.stdin.on('end', () => {
     `${PURPLE}Cartagena 🇨🇴${RESET}`,
   ].filter(Boolean).join(' ')
 
-  // Línea 2 — agentes uno por uno
-  const agentLine = agents
-    .map(a => `${GREEN}◈${RESET} ${DIM}${a}${RESET}`)
-    .join('  ')
+  // Línea 2 — agentes, resaltando el activo
+  const agentLine = agents.map(a => {
+    const isActive = activeAgent && a.toLowerCase().includes(activeAgent)
+    if (isActive) {
+      return `${PURPLE}${BOLD}◈ ${a}${RESET}` // activo: morado brillante
+    }
+    return `${GREEN}◈${RESET} ${DIM}${a}${RESET}` // inactivo: verde tenue
+  }).join('  ')
 
   console.log(line1)
   if (agentLine) console.log(agentLine)
