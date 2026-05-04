@@ -1,9 +1,11 @@
-const { describe, test, expect, beforeEach, afterEach } = require('vitest')
-const { spawnSync } = require('child_process')
-const { writeFileSync, mkdtempSync, rmSync } = require('fs')
-const { tmpdir } = require('os')
-const { join } = require('path')
+import { describe, test, expect, beforeEach, afterEach } from 'vitest'
+import { spawnSync } from 'node:child_process'
+import { writeFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const HOOK = join(__dirname, '..', '..', 'claude', 'hooks', 'uvpln-check-any.js')
 
 let dir
@@ -19,7 +21,7 @@ describe('check-any', () => {
     const f = join(dir, 'file.ts')
     writeFileSync(f, 'const a: any = 1\nfunction b(x: any): any { return x }\n')
     const r = run(f)
-    expect(r.status).toBe(0) // never blocks
+    expect(r.status).toBe(0)
     expect(r.stderr.toString()).toContain('3 uso(s) de any')
   })
 
@@ -43,7 +45,7 @@ describe('check-any', () => {
 
   test('siempre exit 0 (no bloquea)', () => {
     const f = join(dir, 'lots.ts')
-    writeFileSync(f, 'const x: any = null'.repeat(20))
+    writeFileSync(f, 'const x: any = null\n'.repeat(20))
     expect(run(f).status).toBe(0)
   })
 })

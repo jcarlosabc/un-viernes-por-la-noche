@@ -1,9 +1,11 @@
-const { describe, test, expect, beforeEach, afterEach } = require('vitest')
-const { spawnSync } = require('child_process')
-const { mkdtempSync, rmSync, writeFileSync, readFileSync, copyFileSync } = require('fs')
-const { tmpdir } = require('os')
-const { join } = require('path')
+import { describe, test, expect, beforeEach, afterEach } from 'vitest'
+import { spawnSync } from 'node:child_process'
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, copyFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..', '..')
 const MERGE = join(ROOT, 'claude', 'install', 'merge-settings.js')
 const UVPLN = join(ROOT, 'claude', 'settings.json')
@@ -45,7 +47,7 @@ describe('merge-settings', () => {
     run(t)
     const j = read(t)
     expect(j.hooks.PreToolUse.some((g) => g.hooks[0].command.includes('hook-propio'))).toBe(true)
-    expect(j.hooks.PreToolUse.length).toBe(3) // 1 ajeno + 2 uvpln
+    expect(j.hooks.PreToolUse.length).toBe(3)
   })
 
   test('respeta statusLine del usuario por default', () => {

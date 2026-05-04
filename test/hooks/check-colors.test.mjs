@@ -1,9 +1,11 @@
-const { describe, test, expect, beforeEach, afterEach } = require('vitest')
-const { spawnSync } = require('child_process')
-const { writeFileSync, mkdtempSync, rmSync } = require('fs')
-const { tmpdir } = require('os')
-const { join } = require('path')
+import { describe, test, expect, beforeEach, afterEach } from 'vitest'
+import { spawnSync } from 'node:child_process'
+import { writeFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const HOOK = join(__dirname, '..', '..', 'claude', 'hooks', 'uvpln-check-colors.js')
 
 let dir

@@ -1,9 +1,11 @@
-const { describe, test, expect, beforeEach, afterEach } = require('vitest')
-const { spawnSync } = require('child_process')
-const { mkdtempSync, rmSync, existsSync, readFileSync } = require('fs')
-const { tmpdir } = require('os')
-const { join } = require('path')
+import { describe, test, expect, beforeEach, afterEach } from 'vitest'
+import { spawnSync } from 'node:child_process'
+import { mkdtempSync, rmSync, existsSync, readFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..', '..')
 const START = join(ROOT, 'claude', 'hooks', 'uvpln-track-agent-start.js')
 const END = join(ROOT, 'claude', 'hooks', 'uvpln-track-agent-end.js')
