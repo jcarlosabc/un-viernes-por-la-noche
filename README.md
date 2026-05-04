@@ -322,7 +322,7 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
 | **Borra** el comando `/uvpln-loop` de `~/.claude/commands/` | |
 | **Borra** las plantillas de `~/.claude/templates/` | |
 | **Restaura** `~/.claude/CLAUDE.md.backup` si existe | Te devuelve tu CLAUDE.md previo |
-| **NO borra** `~/.claude/settings.json` por defecto | Puede tener config de otras herramientas. Usa `--reset-settings` para borrarlo |
+| **Limpia** `~/.claude/settings.json` automaticamente | Elimina solo las entradas de uvpln — preserva tu config de otras herramientas. Si el archivo queda vacio, lo borra. Usa `-ResetSettings` para borrarlo completo |
 | **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
 
 ---
@@ -357,6 +357,9 @@ un-viernes-por-la-noche/
 │   │   └── refactoring-specialist.md
 │   ├── commands/
 │   │   └── uvpln-loop.md       → slash command /uvpln-loop
+│   ├── install/
+│   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
+│   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
 │   ├── hooks/                  → hooks de calidad
 │   │   ├── uvpln-track-agent-start.js
 │   │   ├── uvpln-track-agent-end.js
@@ -407,6 +410,24 @@ un-viernes-por-la-noche/
 ---
 
 ## Changelog
+
+<details>
+<summary><img src="https://img.shields.io/badge/v2.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Desinstalacion limpia de settings.json</summary>
+
+<br/>
+
+Hasta v2.0.0 el desinstalador no tocaba `settings.json` por defecto — los hooks de uvpln quedaban configurados aunque los archivos ya no existieran, y Claude Code los intentaba correr igual.
+
+**Ahora:**
+
+- `uninstall.ps1` llama a `claude/install/unmerge-settings.js`, que elimina **solo** las entradas de uvpln (hooks, statusLine, permissions) preservando toda la config del usuario.
+- Si `settings.json` queda vacio tras la limpieza, el script lo borra directamente.
+- Si queda config de otras herramientas, el archivo se actualiza sin tocar nada que no sea de uvpln.
+- Fallback: si Node no esta disponible, el desinstalador muestra las claves a remover a mano.
+
+`-ResetSettings` sigue disponible para borrar el archivo completo cuando queres empezar de cero.
+
+</details>
 
 <details>
 <summary><img src="https://img.shields.io/badge/v2.0.0-7C3AED?style=flat-square&logoColor=white" /> &nbsp; Loop automatico + 4 agentes nuevos + plantillas de UI + optimizacion de modelos</summary>

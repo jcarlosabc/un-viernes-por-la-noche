@@ -9,6 +9,8 @@ param(
     [switch]$Help
 )
 
+$UVPLN_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
+
 $CLAUDE_DIR     = "$env:USERPROFILE\.claude"
 $AGENTS_DIR     = "$CLAUDE_DIR\agents"
 $HOOKS_DIR      = "$CLAUDE_DIR\hooks"
@@ -142,24 +144,32 @@ if (Test-Path $claudeBackup) {
     ok "CLAUDE.md removido"
 }
 
-# 4. settings.json: por defecto no se toca
+# 4. settings.json: limpiar entradas de uvpln preservando config del usuario
 $settings = "$CLAUDE_DIR\settings.json"
+$unmergeScript = "$UVPLN_DIR\claude\install\unmerge-settings.js"
 if (Test-Path $settings) {
     if ($ResetSettings) {
         Remove-Item $settings -Force
         ok "settings.json removido (-ResetSettings)"
+    } elseif ((Get-Command node -ErrorAction SilentlyContinue) -and (Test-Path $unmergeScript)) {
+        & node $unmergeScript $settings
+        if ($LASTEXITCODE -eq 0) {
+            ok "settings.json: entradas de uvpln removidas"
+        } else {
+            warn "No se pudo limpiar settings.json automaticamente"
+            Write-Host "  Entradas a remover manualmente de ${settings}:" -ForegroundColor White
+            Write-Host "    hooks.SessionStart, hooks.SessionEnd" -ForegroundColor Gray
+            Write-Host "    hooks.PreToolUse  (matchers Agent y Write|Edit)" -ForegroundColor Gray
+            Write-Host "    hooks.PostToolUse (matchers Agent y Write|Edit)" -ForegroundColor Gray
+            Write-Host "    statusLine" -ForegroundColor Gray
+        }
     } else {
-        warn "settings.json se queda intacto (puede tener config de otras herramientas)"
-        Write-Host ""
-        Write-Host "  Si queres sacar las claves de uvpln a mano, remove de $settings:" -ForegroundColor White
-        Write-Host "    hooks.SessionStart" -ForegroundColor Gray
-        Write-Host "    hooks.SessionEnd" -ForegroundColor Gray
+        warn "Node.js no disponible - settings.json no pudo limpiarse automaticamente"
+        Write-Host "  Entradas a remover manualmente de ${settings}:" -ForegroundColor White
+        Write-Host "    hooks.SessionStart, hooks.SessionEnd" -ForegroundColor Gray
         Write-Host "    hooks.PreToolUse  (matchers Agent y Write|Edit)" -ForegroundColor Gray
         Write-Host "    hooks.PostToolUse (matchers Agent y Write|Edit)" -ForegroundColor Gray
         Write-Host "    statusLine" -ForegroundColor Gray
-        Write-Host ""
-        Write-Host "  O re-correlo: powershell -ExecutionPolicy Bypass -File uninstall.ps1 -ResetSettings" -ForegroundColor White
-        Write-Host ""
     }
 }
 
