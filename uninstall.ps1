@@ -173,7 +173,14 @@ if (Test-Path $settings) {
     }
 }
 
-# 5. memory/design-systems
+# 5. Comando uvpln del PATH
+$uvplnCmd = "$env:USERPROFILE\.local\bin\uvpln.cmd"
+if (Test-Path $uvplnCmd) {
+    Remove-Item $uvplnCmd -Force
+    ok "Removido: uvpln.cmd ($uvplnCmd)"
+}
+
+# 6. memory/design-systems
 $ds = "$CLAUDE_DIR\memory\design-systems"
 if ((Test-Path $ds) -and (Get-ChildItem $ds -Force)) {
     if ($PurgeMemory) {

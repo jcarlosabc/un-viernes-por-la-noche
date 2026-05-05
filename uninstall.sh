@@ -169,7 +169,15 @@ if [ -f "$SETTINGS" ]; then
   fi
 fi
 
-# 5. Memoria de design systems (solo si la persona lo pide)
+# 5. Comando uvpln del PATH
+for uvpln_bin in "$HOME/.local/bin/uvpln" "$HOME/.local/bin/uvpln.cmd"; do
+  if [ -f "$uvpln_bin" ]; then
+    rm -f "$uvpln_bin"
+    ok "Removido: uvpln del PATH ($uvpln_bin)"
+  fi
+done
+
+# 6. Memoria de design systems (solo si la persona lo pide)
 DS="$CLAUDE_DIR/memory/design-systems"
 if [ -d "$DS" ] && [ -n "$(ls -A "$DS" 2>/dev/null)" ]; then
   if [ "$PURGE_MEMORY" -eq 1 ]; then
