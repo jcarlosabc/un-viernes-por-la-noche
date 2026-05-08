@@ -73,6 +73,7 @@ Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disp
 **Slash commands disponibles:**
 - `/uvpln-loop` — loop de calidad completo (architect → tester → fix)
 - `/uvpln-audit` — auditoría de a11y + tokens + performance
+- `/uvpln-security-audit` — auditoría completa de seguridad cliente (XSS, secrets, auth, CSP, headers, deps)
 - `/uvpln-handoff` — documento de handoff de la sesión
 
 El agente usa el bloque TS o JS del example según el lenguaje guardado en memoria del proyecto.
@@ -164,6 +165,7 @@ Claude Code puede invocar subagentes. Usá estos criterios:
 | Conectar componente a una API (fetch, loading, error, paginación) | `api-integrator` |
 | Form complejo (multi-step, file upload, campos dinámicos) | `form-specialist` |
 | Prop drilling, estado global, elegir entre Zustand/Context | `state-manager` |
+| Auth, secrets, XSS, CSP, headers de seguridad, dependencias vulnerables | `security-frontend` |
 
 ---
 

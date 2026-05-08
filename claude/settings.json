@@ -40,6 +40,11 @@
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-colors.js'))\"",
             "blocking": true
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-secrets.js'))\"",
+            "blocking": true
           }
         ]
       }
@@ -96,6 +101,21 @@
           {
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-ssr-window.js'))\"",
+            "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-target-blank.js'))\"",
+            "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-dangerous-html.js'))\"",
+            "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-localstorage-token.js'))\"",
             "blocking": false
           }
         ]

@@ -28,7 +28,7 @@
 
 ## Que es uvpln?
 
-`uvpln` es un equipo de **15 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde conectar una API hasta traducir una referencia visual a codigo, validar accesibilidad y aprobar el componente.
+`uvpln` es un equipo de **16 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde conectar una API hasta traducir una referencia visual a codigo, validar accesibilidad, blindar la seguridad cliente y aprobar el componente.
 
 <p align="center">
   <img src="uvpln.png" alt="uvpln en accion" width="480" />
@@ -41,13 +41,14 @@
 ## Los agentes
 
 <details open>
-<summary><strong>Ver los 15 agentes</strong></summary>
+<summary><strong>Ver los 16 agentes</strong></summary>
 
 <br/>
 
 <table>
   <thead>
     <tr>
+      <th>Icono</th>
       <th>Agente</th>
       <th>Especialidad</th>
       <th>Modelo</th>
@@ -55,82 +56,105 @@
   </thead>
   <tbody>
     <tr>
+      <td align="center">🔍</td>
       <td><img src="https://img.shields.io/badge/ux--researcher-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Traduce requerimientos vagos a flujos, estados y criterios de aceptacion</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">🌉</td>
       <td><img src="https://img.shields.io/badge/design--bridge-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Convierte URLs, screenshots y referencias visuales en briefs para ui-architect</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">🎨</td>
       <td><img src="https://img.shields.io/badge/ui--designer-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Crea specs visuales: layout, jerarquia, tipografia, componentes shadcn a usar</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">🏗️</td>
       <td><img src="https://img.shields.io/badge/ui--architect-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Arquitectura de componentes, React 19, Next.js 15, Tailwind 4, shadcn/ui</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">🧪</td>
       <td><img src="https://img.shields.io/badge/ui--tester-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Testing exhaustivo con browser real, responsive, estados, edge cases</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">🐛</td>
       <td><img src="https://img.shields.io/badge/debugger-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Analiza root cause de bugs — entrega diagnostico preciso a ui-architect</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">♿</td>
       <td><img src="https://img.shields.io/badge/a11y--expert-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Accesibilidad WCAG 2.2, ARIA, gestion de foco, semantica</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">✨</td>
       <td><img src="https://img.shields.io/badge/motion--designer-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Animaciones, Framer Motion, transiciones, micro-interacciones</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">🪙</td>
       <td><img src="https://img.shields.io/badge/tokens--manager-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Design tokens, variables CSS, dark mode, theming</td>
       <td>Haiku</td>
     </tr>
     <tr>
+      <td align="center">⚡</td>
       <td><img src="https://img.shields.io/badge/performance--ui-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Core Web Vitals, bundle size, lazy loading, optimizacion visual</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">👁️</td>
       <td><img src="https://img.shields.io/badge/code--reviewer-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Revision de TypeScript/React — seguridad, calidad, patrones</td>
       <td>Opus</td>
     </tr>
     <tr>
+      <td align="center">🔧</td>
       <td><img src="https://img.shields.io/badge/refactoring--specialist-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Refactor de componentes sin cambiar comportamiento</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">🔌</td>
       <td><img src="https://img.shields.io/badge/api--integrator-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>TanStack Query, SWR, fetch nativo — loading/error/empty states, paginacion, optimistic UI</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">📝</td>
       <td><img src="https://img.shields.io/badge/form--specialist-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Forms complejos: multi-step, file upload, campos dinamicos, validacion async</td>
       <td>Sonnet</td>
     </tr>
     <tr>
+      <td align="center">🧠</td>
       <td><img src="https://img.shields.io/badge/state--manager-7C3AED?style=flat-square&logoColor=white" /></td>
       <td>Arquitectura de estado: useState vs useReducer vs Context vs Zustand — sin prop drilling</td>
       <td>Haiku</td>
     </tr>
+    <tr>
+      <td align="center">🔒</td>
+      <td><img src="https://img.shields.io/badge/security--frontend-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Seguridad cliente: XSS, secrets, auth patterns, CSP, headers, dependencias vulnerables, iframes</td>
+      <td>Sonnet</td>
+    </tr>
   </tbody>
 </table>
+
+> Los mismos iconos aparecen en la statusline (linea 2) — ves de un vistazo que agente esta corriendo. El activo se resalta en morado brillante.
 
 </details>
 
@@ -179,6 +203,7 @@ Para ejecutar el loop completo desde cero:
 |---------|----------|
 | `/uvpln-loop` | Loop completo: architect → tester → fix → aprobado |
 | `/uvpln-audit` | Auditoria de a11y + tokens hardcodeados + performance — reporte consolidado |
+| `/uvpln-security-audit` | 🔒 Auditoria completa de seguridad cliente — XSS, secrets, auth, CSP, headers, dependencias |
 | `/uvpln-handoff` | Documento de cierre de sesion: componentes, decisiones, pendientes |
 
 ---
@@ -300,6 +325,24 @@ Tenes una URL, un screenshot o "queres algo como Stripe". El loop completo se di
 </details>
 
 <details>
+<summary><strong>🔒 Auditoria de seguridad antes de release</strong></summary>
+
+<br/>
+
+```
+> /uvpln-security-audit
+```
+
+**Que pasa:**
+1. `security-frontend` escanea el proyecto: XSS via `dangerouslySetInnerHTML` sin DOMPurify, secrets hardcodeados (API keys, tokens), `localStorage.setItem('token')`, `<a target="_blank">` sin `rel="noopener"`, iframes sin `sandbox`, `eval()` o `new Function`
+2. Verifica `next.config.js`: CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy
+3. Corre `npm audit` y reporta vulnerabilidades CRITICAL y HIGH con paquetes a actualizar
+4. Reporta por severidad: 🔴 CRITICO (bloquea merge) / 🟠 ALTO (bloquea release) / 🟡 MEDIO (sprint) / 🟢 BAJO (mejora)
+5. Cada hallazgo trae fix accionable: codigo concreto o comando exacto
+
+</details>
+
+<details>
 <summary><strong>Traducir un Figma a codigo</strong></summary>
 
 <br/>
@@ -410,30 +453,39 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
   Hola parcero, que haremos hoy?
 ```
 
-**Statusline en tiempo real** (barra inferior):
+**Statusline en tiempo real** (2 líneas):
+
 ```
-🐊 uvpln · mi-proyecto │ 12 agentes │ ◉ design system │ sonnet-4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
+🐊 uvpln · mi-proyecto │ 16 agentes 🔒 15 hooks │ ◉ ds │ sonnet · 12% ctx · $0.023 │ Cartagena 🇨🇴
+🔍 ux-researcher  🌉 design-bridge  🎨 ui-designer  🏗️ ui-architect  🧪 ui-tester  🐛 debugger  ♿ a11y-expert  ✨ motion-designer  🪙 tokens-manager  ⚡ performance-ui  👁️ code-reviewer  🔧 refactoring-specialist  🔌 api-integrator  📝 form-specialist  🧠 state-manager  🔒 security-frontend
 ```
+
+- **Línea 1** muestra contador de agentes y hooks (con `🔒` cuando hay hooks de seguridad activos)
+- **Línea 2** lista los 16 agentes con su icono — el activo se resalta en morado brillante cuando uno está corriendo
 
 </details>
 
 <details>
-<summary><strong>Hooks de calidad · 11 validaciones automaticas mientras escribis</strong></summary>
+<summary><strong>Hooks de calidad · 15 validaciones automaticas mientras escribis (4 son 🔒 seguridad)</strong></summary>
 
 <br/>
 
-uvpln vigila el codigo mientras escribis — 11 hooks automaticos. Los 3 ultimos son world-class: validan vocabulario senior (sombras compuestas, OKLCH en tokens, SSR-safe).
+uvpln vigila el codigo mientras escribis — 15 hooks automaticos. 3 protegen calidad world-class (sombras, OKLCH, SSR), **4 protegen seguridad cliente** (secrets, XSS, auth, tabnabbing).
 
 | Hook | Cuando corre | Que hace |
 |------|-------------|----------|
-| `PreToolUse` Write/Edit | Antes de guardar | **Bloquea** colores hardcodeados (`text-[#fff]`) — fuerza uso de tokens |
+| `PreToolUse` Write/Edit | Antes de guardar | **🛑 Bloquea** colores hardcodeados (`text-[#fff]`) — fuerza uso de tokens |
+| `PreToolUse` Write/Edit | Antes de guardar | **🔒🛑 Bloquea** secrets hardcodeados (Stripe keys, AWS keys, GitHub tokens, API keys, passwords) |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `any` en TypeScript |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `console.log` pendiente de borrar |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `<img>` sin `alt` o `onClick` en elementos no interactivos |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si se usan hooks de cliente sin `"use client"` en Next.js app/ |
-| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay sombras planas** (`shadow-md`, `shadow-lg`) — sugiere tokens compuestos `shadow-(--shadow-card)` |
-| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay `oklch()` inline** en `.tsx` — debe vivir en `globals.css`, no en componentes |
-| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay `window.innerWidth` / `document.cookie` en render inicial** — rompe SSR en Next.js |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay sombras planas (`shadow-md`, `shadow-lg`) — sugiere tokens compuestos `shadow-(--shadow-card)` |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `oklch()` inline en `.tsx` — debe vivir en `globals.css`, no en componentes |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `window.innerWidth` / `document.cookie` en render inicial — rompe SSR en Next.js |
+| `PostToolUse` Write/Edit | Despues de guardar | **🔒** Avisa si hay `<a target="_blank">` sin `rel="noopener noreferrer"` — vulnerabilidad tabnabbing |
+| `PostToolUse` Write/Edit | Despues de guardar | **🔒** Avisa si hay `dangerouslySetInnerHTML` sin DOMPurify cerca — XSS muy probable |
+| `PostToolUse` Write/Edit | Despues de guardar | **🔒** Avisa si hay `localStorage.setItem('token'\|'jwt'\|'auth')` — debe ir en cookie httpOnly |
 | `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
 
 </details>
@@ -585,7 +637,7 @@ un-viernes-por-la-noche/
 │   ├── session-start.js        → banner de bienvenida
 │   ├── session-end.js          → cierre de sesion
 │   ├── statusline.cjs          → barra inferior en tiempo real
-│   ├── agents/                 → 15 agentes especializados
+│   ├── agents/                 → 16 agentes especializados
 │   │   ├── ux-researcher.md
 │   │   ├── design-bridge.md
 │   │   ├── ui-designer.md
@@ -598,28 +650,34 @@ un-viernes-por-la-noche/
 │   │   ├── performance-ui.md
 │   │   ├── code-reviewer.md
 │   │   ├── refactoring-specialist.md
-│   │   ├── api-integrator.md   → TanStack Query, SWR, fetch nativo
-│   │   ├── form-specialist.md  → forms complejos, multi-step, file upload
-│   │   └── state-manager.md    → Zustand, Context, arbol de decision de estado
+│   │   ├── api-integrator.md       → TanStack Query, SWR, fetch nativo
+│   │   ├── form-specialist.md      → forms complejos, multi-step, file upload
+│   │   ├── state-manager.md        → Zustand, Context, arbol de decision de estado
+│   │   └── security-frontend.md    → 🔒 XSS, secrets, auth, CSP, headers, deps
 │   ├── commands/
-│   │   ├── uvpln-loop.md       → slash command /uvpln-loop
-│   │   ├── uvpln-audit.md      → slash command /uvpln-audit
-│   │   └── uvpln-handoff.md    → slash command /uvpln-handoff
+│   │   ├── uvpln-loop.md           → slash command /uvpln-loop
+│   │   ├── uvpln-audit.md          → slash command /uvpln-audit
+│   │   ├── uvpln-security-audit.md → 🔒 slash command /uvpln-security-audit
+│   │   └── uvpln-handoff.md        → slash command /uvpln-handoff
 │   ├── install/
 │   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
 │   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
-│   ├── hooks/                  → 11 hooks de calidad automaticos
+│   ├── hooks/                  → 15 hooks de calidad automaticos
 │   │   ├── uvpln-track-agent-start.js
 │   │   ├── uvpln-track-agent-end.js
 │   │   ├── uvpln-check-colors.js
 │   │   ├── uvpln-check-any.js
 │   │   ├── uvpln-loop-trigger.js
-│   │   ├── uvpln-check-console.js     → detecta console.log pendiente
-│   │   ├── uvpln-check-a11y.js        → detecta img sin alt y onClick no accesible
-│   │   ├── uvpln-check-use-client.js  → detecta hooks sin "use client" en Next.js
-│   │   ├── uvpln-check-shadows.js     → detecta sombras planas (shadow-md), sugiere tokens compuestos
-│   │   ├── uvpln-check-oklch-inline.js → detecta oklch() inline en .tsx, debe estar en tokens
-│   │   └── uvpln-check-ssr-window.js  → detecta window/document en render inicial
+│   │   ├── uvpln-check-console.js          → detecta console.log pendiente
+│   │   ├── uvpln-check-a11y.js             → detecta img sin alt y onClick no accesible
+│   │   ├── uvpln-check-use-client.js       → detecta hooks sin "use client" en Next.js
+│   │   ├── uvpln-check-shadows.js          → detecta sombras planas (shadow-md), sugiere tokens compuestos
+│   │   ├── uvpln-check-oklch-inline.js     → detecta oklch() inline en .tsx, debe estar en tokens
+│   │   ├── uvpln-check-ssr-window.js       → detecta window/document en render inicial
+│   │   ├── uvpln-check-secrets.js          → 🔒🛑 BLOQUEA secrets hardcodeados (Stripe, AWS, GitHub, OpenAI keys)
+│   │   ├── uvpln-check-target-blank.js     → 🔒 detecta tabnabbing en links externos
+│   │   ├── uvpln-check-dangerous-html.js   → 🔒 detecta XSS via dangerouslySetInnerHTML sin DOMPurify
+│   │   └── uvpln-check-localstorage-token.js → 🔒 detecta tokens auth en localStorage
 │   ├── templates/              → 4 patrones visuales de referencia
 │   │   ├── landing-page.md
 │   │   ├── dashboard.md
@@ -682,6 +740,68 @@ un-viernes-por-la-noche/
 ## Changelog
 
 <details open>
+<summary><img src="https://img.shields.io/badge/v3.2.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 🔒 security-frontend · 4 hooks de seguridad · /uvpln-security-audit · statusline mejorada</summary>
+
+<br/>
+
+uvpln cubria diseño y arquitectura world-class pero tenia un gap critico: cero proteccion contra vulnerabilidades de cliente. Esta version cierra el gap con un agente dedicado, hooks que enforzan buenas practicas en tiempo real, y un slash command para auditoria completa.
+
+### security-frontend (agente nuevo, 16 agentes en total)
+
+Especialista Sonnet en seguridad cliente moderna. Cubre:
+
+- **XSS** — `dangerouslySetInnerHTML` con DOMPurify, sanitizacion de input
+- **Secrets** — escaneo de API keys, tokens, passwords hardcodeados
+- **Auth patterns** — cookies httpOnly + Secure + SameSite vs localStorage, JWT + refresh, validacion server-side
+- **CSP y headers** — Content-Security-Policy, X-Frame-Options, Referrer-Policy, Permissions-Policy en `next.config.js`
+- **Tabnabbing** — `<a target="_blank">` con `rel="noopener noreferrer"`
+- **Iframes** — sandbox apropiado por capability
+- **Open redirects** — whitelist de URLs en `/login?redirect=...`
+- **Dependencias** — `npm audit`, paquetes a actualizar urgente
+- **Validacion de inputs** — Zod compartido entre cliente y server
+
+Stack recomendado documentado: NextAuth/Auth.js, Clerk, Lucia segun caso.
+
+### 4 hooks de seguridad nuevos (15 hooks en total)
+
+| Hook | Tipo | Detecta |
+|------|------|---------|
+| `uvpln-check-secrets.js` | 🛑 PreToolUse blocking | API keys (Stripe, AWS, GitHub, OpenAI, Google), tokens, passwords hardcodeados con patterns de proveedores conocidos |
+| `uvpln-check-target-blank.js` | PostToolUse warning | `<a target="_blank">` sin `rel="noopener noreferrer"` (tabnabbing) |
+| `uvpln-check-dangerous-html.js` | PostToolUse warning | `dangerouslySetInnerHTML` sin DOMPurify importado |
+| `uvpln-check-localstorage-token.js` | PostToolUse warning | `localStorage.setItem('token'\|'jwt'\|'auth'\|'session')` |
+
+`check-secrets` es el unico blocking de seguridad — un secret en codigo es no-go inmediato. Los otros 3 avisan para que `security-frontend` o `ui-architect` corrijan.
+
+### /uvpln-security-audit (slash command nuevo)
+
+Auditoria completa con `security-frontend`. Reporte por severidad con fixes accionables:
+
+- 🔴 CRITICO (bloquea merge) — secrets, tokens en localStorage, XSS sin sanitizar, eval, vulnerabilidades CRITICAL
+- 🟠 ALTO (bloquea release) — CSP faltante, headers inseguros, cookies sin httpOnly, validacion server faltante
+- 🟡 MEDIO (corregir en sprint) — `target=_blank` sin rel, iframes sin sandbox, open redirects
+- 🟢 BAJO (mejora) — HSTS, CORS restrictivo, SRI en CDN scripts
+
+Incluye `npm audit` integrado y reporte de paquetes vulnerables a actualizar.
+
+### Statusline mejorada
+
+La linea 1 de la statusline ahora muestra contadores que comunican el sistema de proteccion:
+
+```
+🐊 uvpln · mi-proyecto │ 16 agentes 🔒 15 hooks │ ◉ ds │ sonnet · 12% ctx · $0.023 │ Cartagena 🇨🇴
+◈ ux-researcher  ◈ design-bridge  ◈ ui-designer  ... (linea 2 con todos los agentes)
+```
+
+El icono 🔒 aparece automaticamente cuando hay hooks de seguridad activos. Si los desinstalas, desaparece — la statusline lee el directorio en vivo.
+
+### CLAUDE.md actualizado
+
+Matriz de "cuando llamar a cada agente" suma `security-frontend` para auth, secrets, XSS, CSP, headers de seguridad, dependencias vulnerables.
+
+</details>
+
+<details>
 <summary><img src="https://img.shields.io/badge/v3.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 7 agentes visuales world-class · vocabulario alineado · loop de calidad blindado</summary>
 
 <br/>
