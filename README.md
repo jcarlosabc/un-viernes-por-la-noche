@@ -939,5 +939,5 @@ Primera version de uvpln con 6 agentes especializados y el loop `ui-architect �
 ---
 
 <p align="center">
-  Hecho con berraquera desde Cartagena de Indias, Colombia 🇨🇴
+  Hecho con Amor y Cariño desde Cartagena de Indias, Colombia 🇨🇴, disfruta bro
 </p>
