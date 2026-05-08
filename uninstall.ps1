@@ -62,7 +62,10 @@ $agents = @(
     "design-bridge.md",
     "ui-designer.md",
     "ux-researcher.md",
-    "debugger.md"
+    "debugger.md",
+    "api-integrator.md",
+    "form-specialist.md",
+    "state-manager.md"
 )
 foreach ($agent in $agents) {
     $f = "$AGENTS_DIR\$agent"
@@ -92,7 +95,10 @@ $hooks = @(
     "uvpln-track-agent-end.js",
     "uvpln-check-colors.js",
     "uvpln-check-any.js",
-    "uvpln-loop-trigger.js"
+    "uvpln-loop-trigger.js",
+    "uvpln-check-console.js",
+    "uvpln-check-a11y.js",
+    "uvpln-check-use-client.js"
 )
 foreach ($hook in $hooks) {
     $f = "$HOOKS_DIR\$hook"
@@ -107,7 +113,7 @@ if ((Test-Path $HOOKS_DIR) -and -not (Get-ChildItem $HOOKS_DIR -Force)) {
 }
 
 # 2c. Comandos slash de uvpln
-$cmds = @("uvpln-loop.md")
+$cmds = @("uvpln-loop.md", "uvpln-audit.md", "uvpln-handoff.md")
 foreach ($cmd in $cmds) {
     $f = "$COMMANDS_DIR\$cmd"
     if (Test-Path $f) {
@@ -135,7 +141,7 @@ if ((Test-Path $TEMPLATES_DIR) -and -not (Get-ChildItem $TEMPLATES_DIR -Force)) 
 }
 
 # 2e. Examples de código
-$exs = @("button-variants.md", "form-validation.md", "data-table.md", "modal-pattern.md", "theme-tokens.md")
+$exs = @("button-variants.md", "form-validation.md", "data-table.md", "modal-pattern.md", "theme-tokens.md", "api-fetch.md", "card-grid.md", "navigation.md", "toast-notifications.md")
 foreach ($ex in $exs) {
     $f = "$EXAMPLES_DIR\$ex"
     if (Test-Path $f) {

@@ -41,6 +41,9 @@ Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disp
 | Tailwind components | https://tailwindcss.504b.cc/ | Patrones visuales Tailwind listos |
 | Tailwind showcase | https://tailwindcss.com/showcase | Referencias de diseño en producción |
 | tweakcn theme editor | https://tweakcn.com/editor/theme | Generar y exportar temas shadcn/ui |
+| Lucide icons | https://lucide.dev/icons | Íconos usados por shadcn/ui |
+| Radix UI primitives | https://www.radix-ui.com/primitives | Docs de los primitivos accesibles base |
+| Animata | https://animata.design/ | Micro-interacciones y animaciones free |
 
 **Examples locales** en `~/.claude/examples/` — patrones de código en TS y JS listos para adaptar:
 - `button-variants.md` — Button con variantes y loading state
@@ -48,6 +51,15 @@ Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disp
 - `data-table.md` — DataTable con sorting y paginación
 - `modal-pattern.md` — Dialog y AlertDialog accesibles
 - `theme-tokens.md` — CSS variables base para shadcn/ui + Tailwind 4
+- `api-fetch.md` — TanStack Query con loading / error / empty states
+- `card-grid.md` — Grid responsivo 1→2→3 col con shadcn Card
+- `navigation.md` — Navbar con mobile menu (Sheet)
+- `toast-notifications.md` — Sonner: success, error, promise
+
+**Slash commands disponibles:**
+- `/uvpln-loop` — loop de calidad completo (architect → tester → fix)
+- `/uvpln-audit` — auditoría de a11y + tokens + performance
+- `/uvpln-handoff` — documento de handoff de la sesión
 
 El agente usa el bloque TS o JS del example según el lenguaje guardado en memoria del proyecto.
 
@@ -135,6 +147,9 @@ Claude Code puede invocar subagentes. Usá estos criterios:
 | Lighthouse baja de 90 o hay layout shifts | `performance-ui` |
 | Antes de hacer merge de código nuevo | `code-reviewer` |
 | Componente creció demasiado o está enredado | `refactoring-specialist` |
+| Conectar componente a una API (fetch, loading, error, paginación) | `api-integrator` |
+| Form complejo (multi-step, file upload, campos dinámicos) | `form-specialist` |
+| Prop drilling, estado global, elegir entre Zustand/Context | `state-manager` |
 
 ---
 

@@ -91,6 +91,9 @@ AGENTS=(
   "ui-designer.md"
   "ux-researcher.md"
   "debugger.md"
+  "api-integrator.md"
+  "form-specialist.md"
+  "state-manager.md"
 )
 
 for agent in "${AGENTS[@]}"; do
@@ -123,6 +126,9 @@ HOOKS=(
   "uvpln-check-colors.js"
   "uvpln-check-any.js"
   "uvpln-loop-trigger.js"
+  "uvpln-check-console.js"
+  "uvpln-check-a11y.js"
+  "uvpln-check-use-client.js"
 )
 for hook in "${HOOKS[@]}"; do
   src="$UVPLN_DIR/claude/hooks/$hook"
@@ -136,7 +142,7 @@ for hook in "${HOOKS[@]}"; do
 done
 
 # Instalar comandos slash (loop de calidad)
-for cmd in "uvpln-loop.md"; do
+for cmd in "uvpln-loop.md" "uvpln-audit.md" "uvpln-handoff.md"; do
   src="$UVPLN_DIR/claude/commands/$cmd"
   dst="$COMMANDS_DIR/$cmd"
   if [ -f "$src" ]; then
@@ -160,7 +166,7 @@ for tpl in "README.md" "landing-page.md" "dashboard.md" "auth.md" "ecommerce.md"
 done
 
 # Instalar examples de código (patrones TS + JS)
-for ex in "button-variants.md" "form-validation.md" "data-table.md" "modal-pattern.md" "theme-tokens.md"; do
+for ex in "button-variants.md" "form-validation.md" "data-table.md" "modal-pattern.md" "theme-tokens.md" "api-fetch.md" "card-grid.md" "navigation.md" "toast-notifications.md"; do
   src="$UVPLN_DIR/claude/examples/$ex"
   dst="$EXAMPLES_DIR/$ex"
   if [ -f "$src" ]; then

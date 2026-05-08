@@ -96,7 +96,10 @@ $agents = @(
     "design-bridge.md",
     "ui-designer.md",
     "ux-researcher.md",
-    "debugger.md"
+    "debugger.md",
+    "api-integrator.md",
+    "form-specialist.md",
+    "state-manager.md"
 )
 
 foreach ($agent in $agents) {
@@ -129,7 +132,10 @@ $hooks = @(
     "uvpln-track-agent-end.js",
     "uvpln-check-colors.js",
     "uvpln-check-any.js",
-    "uvpln-loop-trigger.js"
+    "uvpln-loop-trigger.js",
+    "uvpln-check-console.js",
+    "uvpln-check-a11y.js",
+    "uvpln-check-use-client.js"
 )
 foreach ($hook in $hooks) {
     $src = "$UVPLN_DIR\claude\hooks\$hook"
@@ -143,7 +149,7 @@ foreach ($hook in $hooks) {
 }
 
 # Instalar comandos slash (loop de calidad)
-$commands = @("uvpln-loop.md")
+$commands = @("uvpln-loop.md", "uvpln-audit.md", "uvpln-handoff.md")
 foreach ($cmd in $commands) {
     $src = "$UVPLN_DIR\claude\commands\$cmd"
     $dst = "$COMMANDS_DIR\$cmd"
@@ -174,7 +180,11 @@ $examples = @(
     "form-validation.md",
     "data-table.md",
     "modal-pattern.md",
-    "theme-tokens.md"
+    "theme-tokens.md",
+    "api-fetch.md",
+    "card-grid.md",
+    "navigation.md",
+    "toast-notifications.md"
 )
 foreach ($ex in $examples) {
     $src = "$UVPLN_DIR\claude\examples\$ex"

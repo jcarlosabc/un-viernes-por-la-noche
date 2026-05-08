@@ -67,6 +67,21 @@
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-any.js'))\"",
             "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-console.js'))\"",
+            "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-a11y.js'))\"",
+            "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-use-client.js'))\"",
+            "blocking": false
           }
         ]
       }
