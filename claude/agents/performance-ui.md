@@ -27,6 +27,62 @@ Especialista en performance frontend. Core Web Vitals, bundle size, rendering pa
 | INP (Interaction to Next Paint) | < 200ms | 200ms - 500ms | > 500ms |
 | CLS (Cumulative Layout Shift) | < 0.1 | 0.1 - 0.25 | > 0.25 |
 
+## Coordinación con tokens de motion (lenguaje world-class)
+
+Las animaciones afectan INP y consumo de CPU. Coordinar siempre con `tokens-manager` y `motion-designer`:
+
+- Las duraciones del proyecto viven en tokens: `--duration-micro` (150ms), `--duration-base` (250ms), `--duration-macro` (400ms), `--duration-page` (700ms)
+- Animar SOLO `transform`, `opacity`, `filter` y `clip-path` — **nunca** `width`, `height`, `top`, `left`, `margin` (causan reflow + repaint)
+- `will-change` solo en elementos que están a punto de animar — sacar después
+- Animaciones que duran más de `--duration-macro` (400ms) deben tener fallback `prefers-reduced-motion`
+
+```css
+/* will-change correctamente: aplicar antes de animar, sacar después */
+.card {
+  /* sin will-change por default */
+}
+
+.card:hover,
+.card:focus-visible {
+  will-change: transform;
+  transform: translateY(-2px);
+  transition: transform var(--duration-micro) var(--ease-out-expo);
+}
+```
+
+## Container queries vs media queries (impacto en performance)
+
+Container queries son más performantes que media queries en componentes que viven en distintos contenedores (sidebar 300px vs main 800px). Evitan re-layouts innecesarios cuando el viewport cambia pero el contenedor no:
+
+```tsx
+// MAL — cada vez que cambia viewport, todos los componentes recalculan
+<aside className="md:block md:w-1/3">
+  <Card className="md:flex-row" />
+</aside>
+
+// BIEN — solo recalcula si su contenedor cambia
+<aside className="@container">
+  <Card className="@md:flex-row" />
+</aside>
+```
+
+## Bundle size budgets (alertas tempranas)
+
+Definir budgets por route como gate de performance. En `next.config.js`:
+
+```js
+module.exports = {
+  experimental: {
+    bundleSizeLimit: { default: '200kb' }, // First Load JS de cada page
+  },
+}
+```
+
+O con custom check en CI usando `next-bundle-analyzer`:
+- First Load JS por route: **< 200kb** (umbral verde)
+- First Load JS shared: **< 100kb**
+- Si crece >10% en un PR, alertar — es deuda silenciosa.
+
 ## Optimización de imágenes en Next.js 15
 
 ```tsx
@@ -199,20 +255,32 @@ export default withBundleAnalyzer({ enabled: process.env.ANALYZE === "true" })({
 - [ ] Hero image tiene `priority` en next/image
 - [ ] Fuentes cargadas con `next/font` (no @import CSS)
 - [ ] No hay JS bloqueante en el render inicial
+- [ ] Server Components por default — Client Components justificados
 
 ### CLS
-- [ ] Todas las imágenes tienen dimensiones explícitas o contenedor con aspect-ratio
-- [ ] Fuentes con `font-display: swap` y espacio reservado
-- [ ] Ads y embeds tienen espacio reservado
+- [ ] Todas las imágenes tienen `width`/`height` explícitos o contenedor con `aspect-ratio`
+- [ ] Fuentes con `font-display: swap` y `size-adjust` para evitar layout shift
+- [ ] Ads y embeds tienen espacio reservado con altura mínima
+- [ ] Skeletons coinciden EXACTAMENTE con dimensiones del contenido final
 
 ### INP
 - [ ] Event handlers costosos usan `startTransition` o `useDeferredValue`
 - [ ] No hay operaciones síncronas pesadas en el thread principal
+- [ ] Animaciones solo en `transform`/`opacity` (no causan reflow)
+- [ ] `will-change` aplicado **antes** de animar y removido después
 
 ### Bundle
 - [ ] No hay imports de toda la librería (`import * from`)
-- [ ] Componentes pesados están en dynamic imports
+- [ ] Componentes pesados están en `dynamic()` imports
 - [ ] Dependencias duplicadas verificadas con `npx depcheck`
+- [ ] First Load JS por route bajo el budget (< 200kb verde, < 300kb amarillo)
+- [ ] Lucide icons importados nominalmente, no `import * as Icons`
+
+### Streaming y RSC (Next.js 15)
+- [ ] Componentes async pesados envueltos en `<Suspense>` con skeleton coincidente
+- [ ] `loading.tsx` definido en routes con datos lentos
+- [ ] No hay `"use client"` en componentes que solo renderean (deben ser RSC)
+- [ ] Datos fetcheados en server cuando sea posible (no en `useEffect`)
 
 ## Lo que NO hago
 

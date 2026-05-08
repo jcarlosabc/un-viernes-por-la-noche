@@ -28,7 +28,7 @@
 
 ## Que es uvpln?
 
-`uvpln` es un equipo de **16 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde conectar una API hasta traducir una referencia visual a codigo, validar accesibilidad, blindar la seguridad cliente y aprobar el componente.
+`uvpln` es un equipo de **23 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend moderno. No es un agente generico que hace de todo — es un equipo entero que cubre el stack completo: desde traducir una referencia visual a codigo world-class hasta integrar Stripe, mandar mailings transaccionales con React Email, configurar SEO + OG images dinamicas, soportar multi-idioma con RTL, tracking de analytics GDPR-compliant, AI features con streaming, Storybook con visual regression, y validar todo (accesibilidad, performance, seguridad) antes del merge. Y aprende: cada bug que el `ui-tester` detecta se guarda como lesson para que no se repita.
 
 <p align="center">
   <img src="uvpln.png" alt="uvpln en accion" width="480" />
@@ -41,7 +41,7 @@
 ## Los agentes
 
 <details open>
-<summary><strong>Ver los 16 agentes</strong></summary>
+<summary><strong>Ver los 23 agentes</strong></summary>
 
 <br/>
 
@@ -149,6 +149,48 @@
       <td align="center">🔒</td>
       <td><img src="https://img.shields.io/badge/security--frontend-22C55E?style=flat-square&logoColor=white" /></td>
       <td>Seguridad cliente: XSS, secrets, auth patterns, CSP, headers, dependencias vulnerables, iframes</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">📧</td>
+      <td><img src="https://img.shields.io/badge/email--designer-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Mailings transaccionales y marketing — React Email, Resend, dark mode email, deliverability</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">📈</td>
+      <td><img src="https://img.shields.io/badge/seo--specialist-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Metadata API, OG images dinamicas con @vercel/og, sitemap, robots, JSON-LD, hreflang</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">🌍</td>
+      <td><img src="https://img.shields.io/badge/i18n--specialist-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>next-intl, ICU MessageFormat, plurales, RTL, formato por locale, gestion con Crowdin/Lokalise</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">📊</td>
+      <td><img src="https://img.shields.io/badge/analytics--engineer-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>PostHog, Plausible, GA4 — taxonomia de eventos, Web Vitals reales, A/B testing, GDPR cookie banner</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">💳</td>
+      <td><img src="https://img.shields.io/badge/payments--specialist-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Stripe Checkout/Subscriptions/Customer Portal, Lemon Squeezy, webhooks idempotentes, paywalls, tax</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">🤖</td>
+      <td><img src="https://img.shields.io/badge/ai--features--engineer-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Vercel AI SDK, streaming UIs, tool calling, generative UI, RAG con embeddings, prompt injection prevention</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td align="center">📖</td>
+      <td><img src="https://img.shields.io/badge/storybook--curator-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Storybook 9, CSF3, interaction tests, visual regression con Chromatic, MDX docs, addon-a11y</td>
       <td>Sonnet</td>
     </tr>
   </tbody>
@@ -456,21 +498,21 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 **Statusline en tiempo real** (2 líneas):
 
 ```
-🐊 uvpln · mi-proyecto │ 16 agentes 🔒 15 hooks │ ◉ ds │ sonnet · 12% ctx · $0.023 │ Cartagena 🇨🇴
-🔍 ux-researcher  🌉 design-bridge  🎨 ui-designer  🏗️ ui-architect  🧪 ui-tester  🐛 debugger  ♿ a11y-expert  ✨ motion-designer  🪙 tokens-manager  ⚡ performance-ui  👁️ code-reviewer  🔧 refactoring-specialist  🔌 api-integrator  📝 form-specialist  🧠 state-manager  🔒 security-frontend
+🐊 uvpln · mi-proyecto │ 23 agentes 🔒 17 hooks │ ◉ ds │ sonnet · 12% ctx · $0.023 │ Cartagena 🇨🇴
+🔍 ux-researcher  🌉 design-bridge  🎨 ui-designer  🏗️ ui-architect  🧪 ui-tester  🐛 debugger  ♿ a11y-expert  ✨ motion-designer  🪙 tokens-manager  ⚡ performance-ui  👁️ code-reviewer  🔧 refactoring-specialist  🔌 api-integrator  📝 form-specialist  🧠 state-manager  🔒 security-frontend  📧 email-designer  📈 seo-specialist  🌍 i18n-specialist  📊 analytics-engineer  💳 payments-specialist  🤖 ai-features-engineer  📖 storybook-curator
 ```
 
 - **Línea 1** muestra contador de agentes y hooks (con `🔒` cuando hay hooks de seguridad activos)
-- **Línea 2** lista los 16 agentes con su icono — el activo se resalta en morado brillante cuando uno está corriendo
+- **Línea 2** lista los 23 agentes con su icono — el activo se resalta en morado brillante cuando uno está corriendo
 
 </details>
 
 <details>
-<summary><strong>Hooks de calidad · 15 validaciones automaticas mientras escribis (4 son 🔒 seguridad)</strong></summary>
+<summary><strong>Hooks de calidad · 17 validaciones automaticas (4 son 🔒 seguridad, 2 son 📚 aprendizaje)</strong></summary>
 
 <br/>
 
-uvpln vigila el codigo mientras escribis — 15 hooks automaticos. 3 protegen calidad world-class (sombras, OKLCH, SSR), **4 protegen seguridad cliente** (secrets, XSS, auth, tabnabbing).
+uvpln vigila el codigo mientras escribis — 17 hooks automaticos. 3 protegen calidad world-class (sombras, OKLCH, SSR), **4 protegen seguridad cliente** (secrets, XSS, auth, tabnabbing), **2 implementan aprendizaje** (lessons learned + catalogo de componentes auto-indexado).
 
 | Hook | Cuando corre | Que hace |
 |------|-------------|----------|
@@ -487,6 +529,8 @@ uvpln vigila el codigo mientras escribis — 15 hooks automaticos. 3 protegen ca
 | `PostToolUse` Write/Edit | Despues de guardar | **🔒** Avisa si hay `dangerouslySetInnerHTML` sin DOMPurify cerca — XSS muy probable |
 | `PostToolUse` Write/Edit | Despues de guardar | **🔒** Avisa si hay `localStorage.setItem('token'\|'jwt'\|'auth')` — debe ir en cookie httpOnly |
 | `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
+| `PostToolUse` Agent | Cuando un agente termina | **📚** Si fue `ui-tester`, recuerda registrar la lesson aprendida (bug→fix→patron) en `~/.claude/memory/lessons/[proyecto].md` |
+| `SessionStart` | Al abrir Claude Code | **🗂️** Indexa `src/components/**/*.tsx` del proyecto y guarda catalogo en `~/.claude/memory/catalog/[proyecto].md` para que `ui-architect` consulte antes de crear |
 
 </details>
 
@@ -637,7 +681,7 @@ un-viernes-por-la-noche/
 │   ├── session-start.js        → banner de bienvenida
 │   ├── session-end.js          → cierre de sesion
 │   ├── statusline.cjs          → barra inferior en tiempo real
-│   ├── agents/                 → 16 agentes especializados
+│   ├── agents/                 → 23 agentes especializados
 │   │   ├── ux-researcher.md
 │   │   ├── design-bridge.md
 │   │   ├── ui-designer.md
@@ -650,10 +694,17 @@ un-viernes-por-la-noche/
 │   │   ├── performance-ui.md
 │   │   ├── code-reviewer.md
 │   │   ├── refactoring-specialist.md
-│   │   ├── api-integrator.md       → TanStack Query, SWR, fetch nativo
-│   │   ├── form-specialist.md      → forms complejos, multi-step, file upload
-│   │   ├── state-manager.md        → Zustand, Context, arbol de decision de estado
-│   │   └── security-frontend.md    → 🔒 XSS, secrets, auth, CSP, headers, deps
+│   │   ├── api-integrator.md           → TanStack Query, SWR, fetch nativo
+│   │   ├── form-specialist.md          → forms complejos, multi-step, file upload
+│   │   ├── state-manager.md            → Zustand, Context, arbol de decision de estado
+│   │   ├── security-frontend.md        → 🔒 XSS, secrets, auth, CSP, headers, deps
+│   │   ├── email-designer.md           → 📧 React Email, Resend, mailings transaccionales
+│   │   ├── seo-specialist.md           → 📈 Metadata API, OG images dinamicas, JSON-LD
+│   │   ├── i18n-specialist.md          → 🌍 next-intl, ICU, RTL, formato por locale
+│   │   ├── analytics-engineer.md       → 📊 PostHog, Web Vitals reales, A/B, GDPR banner
+│   │   ├── payments-specialist.md      → 💳 Stripe, Lemon Squeezy, webhooks, paywalls
+│   │   ├── ai-features-engineer.md     → 🤖 Vercel AI SDK, streaming, RAG, tool calling
+│   │   └── storybook-curator.md        → 📖 Storybook 9, CSF3, Chromatic, MDX docs
 │   ├── commands/
 │   │   ├── uvpln-loop.md           → slash command /uvpln-loop
 │   │   ├── uvpln-audit.md          → slash command /uvpln-audit
@@ -662,22 +713,24 @@ un-viernes-por-la-noche/
 │   ├── install/
 │   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
 │   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
-│   ├── hooks/                  → 15 hooks de calidad automaticos
+│   ├── hooks/                  → 17 hooks de calidad automaticos
 │   │   ├── uvpln-track-agent-start.js
 │   │   ├── uvpln-track-agent-end.js
 │   │   ├── uvpln-check-colors.js
 │   │   ├── uvpln-check-any.js
 │   │   ├── uvpln-loop-trigger.js
-│   │   ├── uvpln-check-console.js          → detecta console.log pendiente
-│   │   ├── uvpln-check-a11y.js             → detecta img sin alt y onClick no accesible
-│   │   ├── uvpln-check-use-client.js       → detecta hooks sin "use client" en Next.js
-│   │   ├── uvpln-check-shadows.js          → detecta sombras planas (shadow-md), sugiere tokens compuestos
-│   │   ├── uvpln-check-oklch-inline.js     → detecta oklch() inline en .tsx, debe estar en tokens
-│   │   ├── uvpln-check-ssr-window.js       → detecta window/document en render inicial
-│   │   ├── uvpln-check-secrets.js          → 🔒🛑 BLOQUEA secrets hardcodeados (Stripe, AWS, GitHub, OpenAI keys)
-│   │   ├── uvpln-check-target-blank.js     → 🔒 detecta tabnabbing en links externos
-│   │   ├── uvpln-check-dangerous-html.js   → 🔒 detecta XSS via dangerouslySetInnerHTML sin DOMPurify
-│   │   └── uvpln-check-localstorage-token.js → 🔒 detecta tokens auth en localStorage
+│   │   ├── uvpln-check-console.js              → detecta console.log pendiente
+│   │   ├── uvpln-check-a11y.js                 → detecta img sin alt y onClick no accesible
+│   │   ├── uvpln-check-use-client.js           → detecta hooks sin "use client" en Next.js
+│   │   ├── uvpln-check-shadows.js              → detecta sombras planas, sugiere tokens compuestos
+│   │   ├── uvpln-check-oklch-inline.js         → detecta oklch() inline en .tsx
+│   │   ├── uvpln-check-ssr-window.js           → detecta window/document en render inicial
+│   │   ├── uvpln-check-secrets.js              → 🔒🛑 BLOQUEA secrets (Stripe, AWS, GitHub, OpenAI keys)
+│   │   ├── uvpln-check-target-blank.js         → 🔒 detecta tabnabbing en links externos
+│   │   ├── uvpln-check-dangerous-html.js       → 🔒 detecta XSS via dangerouslySetInnerHTML sin DOMPurify
+│   │   ├── uvpln-check-localstorage-token.js   → 🔒 detecta tokens auth en localStorage
+│   │   ├── uvpln-lesson-reminder.js            → 📚 recuerda registrar lesson cuando ui-tester aprueba post-iteracion
+│   │   └── uvpln-catalog-components.js         → 🗂️ SessionStart: indexa src/components y guarda catalogo
 │   ├── templates/              → 4 patrones visuales de referencia
 │   │   ├── landing-page.md
 │   │   ├── dashboard.md
@@ -740,6 +793,77 @@ un-viernes-por-la-noche/
 ## Changelog
 
 <details open>
+<summary><img src="https://img.shields.io/badge/v3.3.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; sistema completo · 7 agentes nuevos · memoria que aprende · catalogo auto-indexado · 23 agentes 17 hooks</summary>
+
+<br/>
+
+La actualizacion mas grande desde el launch. uvpln pasa de "ecosistema de UI world-class" a **stack frontend completo de 2026**: cubre todo lo que un producto real necesita (mailings, SEO, i18n, analytics, payments, AI, Storybook), tiene memoria que aprende entre sesiones, y los agentes existentes consultan el catalogo del proyecto antes de crear duplicados.
+
+### 7 agentes nuevos (16 → 23)
+
+Cada uno cubre un area que antes era "el cliente lo hace en otro lado". Ahora todo vive dentro del mismo loop de calidad uvpln.
+
+| Icono | Agente | Especialidad | Stack |
+|:-----:|--------|-------------|-------|
+| 📧 | `email-designer` | Mailings transaccionales (welcome, reset, receipt) y marketing (newsletters). Dark mode email, deliverability, preview text, RTL. | React Email + Resend / Postmark |
+| 📈 | `seo-specialist` | Metadata API per-route, OG images dinamicas, JSON-LD por tipo (Article, Product, Organization, FAQ), sitemap, robots, hreflang. | Next.js Metadata + @vercel/og |
+| 🌍 | `i18n-specialist` | Routing por locale, ICU MessageFormat para plurales/genero, formato Intl por idioma, RTL con logical properties, gestion con TMS. | next-intl + Crowdin/Lokalise |
+| 📊 | `analytics-engineer` | Taxonomia de eventos type-safe, Web Vitals reales (RUM), A/B testing con feature flags, GDPR cookie banner que respeta opt-out. | PostHog + Plausible / GA4 |
+| 💳 | `payments-specialist` | Stripe Checkout/Subscriptions/Customer Portal, webhooks idempotentes, paywalls (hard + soft), tax automatico, alternativas MoR (Lemon Squeezy, Paddle). | Stripe + Stripe Tax |
+| 🤖 | `ai-features-engineer` | Streaming UIs (chat, completions), tool calling, generative UI con RSC, RAG con embeddings + pgvector, prompt injection prevention, tracking de costos. | Vercel AI SDK + Claude/OpenAI |
+| 📖 | `storybook-curator` | Stories CSF3, interaction tests con `play()`, visual regression con Chromatic, addon-a11y, MDX docs, theming con tokens del proyecto. | Storybook 9 + Chromatic |
+
+Total: **23 agentes** que cubren todo el stack frontend moderno.
+
+### Memoria que aprende (cambio de paradigma)
+
+Antes de v3.3, uvpln era stateless entre sesiones. Cada bug que `ui-tester` detectaba podia repetirse en el siguiente componente. Ahora:
+
+**📚 Lessons learned automatico:**
+- Hook `uvpln-lesson-reminder.js` (PostToolUse Agent) recuerda al `ui-tester` registrar la lesson cuando aprueba post-iteracion
+- `ui-tester` escribe a `~/.claude/memory/lessons/[proyecto].md` el par bug → fix → patron
+- `ui-architect` LEE las lessons antes de empezar cada componente — aplica el patron desde el primer intento, sin esperar a que el tester detecte el bug otra vez
+
+**🗂️ Catalogo de componentes auto-indexado:**
+- Hook `uvpln-catalog-components.js` (SessionStart) escanea `src/components/**/*.tsx` del proyecto activo
+- Genera `~/.claude/memory/catalog/[proyecto].md` agrupado por subcarpeta
+- `ui-architect` lo CONSULTA antes de crear un componente nuevo — evita duplicacion (no construye `PricingCard` si ya existe `pricing/PricingTier.tsx`)
+
+Resultado: cada proyecto enseña al siguiente. Cada sesion empieza con contexto real del codigo. Es lo que separa un asistente de un sistema que mejora.
+
+### Agentes existentes alineados a world-class
+
+**`code-reviewer` (Opus, ultimo filtro pre-merge):**
+- Lectura del brief + lessons + catalogo antes de revisar
+- Checklist de calidad visual world-class: sombras compuestas, sin OKLCH inline, tabular-nums, tracking display, dark rediseñado, motion via tokens, container queries
+- Checklist de seguridad: escala a `security-frontend` en hallazgos criticos
+- Checklist SSR: sin `window` en render inicial, sin warnings de hydration
+
+**`performance-ui` (Sonnet, performance):**
+- Coordinacion con tokens de motion: animar solo `transform`/`opacity`/`filter`, `will-change` antes de animar y removido despues
+- Container queries vs media queries — argumento de performance
+- Bundle size budgets explicitos (< 200kb First Load JS por route)
+- Streaming/RSC checklist: Suspense con skeleton coincidente, Server Components por default, datos en server no en `useEffect`
+
+### 2 hooks nuevos (15 → 17)
+
+| Hook | Cuando | Que hace |
+|------|--------|----------|
+| `uvpln-lesson-reminder.js` | PostToolUse Agent (ui-tester) | Recuerda registrar lesson en `~/.claude/memory/lessons/[proyecto].md` cuando hubo iteracion bug→fix |
+| `uvpln-catalog-components.js` | SessionStart | Indexa `src/components/**/*.tsx` y guarda en `~/.claude/memory/catalog/[proyecto].md` |
+
+### Statusline actualizada
+
+- Linea 1: `23 agentes 🔒 17 hooks` — el contador refleja los nuevos agentes y hooks
+- Linea 2: 23 iconos con sus mappings nuevos: 📧 email-designer, 📈 seo-specialist, 🌍 i18n-specialist, 📊 analytics-engineer, 💳 payments-specialist, 🤖 ai-features-engineer, 📖 storybook-curator
+
+### CLAUDE.md actualizado
+
+Matriz de "cuando llamar a cada agente" suma 7 filas — el routing es preciso, sin ambiguedad sobre que agente toca cada area.
+
+</details>
+
+<details>
 <summary><img src="https://img.shields.io/badge/v3.2.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 🔒 security-frontend · 4 hooks de seguridad · /uvpln-security-audit · statusline mejorada</summary>
 
 <br/>

@@ -58,6 +58,36 @@ Antes de diseñar cualquier componente, preguntar:
 - ¿Cuál es el contexto de uso? (página, modal, sidebar, mobile)
 - ¿Hay restricciones de performance? (above the fold, lazy load)
 
+### 1.b Consultar el catálogo de componentes del proyecto
+
+Antes de crear un componente nuevo, leer `~/.claude/memory/catalog/[proyecto].md` (auto-generado al inicio de cada sesión):
+
+```bash
+cat ~/.claude/memory/catalog/$(basename $(pwd)).md 2>/dev/null
+```
+
+Si encuentro algo similar al componente pedido (ej: piden `PricingCard` y existe `pricing/PricingTier.tsx`), **leo ese archivo primero** y propongo extender/reutilizar en lugar de crear paralelo. La duplicación de componentes es deuda visual y técnica.
+
+Casos donde sí creo nuevo aunque exista algo similar:
+- El existente está acoplado a otro contexto y refactor sería mayor que crear nuevo
+- Diferencias semánticas justifican separación (ej: `Card` vs `PricingCard` vs `ProductCard` con APIs distintas)
+- El existente es legacy que se va a deprecar
+
+### 1.c Leer lessons del proyecto (si existen)
+
+Antes de codear, revisar `~/.claude/memory/lessons/[proyecto].md`:
+
+```bash
+cat ~/.claude/memory/lessons/$(basename $(pwd)).md 2>/dev/null
+```
+
+Cada lesson es un par bug → fix → patrón que ui-tester ya validó en iteraciones previas. Si alguna aplica al componente actual, **aplicar el patrón desde el primer intento** — no esperar a que ui-tester lo detecte de nuevo. Esto es lo que hace que uvpln aprenda con cada proyecto.
+
+Ejemplos de lessons que cambian decisiones:
+- "Nunca usar `window.innerWidth` en render inicial" → uso `@container` desde el principio
+- "Iconos de marca no respetan `currentColor`" → defino tokens custom para esos
+- "shadcn Sheet no anima bien con `prefers-reduced-motion`" → uso `Dialog` con motion custom
+
 Si hay un brief de `design-bridge` o spec de `ui-designer`, usarlo como punto de partida. Si no hay brief y el componente encaja en un patrón estándar (landing, dashboard, auth, e-commerce), consultar la plantilla correspondiente en `~/.claude/templates/` para partir de decisiones de diseño ya resueltas.
 
 Para implementación de componentes, consultar en este orden:

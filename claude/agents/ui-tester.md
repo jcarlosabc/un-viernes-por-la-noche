@@ -184,6 +184,34 @@ Cuando el ui-architect corrige un bug:
 - Si pasa: marcar como resuelto
 - Si falla: reportar de nuevo con más detalle
 
+### 6. Registrar lesson aprendida (obligatorio si hubo iteración)
+
+Si el componente fue aprobado **después de iteración** (bug → fix → re-test), ese par es una lesson valiosa que debe persistir entre sesiones.
+
+Antes de cerrar el handoff, escribir la lesson a `~/.claude/memory/lessons/[proyecto].md` usando la tool `Write` (apendear, no sobrescribir):
+
+```markdown
+## 2026-05-08 — PricingCard
+
+**Bug detectado:** hydration mismatch al usar `window.innerWidth` en sort de tiers para mostrar "Business" primero en mobile.
+
+**Fix aplicado:** reemplazar JS sort por CSS order — `order-first md:order-none` en la card recomendada.
+
+**Patrón a recordar:** en Next.js, layout responsive nunca debe depender de `window.innerWidth` en render inicial. Usar CSS (order, container queries, media queries) o mover la lógica a `useEffect`.
+
+**Severidad evitada:** alto (hydration warning rompía SSR).
+```
+
+**Reglas de qué registrar:**
+- Solo bugs que aprendimos algo no obvio (no "olvidé un import")
+- Solo si el patrón aplica a futuros componentes (no específico a este caso)
+- Máximo 4-6 líneas por lesson — concisión sobre detalle
+
+**Reglas de qué NO registrar:**
+- Bugs de typos o sintaxis
+- Bugs específicos a una API custom del proyecto sin patrón general
+- Lecciones ya documentadas en el agente o en CLAUDE.md
+
 ## Severidad de bugs
 
 | Severidad | Criterio |

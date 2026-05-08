@@ -197,7 +197,7 @@ else
 fi
 
 echo ""
-echo "  ¡Listo parcero! uvpln está instalado."
+echo "  ¡Listo Amigo! uvpln está instalado."
 echo ""
 echo "  Agentes disponibles:"
 for agent in "${AGENTS[@]}"; do

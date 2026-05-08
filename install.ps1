@@ -217,7 +217,7 @@ if (-not (Test-Path $settingsDst)) {
 }
 
 Write-Host ""
-Write-Host "  Listo parcero! uvpln esta instalado." -ForegroundColor Magenta
+Write-Host "  Listo Amigo! uvpln esta instalado." -ForegroundColor Magenta
 Write-Host ""
 Write-Host "  Agentes disponibles:" -ForegroundColor White
 foreach ($agent in $agents) {

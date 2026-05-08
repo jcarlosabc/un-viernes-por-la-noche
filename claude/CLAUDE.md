@@ -166,6 +166,13 @@ Claude Code puede invocar subagentes. Usá estos criterios:
 | Form complejo (multi-step, file upload, campos dinámicos) | `form-specialist` |
 | Prop drilling, estado global, elegir entre Zustand/Context | `state-manager` |
 | Auth, secrets, XSS, CSP, headers de seguridad, dependencias vulnerables | `security-frontend` |
+| Mailings transaccionales o marketing (welcome, reset, receipt, newsletter) | `email-designer` |
+| Metadata, OG images, sitemap, robots, JSON-LD, hreflang | `seo-specialist` |
+| Multi-idioma, RTL, formato de números/fechas/moneda por locale | `i18n-specialist` |
+| Tracking de eventos, Web Vitals reales, A/B tests, cookie banner GDPR | `analytics-engineer` |
+| Stripe, suscripciones, customer portal, paywalls, webhooks de pagos | `payments-specialist` |
+| Chat con LLM, streaming UIs, RAG, embeddings, tool calling, AI features | `ai-features-engineer` |
+| Storybook, stories por componente, visual regression, design system docs | `storybook-curator` |
 
 ---
 

@@ -97,6 +97,13 @@ process.stdin.on('end', () => {
     'form-specialist':       '📝',
     'state-manager':         '🧠',
     'security-frontend':     '🔒',
+    'email-designer':        '📧',
+    'seo-specialist':        '📈',
+    'i18n-specialist':       '🌍',
+    'analytics-engineer':    '📊',
+    'payments-specialist':   '💳',
+    'ai-features-engineer':  '🤖',
+    'storybook-curator':     '📖',
   }
 
   // Línea 2 — agentes con iconos, resaltando el activo

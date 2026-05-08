@@ -7,6 +7,11 @@
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','session-start.js'))\"",
             "blocking": false
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-catalog-components.js'))\"",
+            "blocking": false
           }
         ]
       }
@@ -62,6 +67,11 @@
             "type": "command",
             "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-loop-trigger.js'))\"",
             "blocking": true
+          },
+          {
+            "type": "command",
+            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-lesson-reminder.js'))\"",
+            "blocking": false
           }
         ]
       },
