@@ -27,6 +27,37 @@ Los tokens tienen capas:
 2. **Semánticos** — propósito (`--color-primary: var(--blue-500)`)
 3. **Componente** — específicos (`--button-bg: var(--color-primary)`)
 
+## Cómo recibo paletas del design-bridge
+
+`design-bridge` me pasa el color base en OKLCH (ej: `oklch(55% 0.18 265)`). Mi trabajo es generar la escala completa 50→950 manteniendo H estable y modulando L y C:
+
+| Step | L (light) | C (relativo al base) |
+|------|-----------|----------------------|
+| 50   | 97%       | 15% del base         |
+| 100  | 94%       | 25% del base         |
+| 200  | 88%       | 50% del base         |
+| 300  | 80%       | 75% del base         |
+| 400  | 70%       | 90% del base         |
+| 500  | base      | base (100%)          |
+| 600  | base − 8  | base                 |
+| 700  | base − 18 | base × 0.9           |
+| 800  | base − 30 | base × 0.75          |
+| 900  | base − 40 | base × 0.55          |
+| 950  | 12%       | base × 0.4           |
+
+Regla: el chroma cae en los extremos (50 y 950) para evitar el efecto "color sucio". El hue (H) **no cambia** dentro de una escala.
+
+### Protocolo dark mode rediseñado (no invertido)
+
+Dark mode no es `L = 100 - L_light`. Eso produce contrastes rotos y colores planos. La regla:
+
+1. **Background**: L entre 8% y 14%, no 0%
+2. **Foreground**: L entre 92% y 96%, no 100%
+3. **Acentos**: subir L del color principal entre 5–10 puntos (un acento que en light era `oklch(55% 0.2 265)` en dark va a `oklch(62% 0.18 265)`)
+4. **Reducir chroma 10–20%** en dark — los colores saturados queman en pantallas oscuras
+5. **Borders**: L entre 22% y 28%, nunca puro gris
+6. **Verificar contraste**: AA mínimo (4.5:1) para texto, AAA (7:1) para texto crítico
+
 ## Tailwind 4 — el sistema cambió
 
 En Tailwind 4, los tokens se definen en CSS con `@theme`, no en `tailwind.config.js`.
@@ -62,8 +93,34 @@ En Tailwind 4, los tokens se definen en CSS con `@theme`, no en `tailwind.config
   --radius-lg: 0.75rem;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px oklch(0% 0 0 / 10%), 0 1px 2px oklch(0% 0 0 / 6%);
+  /* Shadows en capas (ambient + key + contact) */
+  --shadow-sm:
+    0 1px 2px oklch(0% 0 0 / 5%);
+
+  --shadow-card:
+    0 0 0 1px oklch(0% 0 0 / 5%),
+    0 1px 2px oklch(0% 0 0 / 6%),
+    0 4px 12px oklch(0% 0 0 / 8%);
+
+  --shadow-card-hover:
+    0 0 0 1px oklch(0% 0 0 / 8%),
+    0 2px 4px oklch(0% 0 0 / 8%),
+    0 12px 24px oklch(0% 0 0 / 12%);
+
+  --shadow-popover:
+    0 0 0 1px oklch(0% 0 0 / 6%),
+    0 8px 32px oklch(0% 0 0 / 16%);
+
+  /* Motion */
+  --duration-micro: 150ms;
+  --duration-base: 250ms;
+  --duration-macro: 400ms;
+  --duration-page: 700ms;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.5, 1.5, 0.5, 1);
 }
 ```
 
@@ -94,22 +151,27 @@ En Tailwind 4, los tokens se definen en CSS con `@theme`, no en `tailwind.config
   --radius: var(--radius-md);
 }
 
-/* Dark mode */
+/* Dark mode rediseñado — no es light invertido */
 .dark {
-  --background: var(--color-neutral-900);
-  --foreground: var(--color-neutral-50);
+  /* Background NO es 0% — usar L 8-14% */
+  --background: oklch(11% 0 0);
+  --foreground: oklch(95% 0 0);
 
-  --card: oklch(17% 0 0);
-  --card-foreground: var(--color-neutral-50);
+  /* Card un poco más claro que el background para profundidad */
+  --card: oklch(15% 0 0);
+  --card-foreground: oklch(95% 0 0);
 
+  /* Acento: subir L 5-10 puntos vs light, bajar chroma 10-20% */
   --primary: var(--color-brand-400);
-  --primary-foreground: var(--color-brand-950);
+  --primary-foreground: oklch(15% 0 0);
 
-  --muted: oklch(20% 0 0);
+  --muted: oklch(18% 0 0);
   --muted-foreground: oklch(65% 0 0);
 
-  --border: oklch(25% 0 0);
-  --input: oklch(25% 0 0);
+  /* Borders nunca puro gris — L 22-28% */
+  --border: oklch(24% 0 0);
+  --input: oklch(24% 0 0);
+  --ring: var(--color-brand-400);
 }
 ```
 
@@ -187,14 +249,31 @@ Cuando reviso un codebase, busco:
 
 ```bash
 # Colores hardcodeados que deberían ser tokens
-grep -r "text-\[#" --include="*.tsx"
-grep -r "bg-\[#" --include="*.tsx"
-grep -r "border-\[#" --include="*.tsx"
+grep -rE "text-\[#|bg-\[#|border-\[#" --include="*.tsx"
+
+# OKLCH inline en componentes (debería estar solo en tokens.css)
+grep -rE "oklch\(" --include="*.tsx"
 
 # Valores de spacing hardcodeados
-grep -r "p-\[" --include="*.tsx"
-grep -r "m-\[" --include="*.tsx"
+grep -rE "(p|m|gap|space)-\[" --include="*.tsx"
+
+# Sombras planas (deberían ser compuestas vía token)
+grep -rE "shadow-(sm|md|lg|xl|2xl)\b" --include="*.tsx"
+
+# Duraciones de motion sueltas (deberían ser tokens)
+grep -rE "duration-\[" --include="*.tsx"
 ```
+
+### Verificación de contraste
+
+Cada token de color que va a fondo + texto debe verificarse:
+
+- Texto body sobre background: ≥ 4.5:1 (AA)
+- Texto pequeño / crítico: ≥ 7:1 (AAA)
+- Componentes UI (border, focus ring): ≥ 3:1
+- Texto sobre acento (botón primario): ≥ 4.5:1
+
+Cuando el ratio falla, ajustar L del foreground hasta que pase. Nunca aceptar contraste roto "porque se ve mejor".
 
 ## Estructura de archivos recomendada
 
@@ -211,6 +290,10 @@ styles/
 - No creo tokens sin nombre semántico claro
 - No mezclo el sistema de tokens de shadcn con convenciones propias incompatibles
 - No defino el mismo valor en dos lugares distintos
+- No uso hex en tokens nuevos — siempre OKLCH
+- No genero dark mode invirtiendo L (`L = 100 - L_light`) — sigo el protocolo de dark rediseñado
+- No uso sombras de una sola capa cuando el design system pide profundidad
+- No omito tokens de motion ni contrasto — son parte del design system, no un afterthought
 
 ## Colaboración
 

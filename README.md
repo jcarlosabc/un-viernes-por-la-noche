@@ -40,6 +40,11 @@
 
 ## Los agentes
 
+<details open>
+<summary><strong>Ver los 15 agentes</strong></summary>
+
+<br/>
+
 <table>
   <thead>
     <tr>
@@ -127,6 +132,8 @@
   </tbody>
 </table>
 
+</details>
+
 ---
 
 ## El loop de calidad
@@ -176,7 +183,146 @@ Para ejecutar el loop completo desde cero:
 
 ---
 
-## Plantillas de UI
+## Ejemplos de uso
+
+Casos reales de como pedirle cosas a uvpln. Solo escribi en lenguaje natural — el equipo de agentes se orquesta solo.
+
+<details open>
+<summary><strong>Construir desde una referencia visual</strong></summary>
+
+<br/>
+
+Tenes una URL, un screenshot o "queres algo como Stripe". El loop completo se dispara solo:
+
+```
+> "Quiero una landing page como linear.app/pricing pero para mi SaaS de facturacion"
+```
+
+**Que pasa:**
+1. `design-bridge` visita la referencia, identifica el lenguaje de marca (Linear-style: precision, monospace en data, gradientes purpura)
+2. Genera el brief con paleta OKLCH, tipografia con `tabular-nums` en precios, sombras en capas, motion ~150ms
+3. `tokens-manager` crea la escala 50→950 desde el OKLCH base + dark mode rediseñado
+4. `ui-architect` construye los componentes (PricingCard con bento grid, FeatureList, CTA con glow)
+5. `ui-tester` lo rompe en mobile/tablet/desktop y revisa todos los estados
+6. Si pasa: aprobado. Si no: vuelve al architect con diagnostico del `debugger`
+
+</details>
+
+<details>
+<summary><strong>Conectar un componente a una API</strong></summary>
+
+<br/>
+
+```
+> "Conecta el DataTable de usuarios a /api/users con paginacion del lado del servidor"
+```
+
+**Que pasa:**
+1. `api-integrator` lee tu config de proyecto (TanStack Query si lo detecta)
+2. Genera el hook `useUsers(page, pageSize)` con loading / error / empty states
+3. Conecta el `DataTable` con `keepPreviousData` para evitar layout shift al paginar
+4. Maneja optimistic UI si hay mutaciones
+5. `ui-tester` verifica todos los estados (loading skeleton, error con retry, empty, data)
+
+</details>
+
+<details>
+<summary><strong>Form complejo multi-step</strong></summary>
+
+<br/>
+
+```
+> "Necesito un wizard de onboarding de 3 pasos: datos personales, datos de empresa, plan de pago"
+```
+
+**Que pasa:**
+1. `form-specialist` arma el form con `react-hook-form` + Zod, un schema por paso
+2. Estado del wizard con `useReducer` (no Context, no Zustand — lo justifica)
+3. Validacion async para email duplicado, persistencia en `sessionStorage` para no perder progreso
+4. Progress indicator accesible, navegacion con teclado
+5. `a11y-expert` revisa focus management entre pasos
+6. `ui-tester` verifica el flujo completo + edge cases (back button, refresh, validacion fallida)
+
+</details>
+
+<details>
+<summary><strong>Auditoria completa antes de merge</strong></summary>
+
+<br/>
+
+```
+> /uvpln-audit
+```
+
+**Que pasa:**
+1. `tokens-manager` busca colores hardcodeados, OKLCH inline, sombras planas, duraciones sueltas
+2. `a11y-expert` revisa contraste, ARIA roles, focus management, alt text
+3. `performance-ui` mide bundle size, identifica imports pesados, detecta layout shifts
+4. `code-reviewer` valida TypeScript estricto, props, patrones React 19
+5. Reporte consolidado con severidades: critico / alto / medio / bajo
+
+</details>
+
+<details>
+<summary><strong>Loop de calidad para un componente nuevo</strong></summary>
+
+<br/>
+
+```
+> /uvpln-loop ProductCard con imagen, titulo, precio, badge de descuento y boton agregar al carrito
+```
+
+**Que pasa:**
+1. `ui-designer` (no hay referencia) crea spec visual con tipografia, color, sombras
+2. `ui-architect` construye con shadcn Card + lazy loading de imagen + `tabular-nums` en precio
+3. `ui-tester` prueba: hover, focus, sin descuento, precio largo, titulo de 4 lineas, imagen rota, mobile
+4. Si encuentra bugs criticos: `debugger` analiza root cause → architect corrige
+5. Maximo 3 iteraciones antes de escalar al usuario
+
+</details>
+
+<details>
+<summary><strong>Refactor de un componente que crecio demasiado</strong></summary>
+
+<br/>
+
+```
+> "El UserDashboard.tsx tiene 600 lineas y mezcla data fetching, UI y logica. Refactorizalo."
+```
+
+**Que pasa:**
+1. `refactoring-specialist` mapea responsabilidades del componente
+2. Extrae custom hooks para data fetching (`useUserStats`, `useRecentActivity`)
+3. Divide en sub-componentes con responsabilidad unica
+4. `state-manager` decide si algo merece Context o Zustand
+5. `code-reviewer` valida que no cambio el comportamiento publico
+
+</details>
+
+<details>
+<summary><strong>Traducir un Figma a codigo</strong></summary>
+
+<br/>
+
+```
+> "Aqui esta el export de Figma del checkout: [imagen.png]. Implementalo."
+```
+
+**Que pasa:**
+1. `design-bridge` lee la imagen con `Read` multimodal
+2. Extrae paleta en OKLCH, tipografia, spacing, identifica componentes shadcn equivalentes
+3. Si la paleta no esta en tokens, `tokens-manager` la crea
+4. `ui-architect` construye respetando el brief (no copia pixel-perfect — traduce intencion)
+5. `ui-tester` compara con la referencia y verifica que la intencion visual se preservo
+
+</details>
+
+---
+
+<details>
+<summary><strong>Plantillas de UI · 4 patrones visuales de referencia</strong></summary>
+
+<br/>
 
 uvpln incluye **4 plantillas de referencia** con patrones visuales ya resueltos. `ui-architect` y `ui-designer` las consultan cuando construyen algo sin brief previo:
 
@@ -187,9 +333,12 @@ uvpln incluye **4 plantillas de referencia** con patrones visuales ya resueltos.
 | `auth` | Login, registro, recuperacion de contrasena |
 | `ecommerce` | Product grid, detalle, carrito drawer, checkout |
 
----
+</details>
 
-## Examples de codigo
+<details>
+<summary><strong>Examples de codigo · 9 patrones TS + JS listos para adaptar</strong></summary>
+
+<br/>
 
 **9 ejemplos de codigo** con bloques TypeScript y JavaScript. Los agentes eligen el bloque correcto segun el lenguaje del proyecto (guardado en memoria).
 
@@ -205,11 +354,16 @@ uvpln incluye **4 plantillas de referencia** con patrones visuales ya resueltos.
 | `navigation` | Navbar con mobile menu usando Sheet |
 | `toast-notifications` | Sonner: success, error, loading→resultado, con accion |
 
----
+</details>
 
-## Recursos web integrados
+<details>
+<summary><strong>Recursos web integrados · referencias que los agentes consultan en vivo</strong></summary>
 
-Recursos gratuitos que los agentes consultan directamente via `WebFetch`:
+<br/>
+
+Recursos gratuitos que los agentes consultan directamente via `WebFetch`. Hay dos tiers:
+
+**Tier tecnico** — componentes, temas y primitivos:
 
 | Recurso | Para que |
 |---------|----------|
@@ -221,9 +375,22 @@ Recursos gratuitos que los agentes consultan directamente via `WebFetch`:
 | [Radix UI](https://www.radix-ui.com/primitives) | Docs de primitivos accesibles |
 | [Animata](https://animata.design/) | Micro-interacciones y animaciones free |
 
----
+**Tier premium** — referencias visuales world-class (usadas por `design-bridge`):
 
-## Experiencia al abrir Claude Code
+| Recurso | Para que |
+|---------|----------|
+| [Mobbin](https://mobbin.com) | Patrones reales de apps top en produccion |
+| [Land-book](https://land-book.com) | Curaduria de landings premium con filtros |
+| [Godly](https://godly.website) | Lo mas experimental y editorial |
+| [Refero](https://refero.design) | Flujos completos por categoria |
+| [SaaS Landing Page](https://saaslandingpage.com) | Referencia B2B |
+| [Page Flows](https://www.pageflows.com) | Flujos UX en video |
+| [Httpster](https://httpster.net) | Inspiracion semanal curada |
+
+</details>
+
+<details>
+<summary><strong>Experiencia al abrir Claude Code · banner y statusline</strong></summary>
 
 uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en tiempo real.
 
@@ -248,9 +415,12 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 🐊 uvpln · mi-proyecto │ 12 agentes │ ◉ design system │ sonnet-4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
 ```
 
----
+</details>
 
-## Hooks de calidad
+<details>
+<summary><strong>Hooks de calidad · 8 validaciones automaticas mientras escribis</strong></summary>
+
+<br/>
 
 uvpln vigila el codigo mientras escribis — 8 hooks automaticos:
 
@@ -262,6 +432,8 @@ uvpln vigila el codigo mientras escribis — 8 hooks automaticos:
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `<img>` sin `alt` o `onClick` en elementos no interactivos |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si se usan hooks de cliente sin `"use client"` en Next.js app/ |
 | `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
+
+</details>
 
 ---
 
@@ -306,7 +478,10 @@ Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este 
 
 ---
 
-## Verificar la instalacion
+<details>
+<summary><strong>Verificar la instalacion · preview, validacion y troubleshooting</strong></summary>
+
+<br/>
 
 ### Antes de instalar — preview sin tocar nada
 
@@ -351,9 +526,12 @@ Si devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando.
 | Banner sale en `--check` pero no al abrir Claude | Ya tenias `~/.claude/settings.json` previo | El instalador mergea automaticamente — si no funciono, corre `install.ps1` de nuevo |
 | Agentes no aparecen en `/agents` | Sesion vieja en cache | Cerrar y reabrir Claude Code |
 
----
+</details>
 
-## Desinstalacion
+<details>
+<summary><strong>Desinstalacion · borrado limpio sin tocar tus proyectos</strong></summary>
+
+<br/>
 
 uvpln se desinstala limpio sin tocar tus proyectos ni codigo.
 
@@ -386,9 +564,10 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
 | **Limpia** `~/.claude/settings.json` automaticamente | Elimina solo las entradas de uvpln — preserva tu config de otras herramientas. Si el archivo queda vacio, lo borra. Usa `-ResetSettings` para borrarlo completo |
 | **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
 
----
+</details>
 
-## Estructura del proyecto
+<details>
+<summary><strong>Estructura del proyecto · arbol de archivos</strong></summary>
 
 ```
 un-viernes-por-la-noche/
@@ -452,9 +631,10 @@ un-viernes-por-la-noche/
 │       └── toast-notifications.md
 ```
 
----
+</details>
 
-## Por que uvpln y no otros
+<details>
+<summary><strong>Por que uvpln y no otros · comparativa</strong></summary>
 
 | | Helix | Engram | **uvpln** |
 |--|:-----:|:------:|:---------:|
@@ -469,9 +649,12 @@ un-viernes-por-la-noche/
 | Statusline personalizada | ✗ | ✗ | ✅ |
 | Soporte Windows nativo | ✗ | ✗ | ✅ |
 
----
+</details>
 
-## Stack de referencia
+<details>
+<summary><strong>Stack de referencia · tecnologias usadas</strong></summary>
+
+<br/>
 
 <p>
   <img src="https://img.shields.io/badge/React-19-22C55E?style=for-the-badge&logo=react&logoColor=white" />
@@ -486,9 +669,89 @@ un-viernes-por-la-noche/
   <img src="https://img.shields.io/badge/WCAG-2.2_AA-7C3AED?style=for-the-badge&logoColor=white" />
 </p>
 
+</details>
+
 ---
 
 ## Changelog
+
+<details open>
+<summary><img src="https://img.shields.io/badge/v3.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; trio visual world-class · design-bridge + ui-architect + tokens-manager alineados</summary>
+
+<br/>
+
+Reescritura quirurgica de los tres agentes que producen calidad visual: `design-bridge` lee la referencia, `ui-architect` la construye, `tokens-manager` la sostiene. Antes hablaban idiomas distintos — ahora comparten vocabulario senior (OKLCH, sombras en capas, motion specs, dark mode rediseñado).
+
+### design-bridge — que cambio
+
+**Protocolo de entrada explicito por tipo de referencia:**
+- URL → `WebFetch`
+- Screenshot/imagen → `Read` multimodal
+- PDF de Figma → `Read` con paginas especificas
+- Link publico de Figma → `WebFetch` al PNG export
+- Descripcion vaga → cruce con recursos curados o pide referencias
+
+**Vocabulario visual ampliado** — el brief ahora captura lo que el 90% de los agentes de IA ignoran:
+- Tipografia: tracking por tamano, `tabular-nums`, optical-sizing, ratio modular explicito
+- Color en **OKLCH** (no hex), con L y C explicitos, escalas 50→950, dark mode rediseñado (no invertido)
+- Profundidad: sombras en 2-3 capas (ambient + key + contact), glow color-coordinado, ring + shadow
+- Motion: duraciones por categoria, easing exacto (`cubic-bezier`), scroll-driven, View Transitions, stagger
+- Composicion: anchor points, optical alignment, bento grids, asimetria intencional
+
+**Lenguajes de marca reconocibles** — tabla con la firma visual de Linear, Vercel, Stripe, Apple, Notion, Arc, Mercury, Cron, Raycast. Cuando el usuario dice "como X", traduce a decisiones concretas.
+
+**Anti-patterns 2026** — lista explicita de lo que NO recomienda aunque la referencia lo tenga: gradientes purpura cliche, glassmorphism mal hecho, carruseles en hero, dark mode invertido, etc.
+
+**Permiso acotado para proponer mejoras** — el agente puede sugerir hasta 3 mejoras tecnicas sobre la referencia (a11y, performance, contraste) en una seccion dedicada del brief. `ui-architect` decide si las aplica.
+
+### ui-architect — que cambio
+
+**Tabla de lectura del brief** — cada seccion del brief de `design-bridge` ahora tiene una accion concreta. Mood/voice define motion y densidad. Lenguaje de marca define defaults. Sombras compuestas no se interpretan, se aplican.
+
+**Patrones de codigo nuevos:**
+- Sombras en 2-3 capas (ambient + key + contact) como tokens compuestos
+- Tipografia con `tracking-tight`, `tabular-nums`, optical-sizing
+- Bento grid en lugar del cliche de "3 cards iguales"
+- Glow color-coordinado en CTAs primarios
+
+**Checklist pre-tester** — 9 puntos verificables antes de pasar al `ui-tester`: mood reflejado, dark mode probado en todos los estados, sombras compuestas, `prefers-reduced-motion` respetado, targets ≥44px, container queries donde aplica.
+
+### tokens-manager — que cambio
+
+**Protocolo de generacion de escala 50→950** — recibe un OKLCH base y genera la escala completa con tabla explicita de L y C por step. Hue estable, chroma cae en extremos para evitar "color sucio".
+
+**Dark mode rediseñado** (no invertido) — protocolo de 6 reglas:
+- Background L 8-14% (no 0%)
+- Foreground L 92-96% (no 100%)
+- Acento sube L 5-10 puntos vs light
+- Chroma se reduce 10-20% en dark
+- Borders L 22-28% (nunca puro gris)
+- Contraste verificado: AA minimo, AAA en texto critico
+
+**Tokens nuevos en `@theme`:**
+- `--shadow-card`, `--shadow-card-hover`, `--shadow-popover` — todas en capas
+- `--duration-micro/base/macro/page` — escala de motion
+- `--ease-out-expo`, `--ease-apple`, `--ease-spring` — easings nombrados
+
+**Audit ampliado** — grep para detectar OKLCH inline en `.tsx` (deberia estar solo en `tokens.css`), sombras planas, duraciones sueltas.
+
+### 7 recursos premium nuevos en CLAUDE.md
+
+Tier separado de los recursos tecnicos. Curaduria visual de clase mundial:
+
+| Recurso | Para que |
+|---------|----------|
+| Mobbin | Patrones reales de apps top en produccion |
+| Land-book | Landings premium con filtros por estilo |
+| Godly | Lo mas experimental y editorial |
+| Refero | Flujos completos por categoria |
+| SaaS Landing Page | Referencia B2B |
+| Page Flows | Flujos UX en video |
+| Httpster | Inspiracion semanal curada |
+
+`design-bridge` los consulta antes de armar briefs cuando hay descripciones vagas o necesita variantes.
+
+</details>
 
 <details>
 <summary><img src="https://img.shields.io/badge/v3.0.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 15 agentes · 9 examples · 8 hooks · recursos web integrados</summary>

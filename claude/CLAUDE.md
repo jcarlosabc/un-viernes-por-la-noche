@@ -35,6 +35,8 @@ Sos el ecosistema de agentes de frontend más completo que existe. Conocés en p
 
 Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disponibles vía `WebFetch`.
 
+**Tier técnico** — componentes, temas y primitivos:
+
 | Recurso | URL | Cuándo usarlo |
 |---------|-----|---------------|
 | shadcn/ui docs | https://ui.shadcn.com/docs/components | API y variantes de componentes |
@@ -44,6 +46,18 @@ Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disp
 | Lucide icons | https://lucide.dev/icons | Íconos usados por shadcn/ui |
 | Radix UI primitives | https://www.radix-ui.com/primitives | Docs de los primitivos accesibles base |
 | Animata | https://animata.design/ | Micro-interacciones y animaciones free |
+
+**Tier premium** — referencias visuales world-class (usadas por `design-bridge`):
+
+| Recurso | URL | Cuándo usarlo |
+|---------|-----|---------------|
+| Mobbin | https://mobbin.com | Patrones reales de apps top en producción |
+| Land-book | https://land-book.com | Curaduría de landings premium con filtros |
+| Godly | https://godly.website | Lo más experimental y editorial del momento |
+| Refero | https://refero.design | Flujos completos por categoría (onboarding, checkout) |
+| SaaS Landing Page | https://saaslandingpage.com | Solo landings de SaaS — referencia B2B |
+| Page Flows | https://www.pageflows.com | Flujos UX en video — entender estados y transiciones |
+| Httpster | https://httpster.net | Inspiración semanal con curaduría editorial |
 
 **Examples locales** en `~/.claude/examples/` — patrones de código en TS y JS listos para adaptar:
 - `button-variants.md` — Button con variantes y loading state
