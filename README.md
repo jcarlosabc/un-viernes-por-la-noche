@@ -418,11 +418,11 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 </details>
 
 <details>
-<summary><strong>Hooks de calidad · 8 validaciones automaticas mientras escribis</strong></summary>
+<summary><strong>Hooks de calidad · 11 validaciones automaticas mientras escribis</strong></summary>
 
 <br/>
 
-uvpln vigila el codigo mientras escribis — 8 hooks automaticos:
+uvpln vigila el codigo mientras escribis — 11 hooks automaticos. Los 3 ultimos son world-class: validan vocabulario senior (sombras compuestas, OKLCH en tokens, SSR-safe).
 
 | Hook | Cuando corre | Que hace |
 |------|-------------|----------|
@@ -431,6 +431,9 @@ uvpln vigila el codigo mientras escribis — 8 hooks automaticos:
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `console.log` pendiente de borrar |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `<img>` sin `alt` o `onClick` en elementos no interactivos |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si se usan hooks de cliente sin `"use client"` en Next.js app/ |
+| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay sombras planas** (`shadow-md`, `shadow-lg`) — sugiere tokens compuestos `shadow-(--shadow-card)` |
+| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay `oklch()` inline** en `.tsx` — debe vivir en `globals.css`, no en componentes |
+| `PostToolUse` Write/Edit | Despues de guardar | **Avisa si hay `window.innerWidth` / `document.cookie` en render inicial** — rompe SSR en Next.js |
 | `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
 
 </details>
@@ -605,15 +608,18 @@ un-viernes-por-la-noche/
 │   ├── install/
 │   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
 │   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
-│   ├── hooks/                  → 8 hooks de calidad automaticos
+│   ├── hooks/                  → 11 hooks de calidad automaticos
 │   │   ├── uvpln-track-agent-start.js
 │   │   ├── uvpln-track-agent-end.js
 │   │   ├── uvpln-check-colors.js
 │   │   ├── uvpln-check-any.js
 │   │   ├── uvpln-loop-trigger.js
-│   │   ├── uvpln-check-console.js  → detecta console.log pendiente
-│   │   ├── uvpln-check-a11y.js     → detecta img sin alt y onClick no accesible
-│   │   └── uvpln-check-use-client.js → detecta hooks sin "use client" en Next.js
+│   │   ├── uvpln-check-console.js     → detecta console.log pendiente
+│   │   ├── uvpln-check-a11y.js        → detecta img sin alt y onClick no accesible
+│   │   ├── uvpln-check-use-client.js  → detecta hooks sin "use client" en Next.js
+│   │   ├── uvpln-check-shadows.js     → detecta sombras planas (shadow-md), sugiere tokens compuestos
+│   │   ├── uvpln-check-oklch-inline.js → detecta oklch() inline en .tsx, debe estar en tokens
+│   │   └── uvpln-check-ssr-window.js  → detecta window/document en render inicial
 │   ├── templates/              → 4 patrones visuales de referencia
 │   │   ├── landing-page.md
 │   │   ├── dashboard.md
@@ -788,6 +794,18 @@ El cuello de botella del loop. Antes aprobaba "se ve bien"; ahora verifica el le
 **Focus visible en dark + forced-colors** — el ring del focus es a11y critica que casi siempre se rompe en dark. Patron CSS con `outline-offset` + soporte `forced-colors: active` (Windows High Contrast).
 
 **Motion como a11y (no solo motion)** — `prefers-reduced-motion`, sin scroll-jacking, autoplay con controles, `prefers-contrast: more`.
+
+### 3 hooks nuevos de proteccion automatica (de 8 a 11)
+
+Los agentes ahora hablan world-class, pero los hooks lo enforzan automaticamente cada vez que se guarda un archivo:
+
+| Hook | Detecta |
+|------|---------|
+| `uvpln-check-shadows.js` | Sombras planas (`shadow-md`, `shadow-lg`, etc.) — sugiere tokens compuestos `shadow-(--shadow-card)` |
+| `uvpln-check-oklch-inline.js` | `oklch()` inline en `.tsx`/`.jsx` — debe vivir en `globals.css`/`tokens.css`, no en componentes |
+| `uvpln-check-ssr-window.js` | `window.innerWidth`, `document.cookie`, `navigator.userAgent` en render inicial — rompe SSR/hidratacion en Next.js. Heuristica detecta uso fuera de `useEffect` y sin guard `typeof window !== 'undefined'` |
+
+Los 3 son `PostToolUse` no bloqueantes — avisan en consola para que `tokens-manager` o `ui-architect` corrijan. Permite override consciente cuando el caso lo justifica.
 
 ### Endurecido con un dry-run real
 
