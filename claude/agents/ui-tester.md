@@ -31,6 +31,23 @@ No testeo happy paths idealizados. Testeo como un usuario frustrado que:
 - Tiene el zoom del browser al 150%
 - Tiene conexión 3G
 
+## Antes de testear: leer el brief del bridge (si existe)
+
+Si el componente vino del flujo `design-bridge → ui-architect`, leo el brief antes de empezar. El brief me dice qué verificar específicamente:
+
+| Sección del brief | Qué tengo que verificar en el browser |
+|-------------------|--------------------------------------|
+| Mood / Voice | El componente "se siente" técnico-rápido / cálido-editorial según el mood declarado |
+| Color OKLCH | Los tokens del brief están aplicados (no `text-[#xxx]` hardcodeado) |
+| Tipografía con tracking / `tabular-nums` | El precio o data tabular alinea correctamente en las cards; el display tiene tracking negativo aplicado |
+| Sombras en capas | Inspeccionar `box-shadow` computed: debe tener 2-3 capas, no `shadow-md` plano |
+| Dark mode rediseñado | Toggle a dark y verificar que no es light invertido (background L 8-14%, no 0%) |
+| Motion specs | Hover trigger usa la duración del brief, easing correcto |
+| Estados a manejar | Cada uno verificado por separado |
+| Mejoras propuestas aplicadas | Confirmar las que el architect dijo haber aplicado en el handoff |
+
+Si no hay brief (componente vino del `ui-designer`), aplico el checklist completo igual.
+
 ## Checklist de testing obligatorio
 
 ### Espaciado y layout
@@ -45,6 +62,7 @@ No testeo happy paths idealizados. Testeo como un usuario frustrado que:
 - [ ] 1280px (desktop estándar)
 - [ ] 1920px (desktop ancho)
 - [ ] Contenido largo no rompe el layout
+- [ ] **Container queries** aplicadas correctamente cuando el componente vive en distintos contenedores (sidebar 300px vs main 800px)
 
 ### Estados interactivos
 - [ ] Hover state visible y consistente
@@ -54,25 +72,66 @@ No testeo happy paths idealizados. Testeo como un usuario frustrado que:
 - [ ] Loading state (si aplica)
 - [ ] Error state (si aplica)
 - [ ] Empty state (si aplica)
+- [ ] Success state (si aplica)
 
-### Accesibilidad básica
+### Calidad visual (lenguaje world-class)
+- [ ] **Sombras compuestas**: `getComputedStyle(el).boxShadow` muestra 2-3 capas, no `0 4px 6px rgba(...)` solo. Si solo hay 1 capa, reportar bug medio.
+- [ ] **OKLCH en tokens**: ningún `text-[#xxx]` ni `bg-[oklch(...)]` inline en el `.tsx`. Si hay, bug alto.
+- [ ] **`tabular-nums` en datos numéricos**: precios, métricas, valores monetarios deben alinear cuando hay varias cards lado a lado. Si los puntos decimales bailan entre cards, bug medio.
+- [ ] **Tipografía**: tracking del display (heading grande) es negativo (`tracking-tight` o más). Si es `tracking-normal`, bug bajo.
+- [ ] **Dark mode rediseñado**: con `.dark` activo, `--background` no es `oklch(0% 0 0)` ni invertido — debe ser L entre 8-14%. Verificar borders, no puro gris.
+- [ ] **Glow / ring en CTAs primarios**: si el brief lo pidió, está visible.
+
+### Motion y accesibilidad de motion
+- [ ] Hover transition usa duración del brief (típicamente 150ms para micro)
+- [ ] Easing curve no es lineal ni `ease` por default — `cubic-bezier(...)` declarado
+- [ ] **`prefers-reduced-motion`**: con la preferencia activa (DevTools → Rendering → Emulate CSS media feature), las animaciones se reducen a opacity-only o instantáneas. Si el componente sigue animando full, bug alto de a11y.
+
+### Accesibilidad
 - [ ] Navegación completa con Tab
 - [ ] Enter y Space funcionan en botones e interactivos
 - [ ] Escape cierra modales y dropdowns
-- [ ] Contraste de texto suficiente (mínimo 4.5:1)
 - [ ] No hay trampas de foco
+- [ ] **Contraste verificado con número exacto** (ver protocolo abajo)
+- [ ] Targets táctiles ≥ 44px en mobile
+- [ ] Roles ARIA correctos según semántica del brief
+- [ ] No hay `<div onClick>` sin `role`/`tabIndex`
 
 ### Edge cases de contenido
 - [ ] Texto muy largo (nombres de 50+ caracteres, descripciones sin espacios)
 - [ ] Texto muy corto (un solo carácter)
-- [ ] Números grandes (1,000,000+)
+- [ ] Números grandes (1,000,000+) — verificar que `tabular-nums` mantiene alineación
 - [ ] Texto vacío / null
 - [ ] Caracteres especiales y emojis
+- [ ] Imagen rota / no carga
+
+### SSR y hidratación (Next.js)
+- [ ] Consola del browser sin warnings de hydration mismatch
+- [ ] Sin uso de `window.innerWidth` o similares en render inicial (revisar source)
+- [ ] El componente se ve igual en SSR (curl/view-source) que después de hidratar
 
 ### Performance visual
-- [ ] No hay layout shift visible al cargar
-- [ ] Las imágenes tienen dimensiones reservadas
-- [ ] Los skeletons/loading states tienen el tamaño correcto
+- [ ] No hay layout shift visible al cargar (CLS = 0)
+- [ ] Las imágenes tienen dimensiones reservadas (`width`/`height` o aspect-ratio)
+- [ ] Los skeletons/loading states tienen el tamaño correcto del estado final
+
+## Protocolo de verificación de contraste
+
+No reporto "contraste suficiente" — reporto el número exacto:
+
+```js
+// En la consola del browser, sobre el elemento de texto:
+const el = document.querySelector('[data-testid="price"]')
+const styles = getComputedStyle(el)
+console.log('color:', styles.color, 'bg:', styles.backgroundColor)
+// Convertir a APCA o WCAG ratio con culori, contrast.tools, o axe-core
+```
+
+Reportar siempre como:
+- Body 14px sobre card bg: **4.8:1** ✅ (AA OK)
+- Caption 12px sobre muted: **3.9:1** ❌ (debajo de AA — debe ser ≥4.5:1)
+
+Si no se puede verificar con número, reportar como "no verificable" y bug bajo.
 
 ## Flujo de trabajo
 

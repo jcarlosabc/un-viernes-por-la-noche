@@ -159,11 +159,20 @@ function TabList({ tabs }) {
 - [ ] Iconos sin texto: `aria-label` en el botón contenedor
 - [ ] Videos con subtítulos
 
-### Contraste
-- [ ] Texto normal: mínimo 4.5:1
-- [ ] Texto grande (18px+): mínimo 3:1
-- [ ] Componentes UI y gráficos: mínimo 3:1
-- [ ] Texto sobre imágenes: verificar en todos los casos
+### Contraste — verificado con número, no estimado
+- [ ] Texto normal: mínimo **4.5:1** (AA), preferible **7:1** (AAA) en texto crítico
+- [ ] Texto grande (18px+ o 14px bold): mínimo **3:1** (AA)
+- [ ] Componentes UI (border, focus ring, iconos sin texto): mínimo **3:1**
+- [ ] Texto sobre imágenes/gradientes: verificar peor caso con scrim o overlay
+- [ ] **Verificación con valor exacto**, no "se ve bien" (ver protocolo abajo)
+- [ ] Verificado en **light Y dark mode** por separado (no asumir)
+
+### Motion y preferencias del usuario
+- [ ] `prefers-reduced-motion: reduce` respetado en cada animación
+- [ ] Sin scroll-jacking ni parallax agresivo
+- [ ] Auto-play deshabilitado en videos/carruseles, o controles obvios
+- [ ] `prefers-contrast: more` considerado si hay tema light suave
+- [ ] `forced-colors: active` (Windows High Contrast) — el componente sigue usable
 
 ### Interacción
 - [ ] Todos los interactivos son alcanzables con Tab
@@ -172,12 +181,84 @@ function TabList({ tabs }) {
 - [ ] Focus visible en todos los estados
 - [ ] No hay trampas de foco (salvo modales intencionales)
 
+## Protocolo de verificación de contraste (con número exacto)
+
+No reporto "contraste suficiente" — reporto el ratio numérico y declaro pass/fail.
+
+### En el browser
+```js
+// Sobre el elemento de texto, en DevTools console:
+const el = document.querySelector('[data-testid="price"]')
+const styles = getComputedStyle(el)
+console.log('color:', styles.color, 'bg:', styles.backgroundColor)
+```
+
+Convertir los valores a OKLCH/RGB y calcular ratio con:
+- **axe DevTools** (extensión browser) — reporte automático con números
+- **Lighthouse** (Chrome DevTools → Audits) — pass/fail con valores
+- **WebAIM Contrast Checker** — verificación rápida manual
+- **`culori` npm** — para tooling propio
+- **APCA Contrast Calculator** (apcacontrast.com) — propuesta WCAG 3, más precisa para texto pequeño
+
+### Sobre tokens OKLCH
+
+Cuando los tokens están en OKLCH, el ratio se calcula igual (los browsers lo resuelven a sRGB). Pero hay un detalle: dark mode no se valida invirtiendo. Cada par foreground/background del dark mode rediseñado se verifica por separado.
+
+Reportar siempre así:
+- Body 14px sobre `--card` light: **4.8:1** ✅ (AA OK)
+- Body 14px sobre `--card` dark: **5.2:1** ✅ (AA OK)
+- Caption 12px sobre `--muted` light: **3.9:1** ❌ (debajo de AA — debe ser ≥4.5:1)
+- Focus ring sobre `--background` dark: **3.4:1** ✅ (AA componente UI OK)
+
+### APCA — la nueva métrica (WCAG 3 draft)
+
+WCAG 2.x usa ratio simple. APCA es perceptual: penaliza más a texto pequeño claro sobre fondo oscuro. Se está adoptando en sistemas modernos (GitHub Primer, Adobe Spectrum 2). Cuando aplica, reportar también:
+
+- Body 14px: **Lc 75** ✅ (objetivo Lc ≥ 75 para body)
+- Caption 12px: **Lc 58** ❌ (debajo del objetivo Lc ≥ 60 para caption)
+
+Si solo se puede uno, usar WCAG 2.x (sigue siendo el estándar legal).
+
+## Focus visible en light y dark
+
+El focus ring es accesibilidad crítica y se rompe casi siempre en dark mode.
+
+```css
+/* MAL — ring del primary funciona en light pero queda invisible en dark */
+:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+/* BIEN — ring con offset y color que respeta ambos modes */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Mejor aún — soporta forced-colors mode (Windows High Contrast) */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText;
+  }
+}
+```
+
+Verificar que `--ring` en dark tiene contraste ≥ 3:1 contra `--background` dark.
+
 ## Lo que NO hago
 
 - No agrego `role` innecesarios a elementos semánticos (`<button role="button">` es redundante)
 - No uso `aria-label` para repetir lo que ya dice el texto visible
 - No oculto contenido importante con `display:none` o `visibility:hidden` sin alternativa
 - No confío en el color como único indicador de estado
+- No reporto contraste sin número exacto — siempre ratio verificado
+- No verifico contraste solo en light — light y dark son escenarios distintos
+- No omito `prefers-reduced-motion` ni `forced-colors` — son a11y, no opcional
 
 ## Colaboración
 

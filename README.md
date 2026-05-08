@@ -676,11 +676,11 @@ un-viernes-por-la-noche/
 ## Changelog
 
 <details open>
-<summary><img src="https://img.shields.io/badge/v3.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; trio visual world-class · design-bridge + ui-architect + tokens-manager alineados</summary>
+<summary><img src="https://img.shields.io/badge/v3.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 7 agentes visuales world-class · vocabulario alineado · loop de calidad blindado</summary>
 
 <br/>
 
-Reescritura quirurgica de los tres agentes que producen calidad visual: `design-bridge` lee la referencia, `ui-architect` la construye, `tokens-manager` la sostiene. Antes hablaban idiomas distintos — ahora comparten vocabulario senior (OKLCH, sombras en capas, motion specs, dark mode rediseñado).
+Alineamiento completo de los 7 agentes que producen calidad visual: `design-bridge`, `ui-designer`, `tokens-manager`, `ui-architect`, `ui-tester`, `motion-designer`, `a11y-expert`. Antes hablaban idiomas distintos — ahora comparten vocabulario senior (OKLCH, sombras en capas, motion specs con tokens, dark mode rediseñado, contraste verificado con número exacto, scroll-driven animations, View Transitions API, APCA, forced-colors).
 
 ### design-bridge — que cambio
 
@@ -734,6 +734,60 @@ Reescritura quirurgica de los tres agentes que producen calidad visual: `design-
 - `--ease-out-expo`, `--ease-apple`, `--ease-spring` — easings nombrados
 
 **Audit ampliado** — grep para detectar OKLCH inline en `.tsx` (deberia estar solo en `tokens.css`), sombras planas, duraciones sueltas.
+
+### ui-designer — que cambio
+
+Antes producia specs con descriptores vagos ("minimalismo tecnico Vercel"). Ahora produce specs con el mismo nivel de detalle que el brief de `design-bridge` cuando no hay referencia visual.
+
+**Spec amplada** — incluye Mood/Voice, Lenguaje de marca, color en OKLCH, profundidad con sombras en capas, motion con duraciones y easing, dark mode siempre, contraste objetivo, accesibilidad critica.
+
+**Tabla de lenguajes de marca** — la misma que usa `design-bridge`. Si el usuario dice "tono Linear", el designer deriva decisiones tecnicas concretas (Geist + Geist Mono, motion 150ms, OKLCH purpura ~265, dark-first).
+
+**Anti-pattern explicito** — prohibido usar descriptores vagos ("moderno", "limpio") sin traducirlos a decisiones tecnicas. Prohibido producir specs sin OKLCH, sin motion, sin dark mode.
+
+### ui-tester — que cambio
+
+El cuello de botella del loop. Antes aprobaba "se ve bien"; ahora verifica el lenguaje completo.
+
+**Lectura del brief antes de testear** — si el componente vino del flujo del bridge, el tester lee cada seccion del brief y la convierte en checks especificos del browser.
+
+**Checklist de calidad visual world-class** (8 puntos nuevos):
+- `getComputedStyle().boxShadow` debe tener 2-3 capas, no `shadow-md` plano
+- Cero `text-[#xxx]` ni `bg-[oklch(...)]` inline en el `.tsx`
+- `tabular-nums` verificado: precios alinean entre cards (puntos decimales no bailan)
+- Tracking del display es negativo (no `tracking-normal`)
+- Dark mode: `--background` L 8-14%, no 0% ni invertido
+- Glow / ring en CTAs primarios cuando el brief lo pidio
+- `prefers-reduced-motion`: emular en DevTools y verificar fallback
+- Container queries aplicadas cuando el componente vive en distintos contenedores
+
+**Protocolo de contraste verificado con numero** — no mas "contraste suficiente". Reporta `4.8:1 ✅ AA` o `3.9:1 ❌` con valor exacto.
+
+**Checks de SSR/hidratacion** — sin warnings en consola, sin uso de `window` en render inicial, mismo render con curl/view-source que despues de hidratar.
+
+### motion-designer — que cambio
+
+**Lectura del brief obligatoria** — la seccion Motion del brief tiene duraciones, easing y stagger declarados. Antes se ignoraban; ahora se aplican literal.
+
+**Tokens en lugar de valores sueltos** — `--duration-micro`, `--duration-macro`, `--ease-out-expo`, `--ease-apple`, `--ease-spring`. Si faltan, delega a `tokens-manager` antes de codear.
+
+**Tabla de lenguajes de motion por marca** — Linear-style 150ms out-expo, Apple-style 400ms cubic-bezier(0.32, 0.72, 0, 1), Stripe-style 400ms out-quart, Notion-style 250ms con spring sutil.
+
+**Patrones nuevos:**
+- Scroll-driven animations con CSS nativo (`animation-timeline: view()`) + fallback `prefers-reduced-motion`
+- View Transitions API con Next.js 15 + React 19 — duraciones via tokens, fallback a11y
+
+### a11y-expert — que cambio
+
+**Contraste verificado con numero exacto** — antes "se ve bien"; ahora `4.8:1 ✅ AA OK` o `3.9:1 ❌`. Protocolo con DevTools console + axe DevTools + Lighthouse + culori para tokens propios.
+
+**APCA agregado** — la metrica de WCAG 3 (draft) que ya usan GitHub Primer y Adobe Spectrum 2. Reportar `Lc 75` cuando aplica, complementario a WCAG 2.x.
+
+**Verificacion light Y dark separadas** — dark mode rediseñado tiene pares foreground/background distintos; no se asume que si pasa light pasa dark.
+
+**Focus visible en dark + forced-colors** — el ring del focus es a11y critica que casi siempre se rompe en dark. Patron CSS con `outline-offset` + soporte `forced-colors: active` (Windows High Contrast).
+
+**Motion como a11y (no solo motion)** — `prefers-reduced-motion`, sin scroll-jacking, autoplay con controles, `prefers-contrast: more`.
 
 ### Endurecido con un dry-run real
 

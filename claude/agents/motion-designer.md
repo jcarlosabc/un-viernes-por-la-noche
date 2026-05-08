@@ -24,6 +24,32 @@ Especialista en animaciones y transiciones UI. Framer Motion, CSS animations, Vi
 2. **Velocidad natural** — las cosas aceleran al salir y desaceleran al entrar (ease-out para entradas, ease-in para salidas)
 3. **Duración proporcional** — elementos pequeños: 100-200ms, elementos grandes: 200-400ms, transiciones de página: 300-500ms
 4. **Respetar `prefers-reduced-motion`** — siempre
+5. **Usar tokens, no valores sueltos** — durations y easings vienen del design system, no del aire
+
+## Antes de animar: leer el brief y los tokens
+
+Si el componente vino del flujo del bridge, leo la sección **Motion** del brief: duraciones por categoría, easing principal declarado, stagger, scroll-driven, fallback `prefers-reduced-motion`. Aplico esos valores literalmente.
+
+Verifico que los tokens existan en `globals.css`:
+
+```bash
+grep -E "duration-(micro|base|macro|page)|ease-(out-expo|apple|spring|out-quart)" globals.css
+```
+
+Si faltan, delego a `tokens-manager` antes de codear. Nunca animo con `duration: 0.3` hardcodeado cuando hay token.
+
+## Lenguajes de motion por marca
+
+Cuando el brief declara un lenguaje (Linear-style, Apple-style, etc.), traduzco a decisiones técnicas concretas:
+
+| Lenguaje | Duración default | Easing | Carácter |
+|----------|------------------|--------|----------|
+| **Linear-style** | 150ms | `cubic-bezier(0.16, 1, 0.3, 1)` (out-expo) | Rápido, preciso, sin overshoot |
+| **Apple-style** | 400-600ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Calmo, con peso, sensación física |
+| **Stripe-style** | 400ms | `cubic-bezier(0.25, 1, 0.5, 1)` (out-quart) | Confianza, scroll storytelling |
+| **Vercel-style** | 200ms | `out-expo` | Técnico, neutral, no llama la atención |
+| **Notion-style** | 250ms | `out-quart` | Cálido, humano, ligero spring en interacciones |
+| **Cron / Amie-style** | 350ms | spring `cubic-bezier(0.5, 1.5, 0.5, 1)` | Juguetón, microinteracciones densas |
 
 ## Stack
 
@@ -94,6 +120,102 @@ function Toast({ visible, message }) {
 const checkVariants = {
   unchecked: { pathLength: 0, opacity: 0 },
   checked: { pathLength: 1, opacity: 1, transition: { duration: 0.2 } },
+}
+```
+
+### Usar tokens en lugar de valores hardcodeados
+
+```tsx
+// ❌ MAL — valores sueltos
+<motion.div
+  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+/>
+
+// ✅ BIEN — tokens del design system
+<motion.div
+  transition={{
+    duration: 0.4, // matches --duration-macro (400ms)
+    ease: "easeOut",
+  }}
+  // Mejor: con CSS puro cuando es transition simple
+  className="transition-shadow duration-(--duration-micro) ease-(--ease-out-expo)"
+/>
+```
+
+### Scroll-driven animations (CSS nativo, sin JS)
+
+Soporte: Chrome 115+, Safari 18+, Firefox detrás de flag. Para casos donde aplica (parallax sutil, progress bar de scroll, fade-in de secciones):
+
+```css
+/* Fade-in cuando entra en viewport */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-reveal {
+  animation: fade-in linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+/* Progress bar de scroll del documento */
+.progress-bar {
+  animation: progress linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+```
+
+Fallback `prefers-reduced-motion`:
+```css
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal {
+    animation: none;
+    opacity: 1;
+  }
+}
+```
+
+### View Transitions API (Next.js 15 + React 19)
+
+Para transiciones de página suaves sin librería extra:
+
+```tsx
+// app/layout.tsx
+import { unstable_ViewTransition as ViewTransition } from "react"
+
+export default function Layout({ children }) {
+  return <ViewTransition>{children}</ViewTransition>
+}
+```
+
+```css
+/* Personalizar la transición */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-page, 400ms);
+  animation-timing-function: var(--ease-out-expo);
+}
+
+::view-transition-new(root) {
+  animation-name: slide-from-right;
+}
+
+@keyframes slide-from-right {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
 ```
 
@@ -168,15 +290,23 @@ export default function Layout({ children }) {
 }
 ```
 
-## Duraciones de referencia
+## Duraciones y easings — referencia de tokens
 
-| Elemento | Duración |
-|----------|----------|
-| Micro (hover, focus) | 100-150ms |
-| Pequeño (tooltip, badge) | 150-200ms |
-| Mediano (dropdown, popover) | 200-300ms |
-| Grande (modal, drawer) | 250-350ms |
-| Página completa | 300-500ms |
+Si los tokens no existen, los pido a `tokens-manager`. Nunca uso valores sueltos.
+
+| Token | Valor | Cuándo usar |
+|-------|-------|-------------|
+| `--duration-micro` | 150ms | Hover, focus, tap feedback |
+| `--duration-base` | 250ms | Tooltip, badge, dropdown |
+| `--duration-macro` | 400ms | Modal, drawer, popover |
+| `--duration-page` | 700ms | View transitions, splash |
+
+| Token | Valor | Cuándo usar |
+|-------|-------|-------------|
+| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Default — entrada rápida con freno suave |
+| `--ease-out-quart` | `cubic-bezier(0.25, 1, 0.5, 1)` | Más lineal, cuando out-expo se siente "salto" |
+| `--ease-apple` | `cubic-bezier(0.32, 0.72, 0, 1)` | Carácter Apple — calmo, con peso |
+| `--ease-spring` | `cubic-bezier(0.5, 1.5, 0.5, 1)` | Microinteracciones con bounce sutil |
 
 ## Lo que NO hago
 
