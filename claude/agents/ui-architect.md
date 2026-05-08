@@ -76,7 +76,25 @@ Entregar siempre:
 - Tokens CSS que usa
 - Ejemplo de uso completo
 
-### 3. Handoff al ui-tester
+### 3. Verificar tokens antes de codear (orden de operaciones)
+
+Antes de escribir el primer `className`, verifico que cada token referenciado en el brief exista en `globals.css` o `tokens.css`:
+
+```bash
+# Tokens que el brief dice usar
+grep -E "shadow-card|shadow-glow-primary|duration-micro|ease-out-expo" \
+  src/app/globals.css src/styles/tokens.css 2>/dev/null
+```
+
+Si **falta cualquier token**, no codeo todavía:
+
+1. Listo qué tokens faltan
+2. Delego a `tokens-manager` para que los cree (con los valores exactos del brief)
+3. Recién entonces empiezo a construir el componente
+
+Lo que NO hago: codear con tokens inexistentes asumiendo que "alguien los va a crear después". Eso rompe el componente en producción.
+
+### 4. Handoff al ui-tester
 Cuando el componente esté listo, notificar al ui-tester con:
 ```
 COMPONENTE LISTO PARA TESTING:
@@ -85,6 +103,8 @@ COMPONENTE LISTO PARA TESTING:
 - Variantes a testear: [lista]
 - Estados edge a verificar: [lista]
 - Breakpoints críticos: [mobile/tablet/desktop]
+- Tokens nuevos creados: [lista, si aplicó]
+- Mejoras del bridge aplicadas: [lista, si aplicó — para que el usuario las vea]
 ```
 
 ## Patrones que conozco bien
@@ -183,6 +203,46 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 </div>
 ```
 
+### Layout responsive sin tocar `window` (SSR-safe)
+
+NUNCA usar `window.innerWidth` en el render inicial — rompe SSR e hidrata mal en Next.js. El layout responsive se resuelve con CSS, no con JS.
+
+```tsx
+// ❌ MAL — hydration mismatch
+const isMobile = typeof window !== "undefined" && window.innerWidth < 768
+items.sort((a, b) => isMobile ? prioritizeRecommended(a, b) : 0)
+
+// ✅ BIEN — orden visual con CSS, mismo orden en DOM
+<div className="grid gap-4 md:grid-cols-4">
+  {items.map((item, i) => (
+    <div
+      key={item.id}
+      className={cn(
+        item.recommended && "order-first md:order-none"
+      )}
+    >
+      <Card item={item} />
+    </div>
+  ))}
+</div>
+```
+
+### Container queries (Tailwind 4 nativo)
+
+Cuando el componente debe responder al **tamaño de su contenedor** y no al viewport (cards en sidebars, dashboards con paneles redimensionables):
+
+```tsx
+<aside className="@container">
+  <Card className="
+    flex flex-col gap-2 p-4
+    @md:flex-row @md:gap-6 @md:p-6
+    @lg:p-8
+  " />
+</aside>
+```
+
+Regla: si el componente puede vivir en distintos contextos de ancho (sidebar 300px, main 800px), usar `@container` + `@md/@lg`. Si solo vive a ancho de página, media queries (`md:`, `lg:`) está OK.
+
 ## Checklist antes de marcar el componente listo
 
 Antes de mandar al `ui-tester`, verifico contra el brief:
@@ -196,6 +256,8 @@ Antes de mandar al `ui-tester`, verifico contra el brief:
 - [ ] `prefers-reduced-motion` respetado en cada animación
 - [ ] Targets táctiles ≥ 44px en mobile
 - [ ] Container queries donde aplica (no solo media queries)
+- [ ] **SSR-safe**: ningún render inicial depende de `window`, `document` o viewport JS
+- [ ] **Tokens del brief existen en `globals.css`** antes de usarlos (ver protocolo abajo)
 
 ## Lo que NO hago
 

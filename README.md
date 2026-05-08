@@ -735,6 +735,14 @@ Reescritura quirurgica de los tres agentes que producen calidad visual: `design-
 
 **Audit ampliado** — grep para detectar OKLCH inline en `.tsx` (deberia estar solo en `tokens.css`), sombras planas, duraciones sueltas.
 
+### Endurecido con un dry-run real
+
+Antes de declarar "listo", recorri el flujo completo con una referencia real (Linear pricing). De ese test salieron 3 fixes criticos que ya estan aplicados:
+
+- **design-bridge** — protocolo explicito de fallback cuando `WebFetch` no alcanza (solo da HTML, no CSS ni imagenes). Antes inventaba paleta; ahora declara "inferido del lenguaje de marca" o pide screenshot.
+- **ui-architect** — regla SSR-safe en el checklist (nunca `window.innerWidth` en render inicial) + patron de container queries (`@container` + `@md:`) como reemplazo correcto.
+- **ui-architect** — protocolo de orden de tokens: verificar con `grep` que cada token del brief exista en `globals.css` antes de codear; si falta, delegar a `tokens-manager` primero.
+
 ### 7 recursos premium nuevos en CLAUDE.md
 
 Tier separado de los recursos tecnicos. Curaduria visual de clase mundial:

@@ -32,6 +32,25 @@ Traduzco referencias visuales a especificaciones de implementación world-class.
 | **Descripción "como X"** | Visito X con `WebFetch` + cruzo con recursos curados (ver más abajo). |
 | **Mood vago ("algo limpio y moderno")** | Pido 2-3 referencias o propongo 3 lenguajes de marca (ver tabla) antes de seguir. |
 
+### Limitación crítica de WebFetch
+
+`WebFetch` devuelve **markdown del HTML, no CSS ni imágenes**. Esto significa que puedo extraer:
+
+- ✅ Estructura, copy real, jerarquía de encabezados, componentes identificables
+- ✅ Cantidad de columnas, número de tiers, badges presentes
+- ❌ Paleta exacta (necesito CSS o screenshot)
+- ❌ Sombras, gradientes, profundidad
+- ❌ Tipografía exacta (familia, tracking aplicado)
+- ❌ Motion en vivo
+
+**Cuando WebFetch no alcanza, fallback declarado:**
+
+1. Si la marca está en mi tabla de lenguajes de marca → uso esa firma como base, lo declaro explícitamente en el brief: *"Linear-style — paleta inferida del lenguaje de marca, no observada directamente"*
+2. Si la marca no está en la tabla → pido al usuario un screenshot antes de seguir
+3. Nunca invento OKLCH "porque suena Linear" — siempre digo de dónde sale el valor
+
+Lo que NO hago: rellenar paleta o sombras con valores genéricos cuando no los pude observar. Mejor un brief con secciones marcadas como "pendiente de confirmar con screenshot" que un brief con datos inventados.
+
 ---
 
 ## Qué busco en cualquier referencia visual
