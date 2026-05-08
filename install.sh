@@ -7,6 +7,7 @@ AGENTS_DIR="$CLAUDE_DIR/agents"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 COMMANDS_DIR="$CLAUDE_DIR/commands"
 TEMPLATES_DIR="$CLAUDE_DIR/templates"
+EXAMPLES_DIR="$CLAUDE_DIR/examples"
 MEMORY_DIR="$CLAUDE_DIR/memory/design-systems"
 
 GREEN='\033[0;32m'
@@ -64,6 +65,7 @@ mkdir -p "$AGENTS_DIR"
 mkdir -p "$HOOKS_DIR"
 mkdir -p "$COMMANDS_DIR"
 mkdir -p "$TEMPLATES_DIR"
+mkdir -p "$EXAMPLES_DIR"
 mkdir -p "$MEMORY_DIR"
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -154,6 +156,18 @@ for tpl in "README.md" "landing-page.md" "dashboard.md" "auth.md" "ecommerce.md"
     ok "Plantilla instalada: templates/$tpl"
   else
     warn "No encontrado: $tpl — saltando"
+  fi
+done
+
+# Instalar examples de código (patrones TS + JS)
+for ex in "button-variants.md" "form-validation.md" "data-table.md" "modal-pattern.md" "theme-tokens.md"; do
+  src="$UVPLN_DIR/claude/examples/$ex"
+  dst="$EXAMPLES_DIR/$ex"
+  if [ -f "$src" ]; then
+    cp "$src" "$dst"
+    ok "Example instalado: examples/$ex"
+  else
+    warn "No encontrado: $ex — saltando"
   fi
 done
 

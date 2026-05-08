@@ -1,7 +1,7 @@
 ---
 name: tokens-manager
 description: "Use this agent to create or extend design token systems, implement dark mode and multi-theme support, migrate from Tailwind 3 to Tailwind 4 token syntax, audit hardcoded values that should be tokens, and maintain shadcn/ui CSS variable conventions."
-tools: Read, Write, Edit, Glob, Grep
+tools: Read, Write, Edit, Glob, Grep, WebFetch
 model: haiku
 ---
 
@@ -170,6 +170,16 @@ shadcn/ui usa una convención específica de CSS variables. Respetar siempre:
 --ring
 --radius
 ```
+
+## Recursos externos
+
+Para generar o personalizar temas:
+
+- **https://tweakcn.com/editor/theme** — editor visual de temas shadcn/ui. Genera la paleta interactivamente y exporta CSS variables. Cuando el usuario pide un tema nuevo o cambiar colores, sugerir este recurso y pedir el export.
+- **https://ui.shadcn.com/docs/theming** — variables CSS que espera shadcn/ui. Referencia autorizada de nombres de tokens.
+- **`~/.claude/examples/theme-tokens.md`** — plantilla base con estructura `@theme` para Tailwind 4 + tokens semánticos light/dark.
+
+Nota: tweakcn.com exporta en formato Tailwind 3 (`tailwind.config.js`). Adaptar a `@theme` de Tailwind 4 si el proyecto lo requiere.
 
 ## Audit de tokens
 

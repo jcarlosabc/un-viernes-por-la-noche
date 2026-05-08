@@ -14,6 +14,7 @@ $AGENTS_DIR     = "$CLAUDE_DIR\agents"
 $HOOKS_DIR      = "$CLAUDE_DIR\hooks"
 $COMMANDS_DIR   = "$CLAUDE_DIR\commands"
 $TEMPLATES_DIR  = "$CLAUDE_DIR\templates"
+$EXAMPLES_DIR   = "$CLAUDE_DIR\examples"
 $MEMORY_DIR     = "$CLAUDE_DIR\memory\design-systems"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
@@ -68,6 +69,7 @@ New-Item -ItemType Directory -Force -Path $AGENTS_DIR    | Out-Null
 New-Item -ItemType Directory -Force -Path $HOOKS_DIR     | Out-Null
 New-Item -ItemType Directory -Force -Path $COMMANDS_DIR  | Out-Null
 New-Item -ItemType Directory -Force -Path $TEMPLATES_DIR | Out-Null
+New-Item -ItemType Directory -Force -Path $EXAMPLES_DIR  | Out-Null
 New-Item -ItemType Directory -Force -Path $MEMORY_DIR    | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
@@ -163,6 +165,25 @@ foreach ($tpl in $templates) {
         ok "Plantilla instalada: templates\$tpl"
     } else {
         warn "No encontrado: $tpl - saltando"
+    }
+}
+
+# Instalar examples de código (patrones TS + JS)
+$examples = @(
+    "button-variants.md",
+    "form-validation.md",
+    "data-table.md",
+    "modal-pattern.md",
+    "theme-tokens.md"
+)
+foreach ($ex in $examples) {
+    $src = "$UVPLN_DIR\claude\examples\$ex"
+    $dst = "$EXAMPLES_DIR\$ex"
+    if (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        ok "Example instalado: examples\$ex"
+    } else {
+        warn "No encontrado: $ex - saltando"
     }
 }
 

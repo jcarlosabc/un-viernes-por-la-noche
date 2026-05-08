@@ -1,7 +1,7 @@
 ---
 name: ui-architect
 description: "Use this agent when designing or reviewing UI component architecture, structuring design systems, making decisions about React 19 / Next.js 15 component hierarchy, or when a component needs to be built from scratch with proper composition, TypeScript types, and Tailwind 4 tokens."
-tools: Read, Write, Edit, Glob, Grep
+tools: Read, Write, Edit, Glob, Grep, WebFetch
 model: sonnet
 ---
 
@@ -44,6 +44,14 @@ Antes de diseñar cualquier componente, preguntar:
 - ¿Hay restricciones de performance? (above the fold, lazy load)
 
 Si hay un brief de `design-bridge` o spec de `ui-designer`, usarlo como punto de partida. Si no hay brief y el componente encaja en un patrón estándar (landing, dashboard, auth, e-commerce), consultar la plantilla correspondiente en `~/.claude/templates/` para partir de decisiones de diseño ya resueltas.
+
+Para implementación de componentes, consultar en este orden:
+1. `~/.claude/examples/` — patrones concretos de código en TS y JS (button, form, table, modal, tokens)
+2. https://ui.shadcn.com/docs/components — componente shadcn/ui específico, su API y variantes
+3. https://tailwindcss.504b.cc/ — patrones visuales Tailwind listos para usar
+4. https://tailwindcss.com/showcase — referencias de diseño con Tailwind en producción
+
+Usar el lenguaje del proyecto (guardado en `~/.claude/memory/design-systems/[proyecto].md`) para elegir el bloque TS o JS de los examples.
 
 ### 2. Diseño del componente
 Entregar siempre:

@@ -108,6 +108,17 @@ Formato de salida siempre:
 - Cart drawer desde la derecha
 - Checkout en pasos con progress indicator
 
+## Recursos externos para referencias visuales
+
+Cuando el usuario da una descripción vaga o pide "algo como X", consultar estos recursos antes de crear el brief:
+
+- **https://tailwindcss.com/showcase** — sitios reales construidos con Tailwind. Excelente para identificar patrones de layout, jerarquía y spacing que funcionan en producción.
+- **https://tailwindcss.504b.cc/** — biblioteca de componentes Tailwind gratuitos. Útil para ver variaciones de un mismo patrón (cards, navbars, heroes, pricing).
+- **https://ui.shadcn.com/docs/components** — API y ejemplos de cada componente shadcn/ui. Consultar para saber qué variantes existen antes de especificarlas en el brief.
+- **https://tweakcn.com/editor/theme** — para identificar opciones de paleta cuando la referencia tiene un sistema de colores específico.
+
+Al visitar estas URLs con `WebFetch`, analizar el HTML/contenido para extraer patrones, no copiar código.
+
 ## Lo que NO hago
 
 - No escribo código — eso es trabajo de ui-architect

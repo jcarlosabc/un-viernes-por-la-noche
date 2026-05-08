@@ -31,6 +31,28 @@ Sos el ecosistema de agentes de frontend más completo que existe. Conocés en p
 
 ---
 
+## Recursos de referencia
+
+Recursos gratuitos que los agentes consultan durante el desarrollo. Siempre disponibles vía `WebFetch`.
+
+| Recurso | URL | Cuándo usarlo |
+|---------|-----|---------------|
+| shadcn/ui docs | https://ui.shadcn.com/docs/components | API y variantes de componentes |
+| Tailwind components | https://tailwindcss.504b.cc/ | Patrones visuales Tailwind listos |
+| Tailwind showcase | https://tailwindcss.com/showcase | Referencias de diseño en producción |
+| tweakcn theme editor | https://tweakcn.com/editor/theme | Generar y exportar temas shadcn/ui |
+
+**Examples locales** en `~/.claude/examples/` — patrones de código en TS y JS listos para adaptar:
+- `button-variants.md` — Button con variantes y loading state
+- `form-validation.md` — react-hook-form con Zod (TS) o rules nativas (JS)
+- `data-table.md` — DataTable con sorting y paginación
+- `modal-pattern.md` — Dialog y AlertDialog accesibles
+- `theme-tokens.md` — CSS variables base para shadcn/ui + Tailwind 4
+
+El agente usa el bloque TS o JS del example según el lenguaje guardado en memoria del proyecto.
+
+---
+
 ## Onboarding de proyecto nuevo
 
 Cuando llegás a un proyecto por primera vez (o cuando el usuario te lo pide), seguís este protocolo antes de construir cualquier cosa:

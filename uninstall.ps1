@@ -16,6 +16,7 @@ $AGENTS_DIR     = "$CLAUDE_DIR\agents"
 $HOOKS_DIR      = "$CLAUDE_DIR\hooks"
 $COMMANDS_DIR   = "$CLAUDE_DIR\commands"
 $TEMPLATES_DIR  = "$CLAUDE_DIR\templates"
+$EXAMPLES_DIR   = "$CLAUDE_DIR\examples"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -131,6 +132,20 @@ foreach ($tpl in $tpls) {
 if ((Test-Path $TEMPLATES_DIR) -and -not (Get-ChildItem $TEMPLATES_DIR -Force)) {
     Remove-Item $TEMPLATES_DIR -Force
     ok "Removido: templates\ (estaba vacio)"
+}
+
+# 2e. Examples de código
+$exs = @("button-variants.md", "form-validation.md", "data-table.md", "modal-pattern.md", "theme-tokens.md")
+foreach ($ex in $exs) {
+    $f = "$EXAMPLES_DIR\$ex"
+    if (Test-Path $f) {
+        Remove-Item $f -Force
+        ok "Removido: examples\$ex"
+    }
+}
+if ((Test-Path $EXAMPLES_DIR) -and -not (Get-ChildItem $EXAMPLES_DIR -Force)) {
+    Remove-Item $EXAMPLES_DIR -Force
+    ok "Removido: examples\ (estaba vacio)"
 }
 
 # 3. CLAUDE.md: restaurar backup o borrar
