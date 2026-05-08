@@ -39,5 +39,5 @@ if (fs.existsSync(agentsDir)) {
 console.log(`  ${W}Agentes:      ${R} ${G}${agentCount} disponibles${R}`)
 console.log(`  ${D}─────────────────────────────────────────────${R}`)
 console.log('')
-console.log(`  ${P}Hola parcero, que haremos hoy?${R}`)
+console.log(`  ${P}Hola Amigo, que haremos hoy?${R}`)
 console.log('')

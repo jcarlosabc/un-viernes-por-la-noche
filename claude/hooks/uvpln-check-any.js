@@ -12,5 +12,5 @@ const content = fs.readFileSync(file, 'utf8')
 const matches = content.match(/:\s*any/g) || []
 
 if (matches.length) {
-  console.warn(`uvpln: ${matches.length} uso(s) de any en ${file} -- ojo parcero`)
+  console.warn(`uvpln: ${matches.length} uso(s) de any en ${file} -- ojo Amigo`)
 }

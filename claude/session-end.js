@@ -28,5 +28,5 @@ if (fs.existsSync(dsFile)) {
 }
 
 console.log('')
-console.log(`  ${P}Hasta la proxima parcero.${R}`)
+console.log(`  ${P}Hasta la proxima Amigo.${R}`)
 console.log('')

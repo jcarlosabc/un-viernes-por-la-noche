@@ -492,7 +492,7 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
   Design system: cargado (48 lineas)
   Agentes:       15 disponibles
 
-  Hola parcero, que haremos hoy?
+  Hola Amigo, que haremos hoy?
 ```
 
 **Statusline en tiempo real** (2 líneas):
