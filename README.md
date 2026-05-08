@@ -28,7 +28,7 @@
 
 ## Que es uvpln?
 
-`uvpln` es un equipo de **12 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde traducir una referencia visual a codigo hasta validar accesibilidad y aprobar el componente.
+`uvpln` es un equipo de **15 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend. No es un agente generico que hace de todo — es un especialista que conoce profundo el stack moderno: desde conectar una API hasta traducir una referencia visual a codigo, validar accesibilidad y aprobar el componente.
 
 <p align="center">
   <img src="uvpln.png" alt="uvpln en accion" width="480" />
@@ -109,6 +109,21 @@
       <td>Refactor de componentes sin cambiar comportamiento</td>
       <td>Sonnet</td>
     </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/api--integrator-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>TanStack Query, SWR, fetch nativo — loading/error/empty states, paginacion, optimistic UI</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/form--specialist-22C55E?style=flat-square&logoColor=white" /></td>
+      <td>Forms complejos: multi-step, file upload, campos dinamicos, validacion async</td>
+      <td>Sonnet</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/state--manager-7C3AED?style=flat-square&logoColor=white" /></td>
+      <td>Arquitectura de estado: useState vs useReducer vs Context vs Zustand — sin prop drilling</td>
+      <td>Haiku</td>
+    </tr>
   </tbody>
 </table>
 
@@ -151,6 +166,14 @@ Para ejecutar el loop completo desde cero:
 /uvpln-loop descripcion del componente que necesitas
 ```
 
+### Slash commands disponibles
+
+| Comando | Que hace |
+|---------|----------|
+| `/uvpln-loop` | Loop completo: architect → tester → fix → aprobado |
+| `/uvpln-audit` | Auditoria de a11y + tokens hardcodeados + performance — reporte consolidado |
+| `/uvpln-handoff` | Documento de cierre de sesion: componentes, decisiones, pendientes |
+
 ---
 
 ## Plantillas de UI
@@ -163,6 +186,40 @@ uvpln incluye **4 plantillas de referencia** con patrones visuales ya resueltos.
 | `dashboard` | Sidebar, KPI cards, tablas — paneles de administracion |
 | `auth` | Login, registro, recuperacion de contrasena |
 | `ecommerce` | Product grid, detalle, carrito drawer, checkout |
+
+---
+
+## Examples de codigo
+
+**9 ejemplos de codigo** con bloques TypeScript y JavaScript. Los agentes eligen el bloque correcto segun el lenguaje del proyecto (guardado en memoria).
+
+| Example | Que cubre |
+|---------|-----------|
+| `button-variants` | Button shadcn con todas las variantes y estado de carga |
+| `form-validation` | react-hook-form + Zod (TS) / rules nativas (JS) |
+| `data-table` | TanStack Table con sorting y paginacion |
+| `modal-pattern` | Dialog y AlertDialog accesibles con Radix |
+| `theme-tokens` | CSS variables completas shadcn/ui + Tailwind 4 |
+| `api-fetch` | TanStack Query con loading / error / empty states |
+| `card-grid` | Grid responsivo 1→2→3 col con shadcn Card + skeleton |
+| `navigation` | Navbar con mobile menu usando Sheet |
+| `toast-notifications` | Sonner: success, error, loading→resultado, con accion |
+
+---
+
+## Recursos web integrados
+
+Recursos gratuitos que los agentes consultan directamente via `WebFetch`:
+
+| Recurso | Para que |
+|---------|----------|
+| [shadcn/ui docs](https://ui.shadcn.com/docs/components) | API y variantes de componentes |
+| [Tailwind components](https://tailwindcss.504b.cc/) | Patrones visuales Tailwind listos |
+| [Tailwind showcase](https://tailwindcss.com/showcase) | Referencias de diseno en produccion |
+| [tweakcn](https://tweakcn.com/editor/theme) | Editor visual de temas shadcn/ui — exporta CSS variables |
+| [Lucide icons](https://lucide.dev/icons) | Iconos usados por shadcn/ui |
+| [Radix UI](https://www.radix-ui.com/primitives) | Docs de primitivos accesibles |
+| [Animata](https://animata.design/) | Micro-interacciones y animaciones free |
 
 ---
 
@@ -181,7 +238,7 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 
   Proyecto:      mi-proyecto
   Design system: cargado (48 lineas)
-  Agentes:       12 disponibles
+  Agentes:       15 disponibles
 
   Hola parcero, que haremos hoy?
 ```
@@ -195,12 +252,15 @@ uvpln personaliza Claude Code con una pantalla de bienvenida y una statusline en
 
 ## Hooks de calidad
 
-uvpln vigila el codigo mientras escribis:
+uvpln vigila el codigo mientras escribis — 8 hooks automaticos:
 
 | Hook | Cuando corre | Que hace |
 |------|-------------|----------|
-| `PreToolUse` Write/Edit | Antes de guardar | Bloquea colores hardcodeados (`text-[#fff]`) — fuerza uso de tokens |
+| `PreToolUse` Write/Edit | Antes de guardar | **Bloquea** colores hardcodeados (`text-[#fff]`) — fuerza uso de tokens |
 | `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `any` en TypeScript |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `console.log` pendiente de borrar |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si hay `<img>` sin `alt` o `onClick` en elementos no interactivos |
+| `PostToolUse` Write/Edit | Despues de guardar | Avisa si se usan hooks de cliente sin `"use client"` en Next.js app/ |
 | `PostToolUse` Agent | Cuando un agente termina | Si fue `ui-architect`, instruye a Claude a invocar `ui-tester` |
 
 ---
@@ -272,9 +332,9 @@ uvpln      # Windows (claude tambien sirve)
 En los primeros 2 segundos tenes que ver:
 
 1. Banner ASCII `UVPLN` morado con texto verde
-2. Linea `Agentes: 12 disponibles`
+2. Linea `Agentes: 15 disponibles`
 3. Statusline abajo con todos los agentes listados
-4. `/agents` lista los 12 con su descripcion
+4. `/agents` lista los 15 con su descripcion
 
 Probalo:
 
@@ -317,10 +377,11 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
 
 | | Comportamiento |
 |---|---|
-| **Borra** los 12 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
+| **Borra** los 15 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
 | **Borra** hooks, scripts de sesion y statusline | Solo los archivos de uvpln |
-| **Borra** el comando `/uvpln-loop` de `~/.claude/commands/` | |
+| **Borra** los comandos `/uvpln-loop`, `/uvpln-audit`, `/uvpln-handoff` | |
 | **Borra** las plantillas de `~/.claude/templates/` | |
+| **Borra** los examples de `~/.claude/examples/` | |
 | **Restaura** `~/.claude/CLAUDE.md.backup` si existe | Te devuelve tu CLAUDE.md previo |
 | **Limpia** `~/.claude/settings.json` automaticamente | Elimina solo las entradas de uvpln — preserva tu config de otras herramientas. Si el archivo queda vacio, lo borra. Usa `-ResetSettings` para borrarlo completo |
 | **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
@@ -342,7 +403,7 @@ un-viernes-por-la-noche/
 │   ├── session-start.js        → banner de bienvenida
 │   ├── session-end.js          → cierre de sesion
 │   ├── statusline.cjs          → barra inferior en tiempo real
-│   ├── agents/                 → 12 agentes especializados
+│   ├── agents/                 → 15 agentes especializados
 │   │   ├── ux-researcher.md
 │   │   ├── design-bridge.md
 │   │   ├── ui-designer.md
@@ -354,23 +415,41 @@ un-viernes-por-la-noche/
 │   │   ├── tokens-manager.md
 │   │   ├── performance-ui.md
 │   │   ├── code-reviewer.md
-│   │   └── refactoring-specialist.md
+│   │   ├── refactoring-specialist.md
+│   │   ├── api-integrator.md   → TanStack Query, SWR, fetch nativo
+│   │   ├── form-specialist.md  → forms complejos, multi-step, file upload
+│   │   └── state-manager.md    → Zustand, Context, arbol de decision de estado
 │   ├── commands/
-│   │   └── uvpln-loop.md       → slash command /uvpln-loop
+│   │   ├── uvpln-loop.md       → slash command /uvpln-loop
+│   │   ├── uvpln-audit.md      → slash command /uvpln-audit
+│   │   └── uvpln-handoff.md    → slash command /uvpln-handoff
 │   ├── install/
 │   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
 │   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
-│   ├── hooks/                  → hooks de calidad
+│   ├── hooks/                  → 8 hooks de calidad automaticos
 │   │   ├── uvpln-track-agent-start.js
 │   │   ├── uvpln-track-agent-end.js
 │   │   ├── uvpln-check-colors.js
 │   │   ├── uvpln-check-any.js
-│   │   └── uvpln-loop-trigger.js
-│   └── templates/              → patrones visuales de referencia
-│       ├── landing-page.md
-│       ├── dashboard.md
-│       ├── auth.md
-│       └── ecommerce.md
+│   │   ├── uvpln-loop-trigger.js
+│   │   ├── uvpln-check-console.js  → detecta console.log pendiente
+│   │   ├── uvpln-check-a11y.js     → detecta img sin alt y onClick no accesible
+│   │   └── uvpln-check-use-client.js → detecta hooks sin "use client" en Next.js
+│   ├── templates/              → 4 patrones visuales de referencia
+│   │   ├── landing-page.md
+│   │   ├── dashboard.md
+│   │   ├── auth.md
+│   │   └── ecommerce.md
+│   └── examples/               → 9 ejemplos de codigo TS + JS
+│       ├── button-variants.md
+│       ├── form-validation.md
+│       ├── data-table.md
+│       ├── modal-pattern.md
+│       ├── theme-tokens.md
+│       ├── api-fetch.md
+│       ├── card-grid.md
+│       ├── navigation.md
+│       └── toast-notifications.md
 ```
 
 ---
@@ -410,6 +489,52 @@ un-viernes-por-la-noche/
 ---
 
 ## Changelog
+
+<details>
+<summary><img src="https://img.shields.io/badge/v3.0.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 15 agentes · 9 examples · 8 hooks · recursos web integrados</summary>
+
+<br/>
+
+La actualizacion mas grande desde el launch. Tres ejes: completar el stack de agentes, agregar una biblioteca de ejemplos de codigo, e integrar recursos web gratuitos que los agentes consultan en tiempo real.
+
+### 3 agentes nuevos (de 12 a 15)
+
+| Agente | Especialidad |
+|--------|-------------|
+| `api-integrator` | TanStack Query, SWR, fetch nativo — loading/error/empty states, optimistic updates, paginacion |
+| `form-specialist` | Forms complejos: multi-step, file upload, campos dinamicos con `useFieldArray`, validacion async |
+| `state-manager` | Arbol de decision: useState → useReducer → Context → Zustand — sin prop drilling |
+
+Estos tres agentes cubrian el gap mas grande del stack anterior: no habia nadie especializado en data fetching, formularios complejos ni arquitectura de estado.
+
+### 9 examples de codigo (nueva carpeta `~/.claude/examples/`)
+
+Cada example tiene bloque **TypeScript** y bloque **JavaScript**. El agente elige segun el lenguaje del proyecto guardado en memoria.
+
+`button-variants` · `form-validation` · `data-table` · `modal-pattern` · `theme-tokens` · `api-fetch` · `card-grid` · `navigation` · `toast-notifications`
+
+### 8 hooks automaticos (de 5 a 8)
+
+Tres hooks nuevos que se ejecutan automaticamente al guardar archivos:
+
+| Hook | Que detecta |
+|------|-------------|
+| `uvpln-check-console.js` | `console.log` pendiente de borrar antes del merge |
+| `uvpln-check-a11y.js` | `<img>` sin `alt`, `onClick` en `<div>` sin `role` ni `tabIndex` |
+| `uvpln-check-use-client.js` | Hooks de cliente (`useState`, `useEffect`, etc.) sin `"use client"` en Next.js app/ |
+
+### 7 recursos web integrados
+
+`design-bridge`, `ui-architect` y `tokens-manager` ahora tienen `WebFetch` y saben cuando consultar:
+
+- shadcn/ui docs · Tailwind components · Tailwind showcase · tweakcn · Lucide icons · Radix UI · Animata
+
+### 2 slash commands nuevos (de 1 a 3)
+
+- `/uvpln-audit` — auditoria completa de a11y + tokens + performance en un solo comando
+- `/uvpln-handoff` — documento de cierre de sesion con componentes, decisiones y pendientes
+
+</details>
 
 <details>
 <summary><img src="https://img.shields.io/badge/v2.1.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; Desinstalacion limpia de settings.json</summary>
