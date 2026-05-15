@@ -26,6 +26,67 @@
 
 ---
 
+## Instalacion
+
+<p>
+  <img src="https://img.shields.io/npm/v/uvpln?style=flat-square&color=22C55E&logo=npm" alt="npm version" />
+  <img src="https://img.shields.io/npm/dt/uvpln?style=flat-square&color=7C3AED" alt="downloads" />
+  <img src="https://img.shields.io/badge/Claude_Code-requerido-7C3AED?style=flat-square&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js_18+-requerido-22C55E?style=flat-square&logo=node.js&logoColor=white" />
+</p>
+
+```bash
+npm install -g uvpln
+uvpln install
+```
+
+Eso es todo. **`uvpln install` no toca tu Claude Code vanilla** — copia todo a `~/.claude-uvpln/` y queda aislado. Despues:
+
+```bash
+claude    # Claude Code vanilla (sin uvpln)
+uvpln     # Claude Code con uvpln (23 agentes, 17 hooks, statusline visual)
+```
+
+Los dos comandos coexisten. Podes alternar cuando quieras.
+
+### Comandos del CLI
+
+```bash
+uvpln                       # Lanza Claude Code con uvpln
+uvpln install               # Instala uvpln en ~/.claude-uvpln/
+uvpln uninstall             # Desinstala uvpln (no toca vanilla)
+uvpln uninstall --full      # Borra TODO incluyendo memoria/sesiones/proyectos
+uvpln status                # Ver que esta instalado
+uvpln --version             # Version del CLI
+uvpln --help                # Ayuda completa
+uvpln chat hola             # Passthrough — equivalente a "claude chat hola"
+```
+
+### Requisitos
+
+- **Claude Code** y suscripcion **Claude Pro o Max**
+- **Node.js 18+** — el CLI, la statusline y los hooks corren en Node (cross-platform)
+
+Sin Docker, sin Python, sin infraestructura.
+
+Asi se ve uvpln corriendo en PowerShell:
+
+<p align="center">
+  <img src="uvpln-powershell.png" alt="uvpln en PowerShell" width="100%" />
+</p>
+
+### Instalacion alternativa (sin npm)
+
+```bash
+git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
+cd un-viernes-por-la-noche
+bash install.sh                                          # Linux / macOS / WSL
+# o
+powershell -ExecutionPolicy Bypass -File install.ps1     # Windows
+```
+
+---
+
 ## Que es uvpln?
 
 `uvpln` es un equipo de **23 agentes especializados** para [Claude Code](https://claude.ai/code) enfocados exclusivamente en frontend moderno. No es un agente generico que hace de todo — es un equipo entero que cubre el stack completo: desde traducir una referencia visual a codigo world-class hasta integrar Stripe, mandar mailings transaccionales con React Email, configurar SEO + OG images dinamicas, soportar multi-idioma con RTL, tracking de analytics GDPR-compliant, AI features con streaming, Storybook con visual regression, y validar todo (accesibilidad, performance, seguridad) antes del merge. Y aprende: cada bug que el `ui-tester` detecta se guarda como lesson para que no se repita.
@@ -229,8 +290,6 @@ El diferenciador de uvpln. Ningun componente es **listo** hasta que pasa el loop
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
-### Loop automatico
-
 Cuando `ui-architect` termina un componente, un hook `PostToolUse` le avisa a Claude automaticamente que debe invocar `ui-tester`. El loop cierra solo — no necesitas recordarlo.
 
 Para ejecutar el loop completo desde cero:
@@ -254,7 +313,7 @@ Para ejecutar el loop completo desde cero:
 
 Casos reales de como pedirle cosas a uvpln. Solo escribi en lenguaje natural — el equipo de agentes se orquesta solo.
 
-<details open>
+<details>
 <summary><strong>Construir desde una referencia visual</strong></summary>
 
 <br/>
@@ -536,83 +595,10 @@ uvpln vigila el codigo mientras escribis — 17 hooks automaticos. 3 protegen ca
 
 ---
 
-## Instalacion
-
-### Con npm (recomendado) — un solo comando, cualquier OS
-
-<p>
-  <img src="https://img.shields.io/npm/v/uvpln?style=flat-square&color=22C55E&logo=npm" alt="npm version" />
-  <img src="https://img.shields.io/npm/dt/uvpln?style=flat-square&color=7C3AED" alt="downloads" />
-</p>
-
-```bash
-npm install -g uvpln
-uvpln install
-```
-
-Eso es todo. **`uvpln install` no toca tu Claude Code vanilla** — copia todo a `~/.claude-uvpln/` y queda aislado. Despues:
-
-```bash
-claude    # Claude Code vanilla (sin uvpln)
-uvpln     # Claude Code con uvpln (23 agentes, 17 hooks, statusline visual)
-```
-
-Los dos comandos coexisten. Podes alternar cuando quieras.
-
-Asi se ve uvpln corriendo en PowerShell:
-
-<p align="center">
-  <img src="uvpln-powershell.png" alt="uvpln en PowerShell" width="100%" />
-</p>
-
-### Desde el repo (alternativa — sin npm)
-
-Si preferis clonar y correr scripts:
-
-```bash
-git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
-cd un-viernes-por-la-noche
-bash install.sh                                          # Linux / macOS / WSL
-# o
-powershell -ExecutionPolicy Bypass -File install.ps1     # Windows
-```
-
-Hace lo mismo que `uvpln install` desde npm.
-
-### Comandos del CLI
-
-```bash
-uvpln                       # Lanza Claude Code con uvpln
-uvpln install               # Instala uvpln en ~/.claude-uvpln/
-uvpln uninstall             # Desinstala uvpln (no toca vanilla)
-uvpln uninstall --full      # Borra TODO incluyendo memoria/sesiones/proyectos
-uvpln status                # Ver que esta instalado
-uvpln --version             # Version del CLI
-uvpln --help                # Ayuda completa
-uvpln chat hola             # Passthrough — equivalente a "claude chat hola"
-```
-
-### Requisitos
-
-<p>
-  <img src="https://img.shields.io/badge/Claude_Code-requerido-7C3AED?style=flat-square&logoColor=white" />
-  <img src="https://img.shields.io/badge/Claude_Pro_o_Max-requerido-22C55E?style=flat-square&logoColor=white" />
-  <img src="https://img.shields.io/badge/Node.js_18+-requerido-22C55E?style=flat-square&logo=node.js&logoColor=white" />
-</p>
-
-- **Claude Code** y suscripcion **Claude Pro o Max**
-- **Node.js 18+** — el CLI, la statusline y los hooks corren en Node (cross-platform)
-
-Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este antes de copiar nada.
-
----
-
 <details>
 <summary><strong>Verificar la instalacion · preview, validacion y troubleshooting</strong></summary>
 
 <br/>
-
-### Verificar la instalacion
 
 ```bash
 uvpln status
@@ -630,8 +616,6 @@ powershell -ExecutionPolicy Bypass -File install.ps1 -Check     # Windows
 ```
 
 ### Despues de instalar — verificacion real
-
-Abri Claude Code con uvpln:
 
 ```bash
 uvpln
@@ -722,78 +706,14 @@ un-viernes-por-la-noche/
 ├── install.ps1                 → instalador alternativo Windows
 ├── uninstall.sh                → desinstalador alternativo Linux/macOS/WSL
 ├── uninstall.ps1               → desinstalador alternativo Windows
-├── uvpln.cmd                   → wrapper legacy Windows (deprecado por el CLI)
 ├── claude/
 │   ├── CLAUDE.md               → personalidad, reglas y decision matrix
 │   ├── settings.json           → hooks cross-platform
-│   ├── session-start.js        → banner de bienvenida
-│   ├── session-end.js          → cierre de sesion
-│   ├── statusline.cjs          → barra inferior en tiempo real
 │   ├── agents/                 → 23 agentes especializados
-│   │   ├── ux-researcher.md
-│   │   ├── design-bridge.md
-│   │   ├── ui-designer.md
-│   │   ├── ui-architect.md
-│   │   ├── ui-tester.md
-│   │   ├── debugger.md
-│   │   ├── a11y-expert.md
-│   │   ├── motion-designer.md
-│   │   ├── tokens-manager.md
-│   │   ├── performance-ui.md
-│   │   ├── code-reviewer.md
-│   │   ├── refactoring-specialist.md
-│   │   ├── api-integrator.md           → TanStack Query, SWR, fetch nativo
-│   │   ├── form-specialist.md          → forms complejos, multi-step, file upload
-│   │   ├── state-manager.md            → Zustand, Context, arbol de decision de estado
-│   │   ├── security-frontend.md        → 🔒 XSS, secrets, auth, CSP, headers, deps
-│   │   ├── email-designer.md           → 📧 React Email, Resend, mailings transaccionales
-│   │   ├── seo-specialist.md           → 📈 Metadata API, OG images dinamicas, JSON-LD
-│   │   ├── i18n-specialist.md          → 🌍 next-intl, ICU, RTL, formato por locale
-│   │   ├── analytics-engineer.md       → 📊 PostHog, Web Vitals reales, A/B, GDPR banner
-│   │   ├── payments-specialist.md      → 💳 Stripe, Lemon Squeezy, webhooks, paywalls
-│   │   ├── ai-features-engineer.md     → 🤖 Vercel AI SDK, streaming, RAG, tool calling
-│   │   └── storybook-curator.md        → 📖 Storybook 9, CSF3, Chromatic, MDX docs
-│   ├── commands/
-│   │   ├── uvpln-loop.md           → slash command /uvpln-loop
-│   │   ├── uvpln-audit.md          → slash command /uvpln-audit
-│   │   ├── uvpln-security-audit.md → 🔒 slash command /uvpln-security-audit
-│   │   └── uvpln-handoff.md        → slash command /uvpln-handoff
-│   ├── install/
-│   │   ├── merge-settings.js   → inyecta config de uvpln en settings.json del usuario
-│   │   └── unmerge-settings.js → elimina solo entradas de uvpln al desinstalar
+│   ├── commands/               → 4 slash commands
 │   ├── hooks/                  → 17 hooks de calidad automaticos
-│   │   ├── uvpln-track-agent-start.js
-│   │   ├── uvpln-track-agent-end.js
-│   │   ├── uvpln-check-colors.js
-│   │   ├── uvpln-check-any.js
-│   │   ├── uvpln-loop-trigger.js
-│   │   ├── uvpln-check-console.js              → detecta console.log pendiente
-│   │   ├── uvpln-check-a11y.js                 → detecta img sin alt y onClick no accesible
-│   │   ├── uvpln-check-use-client.js           → detecta hooks sin "use client" en Next.js
-│   │   ├── uvpln-check-shadows.js              → detecta sombras planas, sugiere tokens compuestos
-│   │   ├── uvpln-check-oklch-inline.js         → detecta oklch() inline en .tsx
-│   │   ├── uvpln-check-ssr-window.js           → detecta window/document en render inicial
-│   │   ├── uvpln-check-secrets.js              → 🔒🛑 BLOQUEA secrets (Stripe, AWS, GitHub, OpenAI keys)
-│   │   ├── uvpln-check-target-blank.js         → 🔒 detecta tabnabbing en links externos
-│   │   ├── uvpln-check-dangerous-html.js       → 🔒 detecta XSS via dangerouslySetInnerHTML sin DOMPurify
-│   │   ├── uvpln-check-localstorage-token.js   → 🔒 detecta tokens auth en localStorage
-│   │   ├── uvpln-lesson-reminder.js            → 📚 recuerda registrar lesson cuando ui-tester aprueba post-iteracion
-│   │   └── uvpln-catalog-components.js         → 🗂️ SessionStart: indexa src/components y guarda catalogo
 │   ├── templates/              → 4 patrones visuales de referencia
-│   │   ├── landing-page.md
-│   │   ├── dashboard.md
-│   │   ├── auth.md
-│   │   └── ecommerce.md
 │   └── examples/               → 9 ejemplos de codigo TS + JS
-│       ├── button-variants.md
-│       ├── form-validation.md
-│       ├── data-table.md
-│       ├── modal-pattern.md
-│       ├── theme-tokens.md
-│       ├── api-fetch.md
-│       ├── card-grid.md
-│       ├── navigation.md
-│       └── toast-notifications.md
 ```
 
 </details>
@@ -816,31 +736,11 @@ un-viernes-por-la-noche/
 
 </details>
 
-<details>
-<summary><strong>Stack de referencia · tecnologias usadas</strong></summary>
-
-<br/>
-
-<p>
-  <img src="https://img.shields.io/badge/React-19-22C55E?style=for-the-badge&logo=react&logoColor=white" />
-  <img src="https://img.shields.io/badge/Next.js-15-7C3AED?style=for-the-badge&logo=next.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-22C55E?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-  <img src="https://img.shields.io/badge/TypeScript-strict-7C3AED?style=for-the-badge&logo=typescript&logoColor=white" />
-</p>
-<p>
-  <img src="https://img.shields.io/badge/shadcn/ui-components-22C55E?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/Radix_UI-primitives-7C3AED?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/Framer_Motion-animations-22C55E?style=for-the-badge&logo=framer&logoColor=white" />
-  <img src="https://img.shields.io/badge/WCAG-2.2_AA-7C3AED?style=for-the-badge&logoColor=white" />
-</p>
-
-</details>
-
 ---
 
 ## Changelog
 
-<details open>
+<details>
 <summary><img src="https://img.shields.io/badge/v3.3.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; sistema completo · 7 agentes nuevos · memoria que aprende · catalogo auto-indexado · 23 agentes 17 hooks</summary>
 
 <br/>
@@ -877,21 +777,7 @@ Antes de v3.3, uvpln era stateless entre sesiones. Cada bug que `ui-tester` dete
 - Genera `~/.claude/memory/catalog/[proyecto].md` agrupado por subcarpeta
 - `ui-architect` lo CONSULTA antes de crear un componente nuevo — evita duplicacion (no construye `PricingCard` si ya existe `pricing/PricingTier.tsx`)
 
-Resultado: cada proyecto enseña al siguiente. Cada sesion empieza con contexto real del codigo. Es lo que separa un asistente de un sistema que mejora.
-
-### Agentes existentes alineados a world-class
-
-**`code-reviewer` (Opus, ultimo filtro pre-merge):**
-- Lectura del brief + lessons + catalogo antes de revisar
-- Checklist de calidad visual world-class: sombras compuestas, sin OKLCH inline, tabular-nums, tracking display, dark rediseñado, motion via tokens, container queries
-- Checklist de seguridad: escala a `security-frontend` en hallazgos criticos
-- Checklist SSR: sin `window` en render inicial, sin warnings de hydration
-
-**`performance-ui` (Sonnet, performance):**
-- Coordinacion con tokens de motion: animar solo `transform`/`opacity`/`filter`, `will-change` antes de animar y removido despues
-- Container queries vs media queries — argumento de performance
-- Bundle size budgets explicitos (< 200kb First Load JS por route)
-- Streaming/RSC checklist: Suspense con skeleton coincidente, Server Components por default, datos en server no en `useEffect`
+Resultado: cada proyecto enseña al siguiente. Cada sesion empieza con contexto real del codigo.
 
 ### 2 hooks nuevos (15 → 17)
 
@@ -899,15 +785,6 @@ Resultado: cada proyecto enseña al siguiente. Cada sesion empieza con contexto 
 |------|--------|----------|
 | `uvpln-lesson-reminder.js` | PostToolUse Agent (ui-tester) | Recuerda registrar lesson en `~/.claude/memory/lessons/[proyecto].md` cuando hubo iteracion bug→fix |
 | `uvpln-catalog-components.js` | SessionStart | Indexa `src/components/**/*.tsx` y guarda en `~/.claude/memory/catalog/[proyecto].md` |
-
-### Statusline actualizada
-
-- Linea 1: `23 agentes 🔒 17 hooks` — el contador refleja los nuevos agentes y hooks
-- Linea 2: 23 iconos con sus mappings nuevos: 📧 email-designer, 📈 seo-specialist, 🌍 i18n-specialist, 📊 analytics-engineer, 💳 payments-specialist, 🤖 ai-features-engineer, 📖 storybook-curator
-
-### CLAUDE.md actualizado
-
-Matriz de "cuando llamar a cada agente" suma 7 filas — el routing es preciso, sin ambiguedad sobre que agente toca cada area.
 
 </details>
 
@@ -932,8 +809,6 @@ Especialista Sonnet en seguridad cliente moderna. Cubre:
 - **Dependencias** — `npm audit`, paquetes a actualizar urgente
 - **Validacion de inputs** — Zod compartido entre cliente y server
 
-Stack recomendado documentado: NextAuth/Auth.js, Clerk, Lucia segun caso.
-
 ### 4 hooks de seguridad nuevos (15 hooks en total)
 
 | Hook | Tipo | Detecta |
@@ -942,8 +817,6 @@ Stack recomendado documentado: NextAuth/Auth.js, Clerk, Lucia segun caso.
 | `uvpln-check-target-blank.js` | PostToolUse warning | `<a target="_blank">` sin `rel="noopener noreferrer"` (tabnabbing) |
 | `uvpln-check-dangerous-html.js` | PostToolUse warning | `dangerouslySetInnerHTML` sin DOMPurify importado |
 | `uvpln-check-localstorage-token.js` | PostToolUse warning | `localStorage.setItem('token'\|'jwt'\|'auth'\|'session')` |
-
-`check-secrets` es el unico blocking de seguridad — un secret en codigo es no-go inmediato. Los otros 3 avisan para que `security-frontend` o `ui-architect` corrijan.
 
 ### /uvpln-security-audit (slash command nuevo)
 
@@ -954,23 +827,6 @@ Auditoria completa con `security-frontend`. Reporte por severidad con fixes acci
 - 🟡 MEDIO (corregir en sprint) — `target=_blank` sin rel, iframes sin sandbox, open redirects
 - 🟢 BAJO (mejora) — HSTS, CORS restrictivo, SRI en CDN scripts
 
-Incluye `npm audit` integrado y reporte de paquetes vulnerables a actualizar.
-
-### Statusline mejorada
-
-La linea 1 de la statusline ahora muestra contadores que comunican el sistema de proteccion:
-
-```
-🐊 uvpln · mi-proyecto │ 16 agentes 🔒 15 hooks │ ◉ ds │ sonnet · 12% ctx · $0.023 │ Cartagena 🇨🇴
-◈ ux-researcher  ◈ design-bridge  ◈ ui-designer  ... (linea 2 con todos los agentes)
-```
-
-El icono 🔒 aparece automaticamente cuando hay hooks de seguridad activos. Si los desinstalas, desaparece — la statusline lee el directorio en vivo.
-
-### CLAUDE.md actualizado
-
-Matriz de "cuando llamar a cada agente" suma `security-frontend` para auth, secrets, XSS, CSP, headers de seguridad, dependencias vulnerables.
-
 </details>
 
 <details>
@@ -978,150 +834,17 @@ Matriz de "cuando llamar a cada agente" suma `security-frontend` para auth, secr
 
 <br/>
 
-Alineamiento completo de los 7 agentes que producen calidad visual: `design-bridge`, `ui-designer`, `tokens-manager`, `ui-architect`, `ui-tester`, `motion-designer`, `a11y-expert`. Antes hablaban idiomas distintos — ahora comparten vocabulario senior (OKLCH, sombras en capas, motion specs con tokens, dark mode rediseñado, contraste verificado con número exacto, scroll-driven animations, View Transitions API, APCA, forced-colors).
+Alineamiento completo de los 7 agentes que producen calidad visual: `design-bridge`, `ui-designer`, `tokens-manager`, `ui-architect`, `ui-tester`, `motion-designer`, `a11y-expert`. Comparten vocabulario senior (OKLCH, sombras en capas, motion specs con tokens, dark mode rediseñado, contraste verificado con numero exacto, scroll-driven animations, View Transitions API, APCA, forced-colors).
 
-### design-bridge — que cambio
+**design-bridge** — protocolo de entrada por tipo: URL → WebFetch, screenshot → Read multimodal, Figma → Read con paginas especificas. Brief captura tipografia con tracking y tabular-nums, color en OKLCH con escala 50→950, sombras en 2-3 capas, motion con duraciones y easing exacto, bento grids.
 
-**Protocolo de entrada explicito por tipo de referencia:**
-- URL → `WebFetch`
-- Screenshot/imagen → `Read` multimodal
-- PDF de Figma → `Read` con paginas especificas
-- Link publico de Figma → `WebFetch` al PNG export
-- Descripcion vaga → cruce con recursos curados o pide referencias
+**ui-architect** — tabla de lectura del brief con accion concreta por seccion. Patrones nuevos: sombras compuestas como tokens, bento grid en lugar de "3 cards iguales", glow color-coordinado en CTAs.
 
-**Vocabulario visual ampliado** — el brief ahora captura lo que el 90% de los agentes de IA ignoran:
-- Tipografia: tracking por tamano, `tabular-nums`, optical-sizing, ratio modular explicito
-- Color en **OKLCH** (no hex), con L y C explicitos, escalas 50→950, dark mode rediseñado (no invertido)
-- Profundidad: sombras en 2-3 capas (ambient + key + contact), glow color-coordinado, ring + shadow
-- Motion: duraciones por categoria, easing exacto (`cubic-bezier`), scroll-driven, View Transitions, stagger
-- Composicion: anchor points, optical alignment, bento grids, asimetria intencional
+**tokens-manager** — protocolo de generacion de escala 50→950 con OKLCH. Dark mode rediseñado (no invertido): background L 8-14%, foreground L 92-96%, acento sube L 5-10 puntos. Tokens nuevos: `--shadow-card`, `--duration-micro/base/macro/page`, `--ease-out-expo`.
 
-**Lenguajes de marca reconocibles** — tabla con la firma visual de Linear, Vercel, Stripe, Apple, Notion, Arc, Mercury, Cron, Raycast. Cuando el usuario dice "como X", traduce a decisiones concretas.
+**ui-tester** — checklist de calidad visual world-class: sombras en 2-3 capas verificadas con getComputedStyle, tabular-nums, tracking negativo en display, dark mode L 8-14%, prefers-reduced-motion en DevTools. Contraste reportado con numero exacto (`4.8:1 ✅ AA`).
 
-**Anti-patterns 2026** — lista explicita de lo que NO recomienda aunque la referencia lo tenga: gradientes purpura cliche, glassmorphism mal hecho, carruseles en hero, dark mode invertido, etc.
-
-**Permiso acotado para proponer mejoras** — el agente puede sugerir hasta 3 mejoras tecnicas sobre la referencia (a11y, performance, contraste) en una seccion dedicada del brief. `ui-architect` decide si las aplica.
-
-### ui-architect — que cambio
-
-**Tabla de lectura del brief** — cada seccion del brief de `design-bridge` ahora tiene una accion concreta. Mood/voice define motion y densidad. Lenguaje de marca define defaults. Sombras compuestas no se interpretan, se aplican.
-
-**Patrones de codigo nuevos:**
-- Sombras en 2-3 capas (ambient + key + contact) como tokens compuestos
-- Tipografia con `tracking-tight`, `tabular-nums`, optical-sizing
-- Bento grid en lugar del cliche de "3 cards iguales"
-- Glow color-coordinado en CTAs primarios
-
-**Checklist pre-tester** — 9 puntos verificables antes de pasar al `ui-tester`: mood reflejado, dark mode probado en todos los estados, sombras compuestas, `prefers-reduced-motion` respetado, targets ≥44px, container queries donde aplica.
-
-### tokens-manager — que cambio
-
-**Protocolo de generacion de escala 50→950** — recibe un OKLCH base y genera la escala completa con tabla explicita de L y C por step. Hue estable, chroma cae en extremos para evitar "color sucio".
-
-**Dark mode rediseñado** (no invertido) — protocolo de 6 reglas:
-- Background L 8-14% (no 0%)
-- Foreground L 92-96% (no 100%)
-- Acento sube L 5-10 puntos vs light
-- Chroma se reduce 10-20% en dark
-- Borders L 22-28% (nunca puro gris)
-- Contraste verificado: AA minimo, AAA en texto critico
-
-**Tokens nuevos en `@theme`:**
-- `--shadow-card`, `--shadow-card-hover`, `--shadow-popover` — todas en capas
-- `--duration-micro/base/macro/page` — escala de motion
-- `--ease-out-expo`, `--ease-apple`, `--ease-spring` — easings nombrados
-
-**Audit ampliado** — grep para detectar OKLCH inline en `.tsx` (deberia estar solo en `tokens.css`), sombras planas, duraciones sueltas.
-
-### ui-designer — que cambio
-
-Antes producia specs con descriptores vagos ("minimalismo tecnico Vercel"). Ahora produce specs con el mismo nivel de detalle que el brief de `design-bridge` cuando no hay referencia visual.
-
-**Spec amplada** — incluye Mood/Voice, Lenguaje de marca, color en OKLCH, profundidad con sombras en capas, motion con duraciones y easing, dark mode siempre, contraste objetivo, accesibilidad critica.
-
-**Tabla de lenguajes de marca** — la misma que usa `design-bridge`. Si el usuario dice "tono Linear", el designer deriva decisiones tecnicas concretas (Geist + Geist Mono, motion 150ms, OKLCH purpura ~265, dark-first).
-
-**Anti-pattern explicito** — prohibido usar descriptores vagos ("moderno", "limpio") sin traducirlos a decisiones tecnicas. Prohibido producir specs sin OKLCH, sin motion, sin dark mode.
-
-### ui-tester — que cambio
-
-El cuello de botella del loop. Antes aprobaba "se ve bien"; ahora verifica el lenguaje completo.
-
-**Lectura del brief antes de testear** — si el componente vino del flujo del bridge, el tester lee cada seccion del brief y la convierte en checks especificos del browser.
-
-**Checklist de calidad visual world-class** (8 puntos nuevos):
-- `getComputedStyle().boxShadow` debe tener 2-3 capas, no `shadow-md` plano
-- Cero `text-[#xxx]` ni `bg-[oklch(...)]` inline en el `.tsx`
-- `tabular-nums` verificado: precios alinean entre cards (puntos decimales no bailan)
-- Tracking del display es negativo (no `tracking-normal`)
-- Dark mode: `--background` L 8-14%, no 0% ni invertido
-- Glow / ring en CTAs primarios cuando el brief lo pidio
-- `prefers-reduced-motion`: emular en DevTools y verificar fallback
-- Container queries aplicadas cuando el componente vive en distintos contenedores
-
-**Protocolo de contraste verificado con numero** — no mas "contraste suficiente". Reporta `4.8:1 ✅ AA` o `3.9:1 ❌` con valor exacto.
-
-**Checks de SSR/hidratacion** — sin warnings en consola, sin uso de `window` en render inicial, mismo render con curl/view-source que despues de hidratar.
-
-### motion-designer — que cambio
-
-**Lectura del brief obligatoria** — la seccion Motion del brief tiene duraciones, easing y stagger declarados. Antes se ignoraban; ahora se aplican literal.
-
-**Tokens en lugar de valores sueltos** — `--duration-micro`, `--duration-macro`, `--ease-out-expo`, `--ease-apple`, `--ease-spring`. Si faltan, delega a `tokens-manager` antes de codear.
-
-**Tabla de lenguajes de motion por marca** — Linear-style 150ms out-expo, Apple-style 400ms cubic-bezier(0.32, 0.72, 0, 1), Stripe-style 400ms out-quart, Notion-style 250ms con spring sutil.
-
-**Patrones nuevos:**
-- Scroll-driven animations con CSS nativo (`animation-timeline: view()`) + fallback `prefers-reduced-motion`
-- View Transitions API con Next.js 15 + React 19 — duraciones via tokens, fallback a11y
-
-### a11y-expert — que cambio
-
-**Contraste verificado con numero exacto** — antes "se ve bien"; ahora `4.8:1 ✅ AA OK` o `3.9:1 ❌`. Protocolo con DevTools console + axe DevTools + Lighthouse + culori para tokens propios.
-
-**APCA agregado** — la metrica de WCAG 3 (draft) que ya usan GitHub Primer y Adobe Spectrum 2. Reportar `Lc 75` cuando aplica, complementario a WCAG 2.x.
-
-**Verificacion light Y dark separadas** — dark mode rediseñado tiene pares foreground/background distintos; no se asume que si pasa light pasa dark.
-
-**Focus visible en dark + forced-colors** — el ring del focus es a11y critica que casi siempre se rompe en dark. Patron CSS con `outline-offset` + soporte `forced-colors: active` (Windows High Contrast).
-
-**Motion como a11y (no solo motion)** — `prefers-reduced-motion`, sin scroll-jacking, autoplay con controles, `prefers-contrast: more`.
-
-### 3 hooks nuevos de proteccion automatica (de 8 a 11)
-
-Los agentes ahora hablan world-class, pero los hooks lo enforzan automaticamente cada vez que se guarda un archivo:
-
-| Hook | Detecta |
-|------|---------|
-| `uvpln-check-shadows.js` | Sombras planas (`shadow-md`, `shadow-lg`, etc.) — sugiere tokens compuestos `shadow-(--shadow-card)` |
-| `uvpln-check-oklch-inline.js` | `oklch()` inline en `.tsx`/`.jsx` — debe vivir en `globals.css`/`tokens.css`, no en componentes |
-| `uvpln-check-ssr-window.js` | `window.innerWidth`, `document.cookie`, `navigator.userAgent` en render inicial — rompe SSR/hidratacion en Next.js. Heuristica detecta uso fuera de `useEffect` y sin guard `typeof window !== 'undefined'` |
-
-Los 3 son `PostToolUse` no bloqueantes — avisan en consola para que `tokens-manager` o `ui-architect` corrijan. Permite override consciente cuando el caso lo justifica.
-
-### Endurecido con un dry-run real
-
-Antes de declarar "listo", recorri el flujo completo con una referencia real (Linear pricing). De ese test salieron 3 fixes criticos que ya estan aplicados:
-
-- **design-bridge** — protocolo explicito de fallback cuando `WebFetch` no alcanza (solo da HTML, no CSS ni imagenes). Antes inventaba paleta; ahora declara "inferido del lenguaje de marca" o pide screenshot.
-- **ui-architect** — regla SSR-safe en el checklist (nunca `window.innerWidth` en render inicial) + patron de container queries (`@container` + `@md:`) como reemplazo correcto.
-- **ui-architect** — protocolo de orden de tokens: verificar con `grep` que cada token del brief exista en `globals.css` antes de codear; si falta, delegar a `tokens-manager` primero.
-
-### 7 recursos premium nuevos en CLAUDE.md
-
-Tier separado de los recursos tecnicos. Curaduria visual de clase mundial:
-
-| Recurso | Para que |
-|---------|----------|
-| Mobbin | Patrones reales de apps top en produccion |
-| Land-book | Landings premium con filtros por estilo |
-| Godly | Lo mas experimental y editorial |
-| Refero | Flujos completos por categoria |
-| SaaS Landing Page | Referencia B2B |
-| Page Flows | Flujos UX en video |
-| Httpster | Inspiracion semanal curada |
-
-`design-bridge` los consulta antes de armar briefs cuando hay descripciones vagas o necesita variantes.
+**3 hooks nuevos** — `uvpln-check-shadows.js`, `uvpln-check-oklch-inline.js`, `uvpln-check-ssr-window.js`.
 
 </details>
 
@@ -1129,8 +852,6 @@ Tier separado de los recursos tecnicos. Curaduria visual de clase mundial:
 <summary><img src="https://img.shields.io/badge/v3.0.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; 15 agentes · 9 examples · 8 hooks · recursos web integrados</summary>
 
 <br/>
-
-La actualizacion mas grande desde el launch. Tres ejes: completar el stack de agentes, agregar una biblioteca de ejemplos de codigo, e integrar recursos web gratuitos que los agentes consultan en tiempo real.
 
 ### 3 agentes nuevos (de 12 a 15)
 
@@ -1140,34 +861,21 @@ La actualizacion mas grande desde el launch. Tres ejes: completar el stack de ag
 | `form-specialist` | Forms complejos: multi-step, file upload, campos dinamicos con `useFieldArray`, validacion async |
 | `state-manager` | Arbol de decision: useState → useReducer → Context → Zustand — sin prop drilling |
 
-Estos tres agentes cubrian el gap mas grande del stack anterior: no habia nadie especializado en data fetching, formularios complejos ni arquitectura de estado.
-
-### 9 examples de codigo (nueva carpeta `~/.claude/examples/`)
-
-Cada example tiene bloque **TypeScript** y bloque **JavaScript**. El agente elige segun el lenguaje del proyecto guardado en memoria.
+### 9 examples de codigo
 
 `button-variants` · `form-validation` · `data-table` · `modal-pattern` · `theme-tokens` · `api-fetch` · `card-grid` · `navigation` · `toast-notifications`
 
 ### 8 hooks automaticos (de 5 a 8)
 
-Tres hooks nuevos que se ejecutan automaticamente al guardar archivos:
-
 | Hook | Que detecta |
 |------|-------------|
-| `uvpln-check-console.js` | `console.log` pendiente de borrar antes del merge |
+| `uvpln-check-console.js` | `console.log` pendiente de borrar |
 | `uvpln-check-a11y.js` | `<img>` sin `alt`, `onClick` en `<div>` sin `role` ni `tabIndex` |
-| `uvpln-check-use-client.js` | Hooks de cliente (`useState`, `useEffect`, etc.) sin `"use client"` en Next.js app/ |
+| `uvpln-check-use-client.js` | Hooks de cliente sin `"use client"` en Next.js app/ |
 
-### 7 recursos web integrados
+### 7 recursos web + 2 slash commands nuevos
 
-`design-bridge`, `ui-architect` y `tokens-manager` ahora tienen `WebFetch` y saben cuando consultar:
-
-- shadcn/ui docs · Tailwind components · Tailwind showcase · tweakcn · Lucide icons · Radix UI · Animata
-
-### 2 slash commands nuevos (de 1 a 3)
-
-- `/uvpln-audit` — auditoria completa de a11y + tokens + performance en un solo comando
-- `/uvpln-handoff` — documento de cierre de sesion con componentes, decisiones y pendientes
+shadcn/ui docs · Tailwind components · tweakcn · Lucide icons · Radix UI · Animata · `/uvpln-audit` · `/uvpln-handoff`
 
 </details>
 
@@ -1176,16 +884,7 @@ Tres hooks nuevos que se ejecutan automaticamente al guardar archivos:
 
 <br/>
 
-Hasta v2.0.0 el desinstalador no tocaba `settings.json` por defecto — los hooks de uvpln quedaban configurados aunque los archivos ya no existieran, y Claude Code los intentaba correr igual.
-
-**Ahora:**
-
-- `uninstall.ps1` llama a `claude/install/unmerge-settings.js`, que elimina **solo** las entradas de uvpln (hooks, statusLine, permissions) preservando toda la config del usuario.
-- Si `settings.json` queda vacio tras la limpieza, el script lo borra directamente.
-- Si queda config de otras herramientas, el archivo se actualiza sin tocar nada que no sea de uvpln.
-- Fallback: si Node no esta disponible, el desinstalador muestra las claves a remover a mano.
-
-`-ResetSettings` sigue disponible para borrar el archivo completo cuando queres empezar de cero.
+`uninstall.ps1` llama a `claude/install/unmerge-settings.js`, que elimina **solo** las entradas de uvpln (hooks, statusLine, permissions) preservando toda la config del usuario. Si `settings.json` queda vacio tras la limpieza, el script lo borra directamente.
 
 </details>
 
@@ -1194,44 +893,11 @@ Hasta v2.0.0 el desinstalador no tocaba `settings.json` por defecto — los hook
 
 <br/>
 
-### Loop de calidad automatizado
-
-El loop ya no es solo una regla en el CLAUDE.md — ahora corre solo:
-
-- **Hook `PostToolUse`** — cuando `ui-architect` termina, Claude recibe automaticamente la instruccion de invocar `ui-tester`. No hay que recordarlo.
-- **`/uvpln-loop`** — slash command que orquesta el ciclo completo: architect → tester → fix → approve, con maximo 3 iteraciones antes de escalar al usuario.
-
-### 4 agentes nuevos
-
-| Agente | Que hace |
-|--------|----------|
-| `ux-researcher` | Traduce requerimientos vagos a flujos, estados y criterios de aceptacion |
-| `design-bridge` | Convierte URLs, screenshots y referencias visuales ("como Stripe") a briefs para ui-architect |
-| `ui-designer` | Crea la spec visual antes de codificar: layout, jerarquia, componentes, tipografia |
-| `debugger` | Analiza la root cause de bugs con logica (no intuicion) y entrega diagnostico preciso a ui-architect |
-
-### Plantillas de UI (sistema de inspiracion visual)
-
-4 archivos en `~/.claude/templates/` con patrones visuales ya resueltos:
-- `landing-page.md` — hero, features, pricing, CTAs
-- `dashboard.md` — sidebar, KPI cards, tablas de datos
-- `auth.md` — login, registro, recuperacion de contrasena
-- `ecommerce.md` — product grid, detalle, carrito drawer
-
-`ui-architect` los consulta cuando construye sin brief previo. Son decisiones de diseno ya tomadas, no codigo copiable.
-
-### Optimizacion de modelos (reduccion de costo ~40%)
-
-| Agente | Antes | Ahora |
-|--------|-------|-------|
-| `a11y-expert` | Sonnet | **Haiku** |
-| `motion-designer` | Sonnet | **Haiku** |
-| `tokens-manager` | Sonnet | **Haiku** |
-| `ux-researcher` (nuevo) | — | Haiku |
-| `ui-designer` (nuevo) | — | Haiku |
-| `debugger` (nuevo) | — | Haiku |
-
-Los agentes que toman decisiones de arquitectura o seguridad (ui-architect, performance-ui, code-reviewer) mantienen Sonnet u Opus.
+- **Hook `PostToolUse`** — cuando `ui-architect` termina, Claude recibe automaticamente la instruccion de invocar `ui-tester`
+- **`/uvpln-loop`** — slash command que orquesta el ciclo completo con maximo 3 iteraciones
+- **4 agentes nuevos** — `ux-researcher`, `design-bridge`, `ui-designer`, `debugger`
+- **4 plantillas de UI** — `landing-page`, `dashboard`, `auth`, `ecommerce`
+- **Optimizacion de modelos** — `a11y-expert`, `motion-designer`, `tokens-manager` pasan a Haiku (~40% menos costo)
 
 </details>
 
@@ -1240,12 +906,7 @@ Los agentes que toman decisiones de arquitectura o seguridad (ui-architect, perf
 
 <br/>
 
-Cuando llega a un proyecto nuevo, uvpln ahora:
-
-1. **Lee el backend** — explora `package.json`, rutas, controladores y README para entender los endpoints disponibles
-2. **Pregunta el stack** — antes de escribir una linea de codigo, pregunta TypeScript o JavaScript, React o Next.js
-3. **Guarda las decisiones** — escribe la config en `~/.claude/memory/design-systems/[proyecto].md`
-4. **Mapea endpoints** — va registrando los endpoints del backend a medida que los descubre
+Cuando llega a un proyecto nuevo, uvpln explora `package.json`, rutas y README para entender los endpoints disponibles. Pregunta TypeScript o JavaScript, React o Next.js. Guarda las decisiones en `~/.claude/memory/design-systems/[proyecto].md`.
 
 </details>
 
@@ -1254,14 +915,7 @@ Cuando llega a un proyecto nuevo, uvpln ahora:
 
 <br/>
 
-La statusline ahora muestra dos lineas: resumen general arriba y cada agente listado individualmente abajo.
-
-```
-🐊 uvpln · mi-proyecto │ ○ ds │ Sonnet 4.6 · 12% ctx · $0.023 │ Cartagena 🇨🇴
-◈ ui-architect  ◈ ui-tester  ◈ a11y-expert  ◈ motion-designer ...
-```
-
-Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se actualiza sola.
+La statusline ahora muestra dos lineas: resumen general arriba y cada agente listado individualmente abajo. Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se actualiza sola.
 
 </details>
 
@@ -1270,9 +924,7 @@ Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se 
 
 <br/>
 
-- Hooks reescritos en Node.js — funcionan igual en Windows, Linux y macOS
-- Comando `uvpln` para abrir Claude Code con identidad uvpln
-- `settings.json` unificado para todas las plataformas
+Hooks reescritos en Node.js — funcionan igual en Windows, Linux y macOS. Comando `uvpln` para abrir Claude Code con identidad uvpln. `settings.json` unificado para todas las plataformas.
 
 </details>
 
@@ -1281,10 +933,7 @@ Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se 
 
 <br/>
 
-- Statusline en tiempo real con proyecto, modelo, contexto y costo
-- Banner ASCII morado/verde al abrir Claude Code
-- `install.ps1` para Windows nativo sin WSL
-- Hooks de calidad: bloquea colores hardcodeados y avisa sobre `any`
+Statusline en tiempo real con proyecto, modelo, contexto y costo. Banner ASCII morado/verde al abrir Claude Code. `install.ps1` para Windows nativo sin WSL. Hooks de calidad: bloquea colores hardcodeados y avisa sobre `any`.
 
 </details>
 
@@ -1293,9 +942,7 @@ Los agentes se leen dinamicamente — si agregas o quitas uno, la statusline se 
 
 <br/>
 
-- `code-reviewer` con Opus para revision pre-merge con severidades
-- `refactoring-specialist` para limpiar componentes sin cambiar comportamiento
-- Frontmatter en todos los agentes para activacion automatica por Claude Code
+`code-reviewer` con Opus para revision pre-merge con severidades. `refactoring-specialist` para limpiar componentes sin cambiar comportamiento. Frontmatter en todos los agentes para activacion automatica por Claude Code.
 
 </details>
 
