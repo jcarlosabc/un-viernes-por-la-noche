@@ -6,7 +6,7 @@ const fs   = require('fs')
 const P = '\x1b[35m'; const G = '\x1b[32m'
 const D = '\x1b[2m';  const R = '\x1b[0m'
 
-const CLAUDE_DIR = path.join(os.homedir(), '.claude')
+const CLAUDE_DIR = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
 const project    = path.basename(process.cwd())
 const dsFile     = path.join(CLAUDE_DIR, 'memory', 'design-systems', `${project}.md`)
 const memDir     = path.join(CLAUDE_DIR, 'memory')
@@ -28,5 +28,5 @@ if (fs.existsSync(dsFile)) {
 }
 
 console.log('')
-console.log(`  ${P}Hasta la proxima Amigo.${R}`)
+console.log(`  ${P}Hasta la próxima.${R}`)
 console.log('')

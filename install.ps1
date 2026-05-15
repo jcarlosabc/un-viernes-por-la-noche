@@ -2,6 +2,13 @@
 # Ejecutar: powershell -ExecutionPolicy Bypass -File install.ps1
 # Preview sin instalar: powershell -ExecutionPolicy Bypass -File install.ps1 -Check
 # Forzar statusLine de uvpln: powershell -ExecutionPolicy Bypass -File install.ps1 -ForceStatusline
+#
+# uvpln se instala APARTE de Claude Code vanilla:
+#   - Vanilla Claude vive en %USERPROFILE%\.claude\        (no se toca)
+#   - uvpln vive en       %USERPROFILE%\.claude-uvpln\     (todo lo nuestro va aca)
+#   - El usuario invoca:
+#       claude   -> Claude vanilla
+#       uvpln    -> Claude con CLAUDE_CONFIG_DIR=~\.claude-uvpln
 
 param(
     [switch]$Check,
@@ -9,13 +16,15 @@ param(
 )
 
 $UVPLN_DIR      = Split-Path -Parent $MyInvocation.MyCommand.Path
-$CLAUDE_DIR     = "$env:USERPROFILE\.claude"
+$CLAUDE_DIR     = "$env:USERPROFILE\.claude-uvpln"
 $AGENTS_DIR     = "$CLAUDE_DIR\agents"
 $HOOKS_DIR      = "$CLAUDE_DIR\hooks"
 $COMMANDS_DIR   = "$CLAUDE_DIR\commands"
 $TEMPLATES_DIR  = "$CLAUDE_DIR\templates"
 $EXAMPLES_DIR   = "$CLAUDE_DIR\examples"
 $MEMORY_DIR     = "$CLAUDE_DIR\memory\design-systems"
+$BIN_DIR        = "$env:USERPROFILE\.local\bin"
+$UVPLN_BIN      = "$BIN_DIR\uvpln.cmd"
 
 function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
@@ -43,7 +52,7 @@ if ($Check) {
 
 Write-Host ""
 Write-Host "  Un Viernes Por La Noche - instalador Windows" -ForegroundColor Magenta
-Write-Host "  Cartagena de Indias, Colombia" -ForegroundColor Green
+Write-Host "  Instalacion aislada: no toca tu Claude Code vanilla." -ForegroundColor White
 Write-Host ""
 
 # Verificar Claude Code
@@ -64,21 +73,22 @@ if ($nodeMajor -lt 18) {
     ok "Node $nodeVer encontrado"
 }
 
-# Crear directorios
+# Crear directorios (aislados)
 New-Item -ItemType Directory -Force -Path $AGENTS_DIR    | Out-Null
 New-Item -ItemType Directory -Force -Path $HOOKS_DIR     | Out-Null
 New-Item -ItemType Directory -Force -Path $COMMANDS_DIR  | Out-Null
 New-Item -ItemType Directory -Force -Path $TEMPLATES_DIR | Out-Null
 New-Item -ItemType Directory -Force -Path $EXAMPLES_DIR  | Out-Null
 New-Item -ItemType Directory -Force -Path $MEMORY_DIR    | Out-Null
+New-Item -ItemType Directory -Force -Path $BIN_DIR       | Out-Null
 ok "Directorios creados en $CLAUDE_DIR"
 
-# Instalar CLAUDE.md (con backup si ya existe)
+# Instalar CLAUDE.md (con backup si ya existe - dentro de uvpln)
 $src = "$UVPLN_DIR\claude\CLAUDE.md"
 $dst = "$CLAUDE_DIR\CLAUDE.md"
 if (Test-Path $dst) {
     Copy-Item $dst "$CLAUDE_DIR\CLAUDE.md.backup" -Force
-    warn "CLAUDE.md existente respaldado en CLAUDE.md.backup"
+    warn "CLAUDE.md de uvpln existente respaldado en CLAUDE.md.backup"
 }
 Copy-Item $src $dst -Force
 ok "CLAUDE.md instalado"
@@ -113,8 +123,8 @@ foreach ($agent in $agents) {
     }
 }
 
-# Instalar scripts de sesion + statusline (Node.js, cross-platform)
-$scripts = @("session-start.js", "session-end.js", "statusline.cjs")
+# Instalar scripts de sesion + statusline + config compartido (Node.js, cross-platform)
+$scripts = @("session-start.js", "session-end.js", "statusline.cjs", "agents-config.js")
 foreach ($script in $scripts) {
     $src = "$UVPLN_DIR\claude\$script"
     $dst = "$CLAUDE_DIR\$script"
@@ -174,7 +184,7 @@ foreach ($tpl in $templates) {
     }
 }
 
-# Instalar examples de código (patrones TS + JS)
+# Instalar examples de codigo (patrones TS + JS)
 $examples = @(
     "button-variants.md",
     "form-validation.md",
@@ -197,7 +207,7 @@ foreach ($ex in $examples) {
     }
 }
 
-# Instalar / mergear settings.json (script Node cross-platform)
+# Instalar / mergear settings.json (dentro de uvpln, NO vanilla)
 $settingsSrc = "$UVPLN_DIR\claude\settings.json"
 $settingsDst = "$CLAUDE_DIR\settings.json"
 $mergeScript = "$UVPLN_DIR\claude\install\merge-settings.js"
@@ -210,21 +220,64 @@ if (-not (Test-Path $settingsDst)) {
     if ($ForceStatusline) { $mergeArgs += "--force-statusline" }
     & node @mergeArgs
     if ($LASTEXITCODE -eq 0) {
-        ok "settings.json mergeado (hooks de uvpln + tu config previa)"
+        ok "settings.json mergeado (hooks de uvpln + config previa de uvpln)"
     } else {
         err "Fallo el merge de settings.json - revisa el backup en $CLAUDE_DIR"
     }
 }
 
+# Crear comando 'uvpln.cmd' en ~\.local\bin
+$batContent = @'
+@echo off
+REM uvpln launcher - corre Claude Code con CLAUDE_CONFIG_DIR=%USERPROFILE%\.claude-uvpln
+set CLAUDE_CONFIG_DIR=%USERPROFILE%\.claude-uvpln
+claude %*
+set CLAUDE_CONFIG_DIR=
+'@
+Set-Content -Path $UVPLN_BIN -Value $batContent -Encoding ASCII
+ok "Comando 'uvpln' creado en $UVPLN_BIN"
+
+# Detectar si ~\.local\bin esta en PATH (User scope)
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$pathOk = $false
+if ($userPath -and ($userPath.Split(';') -contains $BIN_DIR)) {
+    $pathOk = $true
+}
+
+# Agregar al PATH automaticamente si falta
+if (-not $pathOk) {
+    try {
+        $newPath = if ($userPath) { "$userPath;$BIN_DIR" } else { $BIN_DIR }
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+        ok "$BIN_DIR agregado a tu PATH (User)"
+        warn "Reinicia tu terminal para que el comando 'uvpln' funcione en cualquier directorio."
+        $pathOk = $true
+    } catch {
+        warn "No se pudo agregar $BIN_DIR al PATH automaticamente."
+        Write-Host "    Agregalo manualmente: System Properties -> Environment Variables -> Path" -ForegroundColor White
+    }
+}
+
 Write-Host ""
-Write-Host "  Listo Amigo! uvpln esta instalado." -ForegroundColor Magenta
+Write-Host "  Listo! uvpln instalado en modo aislado." -ForegroundColor Magenta
 Write-Host ""
-Write-Host "  Agentes disponibles:" -ForegroundColor White
+Write-Host "  Como usar:" -ForegroundColor White
+Write-Host "    claude   -> Claude Code vanilla (sin uvpln, sin tocar)" -ForegroundColor Green
+Write-Host "    uvpln    -> Claude Code con uvpln (23 agentes, hooks, statusline)" -ForegroundColor Magenta
+Write-Host ""
+
+if ($pathOk) {
+    Write-Host "  Probalo en una terminal nueva:" -ForegroundColor White
+    Write-Host "    uvpln" -ForegroundColor Magenta
+    Write-Host ""
+}
+
+Write-Host "  Agentes incluidos:" -ForegroundColor White
 foreach ($agent in $agents) {
     $name = $agent -replace "\.md", ""
     Write-Host "    -> $name" -ForegroundColor Green
 }
 Write-Host ""
-Write-Host "  Abri Claude Code con: claude  (o uvpln)" -ForegroundColor White
 Write-Host "  Verificacion rapida: powershell -ExecutionPolicy Bypass -File install.ps1 -Check" -ForegroundColor White
+Write-Host "  Desinstalar:         powershell -ExecutionPolicy Bypass -File uninstall.ps1" -ForegroundColor White
 Write-Host ""

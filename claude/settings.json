@@ -5,12 +5,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','session-start.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'session-start.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-catalog-components.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-catalog-components.js'))\"",
             "blocking": false
           }
         ]
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','session-end.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'session-end.js'))\"",
             "blocking": false
           }
         ]
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-track-agent-start.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-track-agent-start.js'))\"",
             "blocking": false
           }
         ]
@@ -43,12 +43,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-colors.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-colors.js'))\"",
             "blocking": true
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-secrets.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-secrets.js'))\"",
             "blocking": true
           }
         ]
@@ -60,17 +60,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-track-agent-end.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-track-agent-end.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-loop-trigger.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-loop-trigger.js'))\"",
             "blocking": true
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-lesson-reminder.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-lesson-reminder.js'))\"",
             "blocking": false
           }
         ]
@@ -80,52 +80,52 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-any.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-any.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-console.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-console.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-a11y.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-a11y.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-use-client.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-use-client.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-shadows.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-shadows.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-oklch-inline.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-oklch-inline.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-ssr-window.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-ssr-window.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-target-blank.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-target-blank.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-dangerous-html.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-dangerous-html.js'))\"",
             "blocking": false
           },
           {
             "type": "command",
-            "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','hooks','uvpln-check-localstorage-token.js'))\"",
+            "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'hooks','uvpln-check-localstorage-token.js'))\"",
             "blocking": false
           }
         ]
@@ -134,8 +134,8 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node -e \"require(require('path').join(require('os').homedir(),'.claude','statusline.cjs'))\"",
-    "refreshInterval": 10
+    "command": "node -e \"const p=require('path'),o=require('os');const d=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');require(p.join(d,'statusline.cjs'))\"",
+    "refreshInterval": 2
   },
   "permissions": {
     "allow": [

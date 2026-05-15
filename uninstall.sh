@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CLAUDE_DIR="$HOME/.claude"
-AGENTS_DIR="$CLAUDE_DIR/agents"
-HOOKS_DIR="$CLAUDE_DIR/hooks"
-COMMANDS_DIR="$CLAUDE_DIR/commands"
-TEMPLATES_DIR="$CLAUDE_DIR/templates"
+# uvpln vive en ~/.claude-uvpln/ (aislado).
+# Vanilla Claude (~/.claude/) NUNCA se toca por este script.
+
+CLAUDE_DIR="$HOME/.claude-uvpln"
+BIN_DIR="$HOME/.local/bin"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -17,26 +17,28 @@ warn() { echo -e "${YELLOW}!${NC} $1"; }
 err()  { echo -e "${RED}✗${NC} $1"; exit 1; }
 
 # Flags
-RESET_SETTINGS=0
 PURGE_MEMORY=0
 ASSUME_YES=0
+FULL=0
 for arg in "$@"; do
   case "$arg" in
-    --reset-settings) RESET_SETTINGS=1 ;;
-    --purge-memory)   PURGE_MEMORY=1 ;;
-    -y|--yes)         ASSUME_YES=1 ;;
+    --purge-memory) PURGE_MEMORY=1 ;;
+    --full)         FULL=1 ;;
+    -y|--yes)       ASSUME_YES=1 ;;
     -h|--help)
       cat <<EOF
 
   uvpln — desinstalador
 
-  Borra uvpln de Claude Code. NO toca tus proyectos ni código.
+  Borra uvpln aislado (~/.claude-uvpln/) y el comando 'uvpln' del PATH.
+  Tu Claude Code vanilla (~/.claude/) NO se toca, jamás.
 
   Uso:
-    bash uninstall.sh                  desinstala (preguntará confirmación)
+    bash uninstall.sh                  desinstala uvpln (preguntará confirmación)
     bash uninstall.sh -y               sin confirmar
-    bash uninstall.sh --reset-settings además borra ~/.claude/settings.json entero
-    bash uninstall.sh --purge-memory   también borra ~/.claude/memory/design-systems/
+    bash uninstall.sh --purge-memory   también borra tus design systems (memory/)
+    bash uninstall.sh --full           borra TODO ~/.claude-uvpln/ incluyendo
+                                       proyectos, sesiones, memoria. Irreversible.
 
 EOF
       exit 0
@@ -46,10 +48,27 @@ done
 
 echo ""
 echo "  uvpln — desinstalador"
-echo "  Borra uvpln de Claude Code. Tus proyectos siguen intactos."
+echo "  Borra uvpln aislado. Tu Claude vanilla queda intacto."
 echo ""
 
+if [ ! -d "$CLAUDE_DIR" ]; then
+  warn "$CLAUDE_DIR no existe — uvpln ya estaba desinstalado."
+  # Igual borramos el binario si quedó suelto
+  for uvpln_bin in "$BIN_DIR/uvpln" "$BIN_DIR/uvpln.cmd"; do
+    if [ -f "$uvpln_bin" ]; then
+      rm -f "$uvpln_bin"
+      ok "Removido: $uvpln_bin"
+    fi
+  done
+  exit 0
+fi
+
 if [ "$ASSUME_YES" -ne 1 ]; then
+  echo "  Se va a borrar: $CLAUDE_DIR"
+  echo "  Comando 'uvpln' del PATH: $BIN_DIR/uvpln"
+  if [ "$FULL" -eq 1 ]; then
+    warn "MODO --full: incluye proyectos, sesiones, memoria. Irreversible."
+  fi
   read -r -p "  ¿Seguir? [y/N] " resp
   case "$resp" in
     [yY]|[yY][eE][sS]|[sS]) ;;
@@ -57,7 +76,32 @@ if [ "$ASSUME_YES" -ne 1 ]; then
   esac
 fi
 
-# 1. Agentes uvpln (lista fija — no toca otros agentes que tengas)
+# 1. Comando 'uvpln' del PATH (~/.local/bin)
+for uvpln_bin in "$BIN_DIR/uvpln" "$BIN_DIR/uvpln.cmd"; do
+  if [ -f "$uvpln_bin" ]; then
+    rm -f "$uvpln_bin"
+    ok "Removido: $uvpln_bin"
+  fi
+done
+
+# 2. Modo --full: nuke entero
+if [ "$FULL" -eq 1 ]; then
+  rm -rf "$CLAUDE_DIR"
+  ok "Removido: $CLAUDE_DIR (todo)"
+  echo ""
+  echo "  uvpln desinstalado por completo."
+  echo ""
+  exit 0
+fi
+
+# 3. Modo normal: borrar archivos uvpln, conservar memoria/proyectos
+AGENTS_DIR="$CLAUDE_DIR/agents"
+HOOKS_DIR="$CLAUDE_DIR/hooks"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
+TEMPLATES_DIR="$CLAUDE_DIR/templates"
+EXAMPLES_DIR="$CLAUDE_DIR/examples"
+
+# Agentes uvpln (lista fija)
 AGENTS=(
   "ui-architect.md"
   "ui-tester.md"
@@ -71,6 +115,9 @@ AGENTS=(
   "ui-designer.md"
   "ux-researcher.md"
   "debugger.md"
+  "api-integrator.md"
+  "form-specialist.md"
+  "state-manager.md"
 )
 for agent in "${AGENTS[@]}"; do
   f="$AGENTS_DIR/$agent"
@@ -79,116 +126,84 @@ for agent in "${AGENTS[@]}"; do
     ok "Removido: agents/$agent"
   fi
 done
-if [ -d "$AGENTS_DIR" ] && [ -z "$(ls -A "$AGENTS_DIR" 2>/dev/null)" ]; then
-  rmdir "$AGENTS_DIR"
-  ok "Removido: agents/ (estaba vacío)"
-fi
+[ -d "$AGENTS_DIR" ] && [ -z "$(ls -A "$AGENTS_DIR" 2>/dev/null)" ] && rmdir "$AGENTS_DIR" && ok "agents/ vacío removido"
 
-# 2. Scripts de sesión + statusline
-for script in session-start.js session-end.js statusline.cjs; do
+# Scripts de sesión + statusline + config
+for script in session-start.js session-end.js statusline.cjs agents-config.js; do
   f="$CLAUDE_DIR/$script"
-  if [ -f "$f" ]; then
-    rm -f "$f"
-    ok "Removido: $script"
-  fi
+  [ -f "$f" ] && rm -f "$f" && ok "Removido: $script"
 done
 
-# 2b. Hooks de uvpln (lista fija — no toca otros hooks que tengas)
+# Hooks uvpln
 HOOKS=(
   "uvpln-track-agent-start.js"
   "uvpln-track-agent-end.js"
   "uvpln-check-colors.js"
   "uvpln-check-any.js"
   "uvpln-loop-trigger.js"
+  "uvpln-check-console.js"
+  "uvpln-check-a11y.js"
+  "uvpln-check-use-client.js"
 )
 for hook in "${HOOKS[@]}"; do
   f="$HOOKS_DIR/$hook"
-  if [ -f "$f" ]; then
-    rm -f "$f"
-    ok "Removido: hooks/$hook"
-  fi
+  [ -f "$f" ] && rm -f "$f" && ok "Removido: hooks/$hook"
 done
-if [ -d "$HOOKS_DIR" ] && [ -z "$(ls -A "$HOOKS_DIR" 2>/dev/null)" ]; then
-  rmdir "$HOOKS_DIR"
-  ok "Removido: hooks/ (estaba vacío)"
-fi
+[ -d "$HOOKS_DIR" ] && [ -z "$(ls -A "$HOOKS_DIR" 2>/dev/null)" ] && rmdir "$HOOKS_DIR" && ok "hooks/ vacío removido"
 
-# 2c. Comandos slash de uvpln
-for cmd in "uvpln-loop.md"; do
+# Comandos slash
+for cmd in "uvpln-loop.md" "uvpln-audit.md" "uvpln-handoff.md"; do
   f="$COMMANDS_DIR/$cmd"
-  if [ -f "$f" ]; then
-    rm -f "$f"
-    ok "Removido: commands/$cmd"
-  fi
+  [ -f "$f" ] && rm -f "$f" && ok "Removido: commands/$cmd"
 done
-if [ -d "$COMMANDS_DIR" ] && [ -z "$(ls -A "$COMMANDS_DIR" 2>/dev/null)" ]; then
-  rmdir "$COMMANDS_DIR"
-  ok "Removido: commands/ (estaba vacío)"
-fi
+[ -d "$COMMANDS_DIR" ] && [ -z "$(ls -A "$COMMANDS_DIR" 2>/dev/null)" ] && rmdir "$COMMANDS_DIR" && ok "commands/ vacío removido"
 
-# 2d. Plantillas de UI
+# Plantillas
 for tpl in "README.md" "landing-page.md" "dashboard.md" "auth.md" "ecommerce.md"; do
   f="$TEMPLATES_DIR/$tpl"
-  if [ -f "$f" ]; then
-    rm -f "$f"
-    ok "Removido: templates/$tpl"
-  fi
+  [ -f "$f" ] && rm -f "$f" && ok "Removido: templates/$tpl"
 done
-if [ -d "$TEMPLATES_DIR" ] && [ -z "$(ls -A "$TEMPLATES_DIR" 2>/dev/null)" ]; then
-  rmdir "$TEMPLATES_DIR"
-  ok "Removido: templates/ (estaba vacío)"
-fi
+[ -d "$TEMPLATES_DIR" ] && [ -z "$(ls -A "$TEMPLATES_DIR" 2>/dev/null)" ] && rmdir "$TEMPLATES_DIR" && ok "templates/ vacío removido"
 
-# 3. CLAUDE.md: si hay backup, lo restauramos; si no, borramos el de uvpln
+# Examples
+for ex in "button-variants.md" "form-validation.md" "data-table.md" "modal-pattern.md" "theme-tokens.md" "api-fetch.md" "card-grid.md" "navigation.md" "toast-notifications.md"; do
+  f="$EXAMPLES_DIR/$ex"
+  [ -f "$f" ] && rm -f "$f" && ok "Removido: examples/$ex"
+done
+[ -d "$EXAMPLES_DIR" ] && [ -z "$(ls -A "$EXAMPLES_DIR" 2>/dev/null)" ] && rmdir "$EXAMPLES_DIR" && ok "examples/ vacío removido"
+
+# CLAUDE.md (dentro de uvpln — restaurar backup o borrar)
 if [ -f "$CLAUDE_DIR/CLAUDE.md.backup" ]; then
   mv "$CLAUDE_DIR/CLAUDE.md.backup" "$CLAUDE_DIR/CLAUDE.md"
-  ok "CLAUDE.md.backup restaurado como CLAUDE.md"
+  ok "CLAUDE.md.backup restaurado como CLAUDE.md (uvpln)"
 elif [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
   rm -f "$CLAUDE_DIR/CLAUDE.md"
   ok "CLAUDE.md removido"
 fi
 
-# 4. settings.json: por defecto NO lo tocamos (puede tener config tuya)
+# settings.json (dentro de uvpln — no afecta vanilla)
 SETTINGS="$CLAUDE_DIR/settings.json"
 if [ -f "$SETTINGS" ]; then
-  if [ "$RESET_SETTINGS" -eq 1 ]; then
-    rm -f "$SETTINGS"
-    ok "settings.json removido (--reset-settings)"
-  else
-    warn "settings.json se queda intacto (puede tener config de otras herramientas)"
-    echo ""
-    echo "  Si querés sacar las claves de uvpln a mano, remové de $SETTINGS:"
-    echo "    hooks.SessionStart"
-    echo "    hooks.SessionEnd"
-    echo "    hooks.PreToolUse  (los matchers Agent y Write|Edit)"
-    echo "    hooks.PostToolUse (los matchers Agent y Write|Edit)"
-    echo "    statusLine"
-    echo ""
-    echo "  O re-corré: bash uninstall.sh --reset-settings"
-    echo ""
-  fi
+  rm -f "$SETTINGS"
+  ok "settings.json removido"
 fi
 
-# 5. Comando uvpln del PATH
-for uvpln_bin in "$HOME/.local/bin/uvpln" "$HOME/.local/bin/uvpln.cmd"; do
-  if [ -f "$uvpln_bin" ]; then
-    rm -f "$uvpln_bin"
-    ok "Removido: uvpln del PATH ($uvpln_bin)"
-  fi
-done
-
-# 6. Memoria de design systems (solo si la persona lo pide)
+# Memoria de design systems (solo si la persona lo pide)
 DS="$CLAUDE_DIR/memory/design-systems"
 if [ -d "$DS" ] && [ -n "$(ls -A "$DS" 2>/dev/null)" ]; then
   if [ "$PURGE_MEMORY" -eq 1 ]; then
     rm -rf "$DS"
     ok "memory/design-systems removido (--purge-memory)"
   else
-    warn "memory/design-systems tiene tus tokens/decisiones por proyecto — NO se borra"
+    warn "memory/design-systems tiene tus tokens/decisiones — NO se borra"
     echo "  Para borrarla: rm -rf $DS  (o usá --purge-memory)"
   fi
 fi
 
+# Si ~/.claude-uvpln/ quedó sólo con runtime state (memory/sessions/projects), lo dejamos.
+# El usuario puede borrarlo con --full si quiere.
+
 echo ""
-echo "  uvpln desinstalado. Tus proyectos siguen intactos."
+echo "  uvpln desinstalado. Tu Claude Code vanilla sigue intacto."
+echo "  Si querés borrar TODO (proyectos, sesiones, memoria): bash uninstall.sh --full"
 echo ""

@@ -1,23 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# uvpln se instala APARTE de Claude Code vanilla.
+# - Vanilla Claude vive en ~/.claude/        (no se toca)
+# - uvpln vive en      ~/.claude-uvpln/      (todo lo nuestro va acá)
+# - El usuario invoca:
+#     claude   → Claude vanilla
+#     uvpln    → Claude con CLAUDE_CONFIG_DIR=~/.claude-uvpln
+
 UVPLN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLAUDE_DIR="$HOME/.claude"
+CLAUDE_DIR="$HOME/.claude-uvpln"
 AGENTS_DIR="$CLAUDE_DIR/agents"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 COMMANDS_DIR="$CLAUDE_DIR/commands"
 TEMPLATES_DIR="$CLAUDE_DIR/templates"
 EXAMPLES_DIR="$CLAUDE_DIR/examples"
 MEMORY_DIR="$CLAUDE_DIR/memory/design-systems"
+BIN_DIR="$HOME/.local/bin"
+UVPLN_BIN="$BIN_DIR/uvpln"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+MAGENTA='\033[0;35m'
 NC='\033[0m'
 
 ok()   { echo -e "${GREEN}✓${NC} $1"; }
 warn() { echo -e "${YELLOW}!${NC} $1"; }
 err()  { echo -e "${RED}✗${NC} $1"; exit 1; }
+hdr()  { echo -e "${MAGENTA}$1${NC}"; }
 
 # Modo --check: preview de gráficas sin instalar
 if [ "${1:-}" = "--check" ]; then
@@ -39,8 +50,8 @@ if [ "${1:-}" = "--check" ]; then
 fi
 
 echo ""
-echo "  Un Viernes Por La Noche — instalador"
-echo "  Cartagena de Indias, Colombia"
+hdr "  Un Viernes Por La Noche — instalador"
+echo "  Instalación aislada: no toca tu Claude Code vanilla."
 echo ""
 
 # Verificar Claude Code
@@ -60,19 +71,20 @@ else
   ok "Node $(node --version) encontrado"
 fi
 
-# Crear estructura de directorios
+# Crear estructura de directorios (aislada)
 mkdir -p "$AGENTS_DIR"
 mkdir -p "$HOOKS_DIR"
 mkdir -p "$COMMANDS_DIR"
 mkdir -p "$TEMPLATES_DIR"
 mkdir -p "$EXAMPLES_DIR"
 mkdir -p "$MEMORY_DIR"
+mkdir -p "$BIN_DIR"
 ok "Directorios creados en $CLAUDE_DIR"
 
-# Instalar CLAUDE.md (con backup si ya existe)
+# Instalar CLAUDE.md (con backup si ya existe — solo dentro de uvpln)
 if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
   cp "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.backup"
-  warn "CLAUDE.md existente respaldado en CLAUDE.md.backup"
+  warn "CLAUDE.md de uvpln existente respaldado en CLAUDE.md.backup"
 fi
 cp "$UVPLN_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 ok "CLAUDE.md instalado"
@@ -107,8 +119,8 @@ for agent in "${AGENTS[@]}"; do
   fi
 done
 
-# Instalar scripts de sesión + statusline (Node.js, cross-platform)
-for script in session-start.js session-end.js statusline.cjs; do
+# Instalar scripts de sesión + statusline + config compartido (Node.js, cross-platform)
+for script in session-start.js session-end.js statusline.cjs agents-config.js; do
   src="$UVPLN_DIR/claude/$script"
   dst="$CLAUDE_DIR/$script"
   if [ -f "$src" ]; then
@@ -119,7 +131,7 @@ for script in session-start.js session-end.js statusline.cjs; do
   fi
 done
 
-# Instalar hooks (lista fija — no toca otros hooks que tengas)
+# Instalar hooks (lista fija)
 HOOKS=(
   "uvpln-track-agent-start.js"
   "uvpln-track-agent-end.js"
@@ -177,7 +189,7 @@ for ex in "button-variants.md" "form-validation.md" "data-table.md" "modal-patte
   fi
 done
 
-# Instalar / mergear settings.json
+# Instalar / mergear settings.json (dentro de uvpln, NO vanilla)
 SETTINGS="$CLAUDE_DIR/settings.json"
 MERGE_SCRIPT="$UVPLN_DIR/claude/install/merge-settings.js"
 FORCE_FLAG=""
@@ -190,20 +202,61 @@ if [ ! -f "$SETTINGS" ]; then
   ok "settings.json instalado"
 else
   if node "$MERGE_SCRIPT" "$UVPLN_DIR/claude/settings.json" "$SETTINGS" $FORCE_FLAG; then
-    ok "settings.json mergeado (hooks de uvpln + tu config previa)"
+    ok "settings.json mergeado (hooks de uvpln + config previa de uvpln)"
   else
     err "Falló el merge de settings.json — revisá el backup en $CLAUDE_DIR"
   fi
 fi
 
+# Crear comando 'uvpln' en ~/.local/bin
+cat > "$UVPLN_BIN" <<'EOF'
+#!/usr/bin/env bash
+# uvpln launcher — corre Claude Code con CLAUDE_CONFIG_DIR=~/.claude-uvpln
+export CLAUDE_CONFIG_DIR="$HOME/.claude-uvpln"
+exec claude "$@"
+EOF
+chmod +x "$UVPLN_BIN"
+ok "Comando 'uvpln' creado en $UVPLN_BIN"
+
+# Detectar si ~/.local/bin está en PATH
+PATH_OK=0
+case ":$PATH:" in
+  *":$BIN_DIR:"*) PATH_OK=1 ;;
+esac
+
 echo ""
-echo "  ¡Listo Amigo! uvpln está instalado."
+hdr "  ¡Listo! uvpln instalado en modo aislado."
 echo ""
-echo "  Agentes disponibles:"
+echo "  Cómo usar:"
+echo -e "    ${GREEN}claude${NC}   → Claude Code vanilla (sin uvpln, sin tocar)"
+echo -e "    ${MAGENTA}uvpln${NC}    → Claude Code con uvpln (23 agentes, hooks, statusline)"
+echo ""
+
+if [ "$PATH_OK" -eq 0 ]; then
+  warn "$BIN_DIR no está en tu PATH. Agregalo así:"
+  echo ""
+  if [ -f "$HOME/.zshrc" ]; then
+    echo "    echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.zshrc && source ~/.zshrc"
+  elif [ -f "$HOME/.bashrc" ]; then
+    echo "    echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bashrc && source ~/.bashrc"
+  else
+    echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+  fi
+  echo ""
+  echo "  Mientras tanto podés correr uvpln con la ruta completa:"
+  echo "    $UVPLN_BIN"
+  echo ""
+else
+  echo "  Probalo ahora:"
+  echo -e "    ${MAGENTA}uvpln${NC}"
+  echo ""
+fi
+
+echo "  Agentes incluidos:"
 for agent in "${AGENTS[@]}"; do
   echo "    - ${agent%.md}"
 done
 echo ""
-echo "  Abrí Claude Code y arrancá a construir."
-echo "  (Verificación rápida: bash install.sh --check)"
+echo "  Verificación rápida: bash install.sh --check"
+echo "  Desinstalar:         bash uninstall.sh"
 echo ""
