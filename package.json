@@ -1,13 +1,51 @@
 {
   "name": "uvpln",
-  "version": "2.0.0",
-  "private": true,
-  "description": "Un Viernes Por La Noche — frontend AI agent ecosystem para Claude Code",
+  "version": "0.1.0",
+  "description": "Ecosistema de agentes frontend para Claude Code — 23 agentes especializados, 17 hooks de calidad, statusline visual. Instalación aislada que no toca tu Claude Code vanilla.",
+  "keywords": [
+    "claude-code",
+    "anthropic",
+    "ai-agents",
+    "frontend",
+    "react",
+    "nextjs",
+    "tailwindcss",
+    "shadcn",
+    "design-system",
+    "accessibility",
+    "a11y"
+  ],
+  "homepage": "https://github.com/jcarlosabc/un-viernes-por-la-noche",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcarlosabc/un-viernes-por-la-noche.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jcarlosabc/un-viernes-por-la-noche/issues"
+  },
+  "license": "MIT",
+  "author": "jcarlosabc",
+  "bin": {
+    "uvpln": "./bin/uvpln.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "claude/",
+    "install.sh",
+    "install.ps1",
+    "uninstall.sh",
+    "uninstall.ps1",
+    "README.md"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:install": "bash test/install-flow.sh",
     "lint:agents": "node test/lint-agents.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
   },
   "devDependencies": {
     "vitest": "^2.1.0"
