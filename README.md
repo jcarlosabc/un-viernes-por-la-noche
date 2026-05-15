@@ -538,15 +538,26 @@ uvpln vigila el codigo mientras escribis — 17 hooks automaticos. 3 protegen ca
 
 ## Instalacion
 
-### Windows
+### Con npm (recomendado) — un solo comando, cualquier OS
 
-```powershell
-git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
-cd un-viernes-por-la-noche
-powershell -ExecutionPolicy Bypass -File install.ps1
+<p>
+  <img src="https://img.shields.io/npm/v/uvpln?style=flat-square&color=22C55E&logo=npm" alt="npm version" />
+  <img src="https://img.shields.io/npm/dt/uvpln?style=flat-square&color=7C3AED" alt="downloads" />
+</p>
+
+```bash
+npm install -g uvpln
+uvpln install
 ```
 
-Despues escribi `uvpln` en cualquier terminal para abrir Claude Code con identidad uvpln.
+Eso es todo. **`uvpln install` no toca tu Claude Code vanilla** — copia todo a `~/.claude-uvpln/` y queda aislado. Despues:
+
+```bash
+claude    # Claude Code vanilla (sin uvpln)
+uvpln     # Claude Code con uvpln (23 agentes, 17 hooks, statusline visual)
+```
+
+Los dos comandos coexisten. Podes alternar cuando quieras.
 
 Asi se ve uvpln corriendo en PowerShell:
 
@@ -554,12 +565,31 @@ Asi se ve uvpln corriendo en PowerShell:
   <img src="uvpln-powershell.png" alt="uvpln en PowerShell" width="100%" />
 </p>
 
-### Linux / macOS / WSL
+### Desde el repo (alternativa — sin npm)
+
+Si preferis clonar y correr scripts:
 
 ```bash
 git clone https://github.com/jcarlosabc/un-viernes-por-la-noche.git
 cd un-viernes-por-la-noche
-bash install.sh
+bash install.sh                                          # Linux / macOS / WSL
+# o
+powershell -ExecutionPolicy Bypass -File install.ps1     # Windows
+```
+
+Hace lo mismo que `uvpln install` desde npm.
+
+### Comandos del CLI
+
+```bash
+uvpln                       # Lanza Claude Code con uvpln
+uvpln install               # Instala uvpln en ~/.claude-uvpln/
+uvpln uninstall             # Desinstala uvpln (no toca vanilla)
+uvpln uninstall --full      # Borra TODO incluyendo memoria/sesiones/proyectos
+uvpln status                # Ver que esta instalado
+uvpln --version             # Version del CLI
+uvpln --help                # Ayuda completa
+uvpln chat hola             # Passthrough — equivalente a "claude chat hola"
 ```
 
 ### Requisitos
@@ -571,7 +601,7 @@ bash install.sh
 </p>
 
 - **Claude Code** y suscripcion **Claude Pro o Max**
-- **Node.js 18+** — el banner, la statusline y los hooks corren en Node (cross-platform)
+- **Node.js 18+** — el CLI, la statusline y los hooks corren en Node (cross-platform)
 
 Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este antes de copiar nada.
 
@@ -582,33 +612,37 @@ Sin Docker, sin Python, sin infraestructura. El instalador valida que todo este 
 
 <br/>
 
-### Antes de instalar — preview sin tocar nada
+### Verificar la instalacion
 
 ```bash
-# Linux / macOS / WSL
-bash install.sh --check
+uvpln status
 ```
 
-```powershell
-# Windows
-powershell -ExecutionPolicy Bypass -File install.ps1 -Check
+Muestra que esta instalado: agentes, hooks, comandos, templates, examples, design systems guardados. Si todo aparece con numeros en verde, esta listo.
+
+### Antes de instalar — preview sin tocar nada
+
+Si clonaste el repo en vez de usar npm:
+
+```bash
+bash install.sh --check                                         # Linux / macOS / WSL
+powershell -ExecutionPolicy Bypass -File install.ps1 -Check     # Windows
 ```
 
 ### Despues de instalar — verificacion real
 
-Abri Claude Code:
+Abri Claude Code con uvpln:
 
 ```bash
-claude     # Linux / macOS / WSL
-uvpln      # Windows (claude tambien sirve)
+uvpln
 ```
 
 En los primeros 2 segundos tenes que ver:
 
 1. Banner ASCII `UVPLN` morado con texto verde
-2. Linea `Agentes: 15 disponibles`
-3. Statusline abajo con todos los agentes listados
-4. `/agents` lista los 15 con su descripcion
+2. Linea `Agentes: 23 disponibles`
+3. Statusline abajo con todas las 5 categorias de agentes
+4. `/agents` lista los 23 con su descripcion
 
 Probalo:
 
@@ -620,9 +654,10 @@ Si devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando.
 
 | Sintoma | Causa probable | Fix |
 |---------|----------------|-----|
+| `uvpln: command not found` | npm global bin no esta en PATH | Ver `npm config get prefix` y agregar al PATH |
 | `claude: command not found` | Claude Code no instalado | https://claude.ai/code |
 | Sin banner ni statusline | Node.js no instalado o <18 | Instalar Node 18+ |
-| Banner sale en `--check` pero no al abrir Claude | Ya tenias `~/.claude/settings.json` previo | El instalador mergea automaticamente — si no funciono, corre `install.ps1` de nuevo |
+| `uvpln status` dice "uvpln NO esta instalado" | Falta correr el install | `uvpln install` |
 | Agentes no aparecen en `/agents` | Sesion vieja en cache | Cerrar y reabrir Claude Code |
 
 </details>
@@ -632,36 +667,40 @@ Si devuelve `.tsx` con tokens (sin `text-[#fff]`), uvpln esta funcionando.
 
 <br/>
 
-uvpln se desinstala limpio sin tocar tus proyectos ni codigo.
+uvpln se desinstala limpio. **Tu Claude Code vanilla (`~/.claude/`) nunca se toca** — uvpln vive aislado en `~/.claude-uvpln/`.
 
-### Linux / macOS / WSL
+### Con el CLI (recomendado)
 
 ```bash
-bash uninstall.sh           # con confirmacion
-bash uninstall.sh -y        # sin preguntar
-bash uninstall.sh --help    # opciones avanzadas
+uvpln uninstall                # con confirmacion, preserva memoria de proyectos
+uvpln uninstall -y             # sin preguntar
+uvpln uninstall --full         # borra TODO incluyendo memoria/sesiones/proyectos
 ```
 
-### Windows
+Y opcionalmente removes el paquete global:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File uninstall.ps1
-powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Yes
-powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
+```bash
+npm uninstall -g uvpln         # remueve el comando uvpln del sistema
+```
+
+### Desde el repo clonado (alternativa)
+
+```bash
+bash uninstall.sh                                        # Linux / macOS / WSL
+powershell -ExecutionPolicy Bypass -File uninstall.ps1   # Windows
 ```
 
 ### Que borra y que conserva
 
 | | Comportamiento |
 |---|---|
-| **Borra** los 15 agentes uvpln en `~/.claude/agents/` | Lista fija — no toca otros agentes que tengas |
-| **Borra** hooks, scripts de sesion y statusline | Solo los archivos de uvpln |
-| **Borra** los comandos `/uvpln-loop`, `/uvpln-audit`, `/uvpln-handoff` | |
-| **Borra** las plantillas de `~/.claude/templates/` | |
-| **Borra** los examples de `~/.claude/examples/` | |
-| **Restaura** `~/.claude/CLAUDE.md.backup` si existe | Te devuelve tu CLAUDE.md previo |
-| **Limpia** `~/.claude/settings.json` automaticamente | Elimina solo las entradas de uvpln — preserva tu config de otras herramientas. Si el archivo queda vacio, lo borra. Usa `-ResetSettings` para borrarlo completo |
-| **NO borra** `~/.claude/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--purge-memory` |
+| **Borra** los 23 agentes uvpln en `~/.claude-uvpln/agents/` | Lista fija — no toca otros agentes que tengas en `~/.claude/` |
+| **Borra** los 17 hooks, scripts de sesion y statusline | Solo los archivos de uvpln |
+| **Borra** los slash commands (`/uvpln-loop`, `/uvpln-audit`, `/uvpln-handoff`, `/uvpln-security-audit`) | |
+| **Borra** las plantillas y examples de `~/.claude-uvpln/` | |
+| **Borra** `~/.claude-uvpln/settings.json` | Tu Claude vanilla queda intacto |
+| **NO toca** `~/.claude/` jamas | Tu Claude Code vanilla siempre se preserva |
+| **NO borra** `~/.claude-uvpln/memory/design-systems/` por defecto | Tu memoria de tokens/decisiones por proyecto sigue ahi. Para borrarla: `--full` |
 
 </details>
 
@@ -670,11 +709,20 @@ powershell -ExecutionPolicy Bypass -File uninstall.ps1 -Help
 
 ```
 un-viernes-por-la-noche/
-├── install.sh                  → instalador Linux/macOS/WSL
-├── install.ps1                 → instalador Windows
-├── uninstall.sh                → desinstalador Linux/macOS/WSL
-├── uninstall.ps1               → desinstalador Windows
-├── uvpln.cmd                   → comando uvpln para Windows
+├── package.json                → manifest npm (bin: uvpln → bin/uvpln.js)
+├── bin/
+│   └── uvpln.js                → entry point del CLI (commander)
+├── src/
+│   ├── install.js              → logica de `uvpln install`
+│   ├── uninstall.js            → logica de `uvpln uninstall`
+│   ├── status.js               → logica de `uvpln status`
+│   ├── run.js                  → spawn de claude con CLAUDE_CONFIG_DIR
+│   └── util.js                 → colores, paths, helpers
+├── install.sh                  → instalador alternativo Linux/macOS/WSL
+├── install.ps1                 → instalador alternativo Windows
+├── uninstall.sh                → desinstalador alternativo Linux/macOS/WSL
+├── uninstall.ps1               → desinstalador alternativo Windows
+├── uvpln.cmd                   → wrapper legacy Windows (deprecado por el CLI)
 ├── claude/
 │   ├── CLAUDE.md               → personalidad, reglas y decision matrix
 │   ├── settings.json           → hooks cross-platform
