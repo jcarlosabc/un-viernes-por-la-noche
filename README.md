@@ -54,8 +54,8 @@ Los dos comandos coexisten. Podes alternar cuando quieras.
 ```bash
 uvpln                       # Lanza Claude Code con uvpln
 uvpln install               # Instala uvpln en ~/.claude-uvpln/
-uvpln uninstall             # Desinstala uvpln (no toca vanilla)
-uvpln uninstall --full      # Borra TODO incluyendo memoria/sesiones/proyectos
+uvpln uninstall             # Desinstala uvpln (no toca vanilla, preserva memoria)
+uvpln uninstall --full      # Borra TODO + remueve el paquete npm automaticamente
 uvpln status                # Ver que esta instalado
 uvpln --version             # Version del CLI
 uvpln --help                # Ayuda completa
@@ -656,16 +656,13 @@ uvpln se desinstala limpio. **Tu Claude Code vanilla (`~/.claude/`) nunca se toc
 ### Con el CLI (recomendado)
 
 ```bash
+uvpln uninstall --full --yes   # desinstalacion completa — borra TODO y remueve el paquete npm
 uvpln uninstall                # con confirmacion, preserva memoria de proyectos
-uvpln uninstall -y             # sin preguntar
-uvpln uninstall --full         # borra TODO incluyendo memoria/sesiones/proyectos
+uvpln uninstall -y             # sin preguntar, preserva memoria
+uvpln uninstall --full         # borra TODO incluyendo memoria/sesiones/proyectos + npm uninstall
 ```
 
-Y opcionalmente removes el paquete global:
-
-```bash
-npm uninstall -g uvpln         # remueve el comando uvpln del sistema
-```
+`--full` borra `~/.claude-uvpln/` completo **y** corre `npm uninstall -g uvpln` automaticamente — no necesitas un comando extra.
 
 ### Desde el repo clonado (alternativa)
 
@@ -739,6 +736,15 @@ un-viernes-por-la-noche/
 ---
 
 ## Changelog
+
+<details>
+<summary><img src="https://img.shields.io/badge/v0.1.2-22C55E?style=flat-square&logoColor=white" /> &nbsp; uvpln uninstall --full ahora incluye npm uninstall automatico</summary>
+
+<br/>
+
+`uvpln uninstall --full` ahora desinstala completamente en un solo comando: borra `~/.claude-uvpln/` y corre `npm uninstall -g uvpln` automaticamente. Ya no hace falta recordar el segundo paso.
+
+</details>
 
 <details>
 <summary><img src="https://img.shields.io/badge/v3.3.0-22C55E?style=flat-square&logoColor=white" /> &nbsp; sistema completo · 7 agentes nuevos · memoria que aprende · catalogo auto-indexado · 23 agentes 17 hooks</summary>

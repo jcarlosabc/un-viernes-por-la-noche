@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const readline = require('readline')
+const { execSync } = require('child_process')
 const { COLORS, ok, warn, hdr, paths } = require('./util')
 
 function ask(question) {
@@ -29,7 +30,7 @@ async function uninstallCmd(opts = {}) {
   // Confirmación (a menos que --yes)
   if (!opts.yes) {
     const msg = opts.full
-      ? `  Se va a borrar TODO ${DST} (incluye memoria, sesiones, proyectos). Irreversible. ¿Seguir? [y/N] `
+      ? `  Se va a borrar TODO ${DST} y desinstalar el paquete npm. Irreversible. ¿Seguir? [y/N] `
       : `  Se va a borrar ${DST} (preserva tu memory/design-systems/). ¿Seguir? [y/N] `
     const answer = await ask(msg)
     if (!/^(y|yes|s|si)$/i.test(answer.trim())) {
@@ -41,6 +42,14 @@ async function uninstallCmd(opts = {}) {
   if (opts.full) {
     fs.rmSync(DST, { recursive: true, force: true })
     ok(`Removido: ${DST} (todo)`)
+    console.log()
+    console.log(`  Desinstalando paquete npm...`)
+    try {
+      execSync('npm uninstall -g uvpln', { stdio: 'inherit' })
+    } catch {
+      warn('No se pudo desinstalar el paquete npm automáticamente.')
+      warn(`Corre manualmente: npm uninstall -g uvpln`)
+    }
   } else {
     // Borrar archivos uvpln pero preservar memory/ y runtime state
     const toRemove = [
