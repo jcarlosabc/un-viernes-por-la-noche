@@ -1,6 +1,6 @@
 {
   "name": "uvpln",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ecosistema de agentes frontend para Claude Code — 23 agentes especializados, 17 hooks de calidad, statusline visual. Instalación aislada que no toca tu Claude Code vanilla.",
   "keywords": [
     "claude-code",
