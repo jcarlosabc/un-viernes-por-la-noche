@@ -16,6 +16,33 @@ ok()   { echo -e "${GREEN}✓${NC} $1"; }
 warn() { echo -e "${YELLOW}!${NC} $1"; }
 err()  { echo -e "${RED}✗${NC} $1"; exit 1; }
 
+# Elimina archivos uvpln que pudieron haber quedado en ~/.claude/ (vanilla).
+# Corre siempre al final de cualquier modo de desinstalación.
+cleanup_vanilla() {
+  local VANILLA="$HOME/.claude"
+  local leaked=0
+
+  for f in "$VANILLA/commands/uvpln-"*.md; do
+    [ -f "$f" ] || continue
+    rm -f "$f"
+    ok "Limpiado de ~/.claude/: commands/$(basename "$f")"
+    leaked=$((leaked + 1))
+  done
+
+  for f in "$VANILLA/hooks/uvpln-"*.js; do
+    [ -f "$f" ] || continue
+    rm -f "$f"
+    ok "Limpiado de ~/.claude/: hooks/$(basename "$f")"
+    leaked=$((leaked + 1))
+  done
+
+  rm -f "$VANILLA/memory/active-agent.txt" 2>/dev/null || true
+
+  if [ "$leaked" -gt 0 ]; then
+    warn "$leaked archivo(s) de uvpln removidos de ~/.claude/ (estaban en el directorio vanilla)"
+  fi
+}
+
 # Flags
 PURGE_MEMORY=0
 ASSUME_YES=0
@@ -88,6 +115,7 @@ done
 if [ "$FULL" -eq 1 ]; then
   rm -rf "$CLAUDE_DIR"
   ok "Removido: $CLAUDE_DIR (todo)"
+  cleanup_vanilla
   echo ""
   echo "  uvpln desinstalado por completo."
   echo ""
@@ -202,6 +230,8 @@ fi
 
 # Si ~/.claude-uvpln/ quedó sólo con runtime state (memory/sessions/projects), lo dejamos.
 # El usuario puede borrarlo con --full si quiere.
+
+cleanup_vanilla
 
 echo ""
 echo "  uvpln desinstalado. Tu Claude Code vanilla sigue intacto."

@@ -229,10 +229,40 @@ if (-not (Test-Path $settingsDst)) {
 # Crear comando 'uvpln.cmd' en ~\.local\bin
 $batContent = @'
 @echo off
-REM uvpln launcher - corre Claude Code con CLAUDE_CONFIG_DIR=%USERPROFILE%\.claude-uvpln
+REM uvpln launcher - Para desinstalar: uvpln uninstall
+if /i "%~1"=="uninstall" goto :uvpln_uninstall
 set CLAUDE_CONFIG_DIR=%USERPROFILE%\.claude-uvpln
 claude %*
 set CLAUDE_CONFIG_DIR=
+goto :eof
+
+:uvpln_uninstall
+echo.
+echo   Un Viernes Por La Noche - desinstalador
+echo   Borra uvpln aislado. Tu Claude vanilla queda intacto.
+echo.
+set UVPLN_CLAUDE=%USERPROFILE%\.claude-uvpln
+set VANILLA=%USERPROFILE%\.claude
+if exist "%UVPLN_CLAUDE%" (
+    rmdir /s /q "%UVPLN_CLAUDE%"
+    echo   [OK] .claude-uvpln eliminado
+) else (
+    echo   [!]  .claude-uvpln no encontrado - ya estaba eliminado
+)
+for %%F in ("%VANILLA%\commands\uvpln-*.md") do (
+    del /q "%%F" 2>nul
+    echo   [!]  Limpiado de .claude\commands: %%~nxF
+)
+for %%F in ("%VANILLA%\hooks\uvpln-*.js") do (
+    del /q "%%F" 2>nul
+    echo   [!]  Limpiado de .claude\hooks: %%~nxF
+)
+if exist "%VANILLA%\memory\active-agent.txt" del /q "%VANILLA%\memory\active-agent.txt"
+echo   [OK] %~f0 eliminado
+echo.
+echo   uvpln desinstalado.
+echo.
+del /q "%~f0"
 '@
 Set-Content -Path $UVPLN_BIN -Value $batContent -Encoding ASCII
 ok "Comando 'uvpln' creado en $UVPLN_BIN"

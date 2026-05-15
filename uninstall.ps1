@@ -23,6 +23,34 @@ function ok   { param($msg); Write-Host "  [OK] $msg" -ForegroundColor Green }
 function warn { param($msg); Write-Host "  [!]  $msg" -ForegroundColor Yellow }
 function err  { param($msg); Write-Host "  [X]  $msg" -ForegroundColor Red; exit 1 }
 
+# Elimina archivos uvpln que pudieron quedar en %USERPROFILE%\.claude\ (vanilla).
+# Corre siempre al final de cualquier modo de desinstalacion.
+function Cleanup-Vanilla {
+    $VANILLA = "$env:USERPROFILE\.claude"
+    $leaked  = 0
+
+    Get-ChildItem "$VANILLA\commands\uvpln-*.md" -ErrorAction SilentlyContinue | ForEach-Object {
+        Remove-Item $_.FullName -Force
+        ok "Limpiado de .claude\: commands\$($_.Name)"
+        $leaked++
+    }
+
+    Get-ChildItem "$VANILLA\hooks\uvpln-*.js" -ErrorAction SilentlyContinue | ForEach-Object {
+        Remove-Item $_.FullName -Force
+        ok "Limpiado de .claude\: hooks\$($_.Name)"
+        $leaked++
+    }
+
+    $activeAgent = "$VANILLA\memory\active-agent.txt"
+    if (Test-Path $activeAgent) {
+        Remove-Item $activeAgent -Force
+    }
+
+    if ($leaked -gt 0) {
+        warn "$leaked archivo(s) de uvpln removidos de .claude\ (estaban en el directorio vanilla)"
+    }
+}
+
 if ($Help) {
     Write-Host ""
     Write-Host "  uvpln - desinstalador" -ForegroundColor Magenta
@@ -80,6 +108,7 @@ foreach ($b in @("$BIN_DIR\uvpln", "$BIN_DIR\uvpln.cmd")) {
 if ($Full) {
     Remove-Item $CLAUDE_DIR -Recurse -Force
     ok "Removido: $CLAUDE_DIR (todo)"
+    Cleanup-Vanilla
     Write-Host ""
     Write-Host "  uvpln desinstalado por completo." -ForegroundColor Magenta
     Write-Host ""
@@ -232,6 +261,8 @@ if ((Test-Path $ds) -and (Get-ChildItem $ds -Force)) {
         Write-Host "  Para borrarla: Remove-Item -Recurse -Force $ds  (o usa -PurgeMemory)" -ForegroundColor White
     }
 }
+
+Cleanup-Vanilla
 
 Write-Host ""
 Write-Host "  uvpln desinstalado. Tu Claude Code vanilla sigue intacto." -ForegroundColor Magenta

@@ -52,9 +52,8 @@ Más info: https://github.com/jcarlosabc/un-viernes-por-la-noche
 
   program
     .command('uninstall')
-    .description('Desinstalar uvpln (no toca Claude vanilla)')
+    .description('Desinstalar uvpln — borra todo, Claude vanilla queda intacto')
     .option('-y, --yes', 'No pedir confirmación')
-    .option('--full', 'Borrar TODO incluyendo memoria, sesiones y proyectos')
     .action((opts) => require('../src/uninstall').uninstallCmd(opts))
 
   program

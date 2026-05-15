@@ -6,6 +6,29 @@ const readline = require('readline')
 const { execSync } = require('child_process')
 const { COLORS, ok, warn, hdr, paths } = require('./util')
 
+// Limpia archivos uvpln que pudieron haber quedado en ~/.claude/ (vanilla).
+// Pasa sin error si no hay nada que borrar.
+function cleanupVanilla() {
+  const vanilla = path.join(paths.home, '.claude')
+  const targets = [
+    { dir: path.join(vanilla, 'commands'), pattern: /^uvpln-.*\.md$/ },
+    { dir: path.join(vanilla, 'hooks'),    pattern: /^uvpln-.*\.js$/ },
+  ]
+  let leaked = 0
+  for (const { dir, pattern } of targets) {
+    if (!fs.existsSync(dir)) continue
+    for (const f of fs.readdirSync(dir)) {
+      if (!pattern.test(f)) continue
+      fs.rmSync(path.join(dir, f), { force: true })
+      warn(`Limpiado de ~/.claude/: ${path.relative(vanilla, path.join(dir, f))}`)
+      leaked++
+    }
+  }
+  const activeAgent = path.join(vanilla, 'memory', 'active-agent.txt')
+  if (fs.existsSync(activeAgent)) fs.rmSync(activeAgent, { force: true })
+  if (leaked > 0) warn(`${leaked} archivo(s) de uvpln removidos de ~/.claude/ (estaban en vanilla)`)
+}
+
 function ask(question) {
   return new Promise((resolve) => {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
@@ -24,56 +47,21 @@ async function uninstallCmd(opts = {}) {
 
   if (!fs.existsSync(DST)) {
     warn(`${DST} no existe — uvpln ya estaba desinstalado.`)
+    cleanupVanilla()
     return
   }
 
-  // Confirmación (a menos que --yes)
   if (!opts.yes) {
-    const msg = opts.full
-      ? `  Se va a borrar TODO ${DST} y desinstalar el paquete npm. Irreversible. ¿Seguir? [y/N] `
-      : `  Se va a borrar ${DST} (preserva tu memory/design-systems/). ¿Seguir? [y/N] `
-    const answer = await ask(msg)
+    const answer = await ask(`  Se va a borrar ${DST} por completo. ¿Seguir? [y/N] `)
     if (!/^(y|yes|s|si)$/i.test(answer.trim())) {
       console.log('  Cancelado.')
       return
     }
   }
 
-  if (opts.full) {
-    fs.rmSync(DST, { recursive: true, force: true })
-    ok(`Removido: ${DST} (todo)`)
-    console.log()
-    console.log(`  Desinstalando paquete npm...`)
-    try {
-      execSync('npm uninstall -g uvpln', { stdio: 'inherit' })
-    } catch {
-      warn('No se pudo desinstalar el paquete npm automáticamente.')
-      warn(`Corre manualmente: npm uninstall -g uvpln`)
-    }
-  } else {
-    // Borrar archivos uvpln pero preservar memory/ y runtime state
-    const toRemove = [
-      'agents', 'hooks', 'commands', 'templates', 'examples', 'install',
-      'session-start.js', 'session-end.js', 'session-start.ps1', 'session-end.ps1',
-      'statusline.cjs', 'agents-config.js',
-      'settings.json', 'CLAUDE.md', 'CLAUDE.md.backup',
-    ]
-    let removed = 0
-    for (const item of toRemove) {
-      const p = path.join(DST, item)
-      if (fs.existsSync(p)) {
-        fs.rmSync(p, { recursive: true, force: true })
-        ok(`Removido: ${item}`)
-        removed++
-      }
-    }
-    if (removed === 0) {
-      warn('No había nada de uvpln para remover.')
-    } else {
-      warn(`memory/, sessions/, projects/ preservados (tu data personal queda).`)
-      console.log(`  Para borrar TODO incluyendo memoria: ${COLORS.cyan}uvpln uninstall --full${COLORS.reset}`)
-    }
-  }
+  fs.rmSync(DST, { recursive: true, force: true })
+  ok(`~/.claude-uvpln/ eliminado`)
+  cleanupVanilla()
 
   console.log()
   hdr('  uvpln desinstalado. Tu Claude Code vanilla sigue intacto.')

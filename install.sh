@@ -212,7 +212,46 @@ fi
 cat > "$UVPLN_BIN" <<'EOF'
 #!/usr/bin/env bash
 # uvpln launcher — corre Claude Code con CLAUDE_CONFIG_DIR=~/.claude-uvpln
+# Para desinstalar: uvpln uninstall
 export CLAUDE_CONFIG_DIR="$HOME/.claude-uvpln"
+
+if [ "${1:-}" = "uninstall" ]; then
+  UVPLN_CLAUDE="$HOME/.claude-uvpln"
+  VANILLA="$HOME/.claude"
+  SELF="$(realpath "$0" 2>/dev/null || echo "$0")"
+
+  printf '\n\033[0;35m  Un Viernes Por La Noche — desinstalador\033[0m\n'
+  printf '  Borra uvpln aislado. Tu Claude vanilla queda intacto.\n\n'
+
+  if [ -d "$UVPLN_CLAUDE" ]; then
+    rm -rf "$UVPLN_CLAUDE"
+    printf '\033[0;32m  [OK]\033[0m ~/.claude-uvpln/ eliminado\n'
+  else
+    printf '\033[1;33m  [!] \033[0m ~/.claude-uvpln/ no encontrado — ya estaba eliminado\n'
+  fi
+
+  leaked=0
+  for f in "$VANILLA/commands/uvpln-"*.md; do
+    [ -f "$f" ] || continue
+    rm -f "$f"
+    printf '\033[1;33m  [!] \033[0m Limpiado de ~/.claude/: commands/%s\n' "$(basename "$f")"
+    leaked=$((leaked + 1))
+  done
+  for f in "$VANILLA/hooks/uvpln-"*.js; do
+    [ -f "$f" ] || continue
+    rm -f "$f"
+    printf '\033[1;33m  [!] \033[0m Limpiado de ~/.claude/: hooks/%s\n' "$(basename "$f")"
+    leaked=$((leaked + 1))
+  done
+  rm -f "$VANILLA/memory/active-agent.txt" 2>/dev/null || true
+
+  rm -f "$SELF"
+  printf '\033[0;32m  [OK]\033[0m %s eliminado\n' "$SELF"
+
+  printf '\n\033[0;35m  uvpln desinstalado.\033[0m\n\n'
+  exit 0
+fi
+
 exec claude "$@"
 EOF
 chmod +x "$UVPLN_BIN"
