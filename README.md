@@ -49,6 +49,15 @@ uvpln     # Claude Code con uvpln (23 agentes, 17 hooks, statusline visual)
 
 Los dos comandos coexisten. Podes alternar cuando quieras.
 
+### Actualizar
+
+```bash
+npm install -g uvpln@latest
+uvpln install
+```
+
+El primer comando actualiza el paquete npm. El segundo aplica los nuevos agentes, hooks y configuracion a `~/.claude-uvpln/`.
+
 ### Comandos del CLI
 
 ```bash
